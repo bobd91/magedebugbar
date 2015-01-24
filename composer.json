@@ -1,4 +1,6 @@
 {
+    "name": "bobd91/mci-debugbar",
+    "type": "magento-module",
     "require": {
         "maximebf/debugbar": "1.*"
     }
