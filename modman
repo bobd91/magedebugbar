@@ -1,4 +1,12 @@
+# Magento changes
+app/code/community/Mage/Core/Model/App.php   app/code/community/Mage/Core/Model/App.php   
+
+# MageDebugBar
+MageDebugBar lib/MageDebugBar
+MageDebugBar/Resources js/MageDebugBar
+
+# PHPDebugBar
 ../../maximebf/debugbar/src/DebugBar lib/DebugBar/
-../../maximebf/debugbar/src/DebugBar/Resources/ js/DebugBar
+../../maximebf/debugbar/src/DebugBar/Resources js/DebugBar
 ../../psr/log/Psr/Log lib/Psr/Log
 ../../symfony/var-dumper/Symfony/Component/VarDumper lib/Symfony/Component/VarDumper
