@@ -3,7 +3,7 @@ app/code/community/Mage/Core/Model/App.php   app/code/community/Mage/Core/Model/
 
 # MageDebugBar
 MageDebugBar lib/MageDebugBar
-MageDebugBar/Resources js/MageDebugBar
+Resources js/MageDebugBar
 
 # PHPDebugBar
 ../../maximebf/debugbar/src/DebugBar lib/DebugBar/
