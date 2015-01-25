@@ -3,5 +3,8 @@
     "type": "magento-module",
     "require": {
         "maximebf/debugbar": "1.*"
+    },
+    "autoload": {
+        "psr-0": {"MageDebugBar": ""}
     }
 }

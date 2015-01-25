@@ -1,12 +1,9 @@
 # Magento changes
 app/code/community/Mage/Core/Model/App.php   app/code/community/Mage/Core/Model/App.php   
 
-# MageDebugBar
-MageDebugBar lib/MageDebugBar
-Resources js/MageDebugBar
+# Composer
+../.. lib/vendor
 
-# PHPDebugBar
-../../maximebf/debugbar/src/DebugBar lib/DebugBar/
+# Javascript and CSS
+Resources js/MageDebugBar
 ../../maximebf/debugbar/src/DebugBar/Resources js/DebugBar
-../../psr/log/Psr/Log lib/Psr/Log
-../../symfony/var-dumper/Symfony/Component/VarDumper lib/Symfony/Component/VarDumper
