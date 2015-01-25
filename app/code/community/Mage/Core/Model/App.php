@@ -24,6 +24,8 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+require "vendor/autoload.php";
+
 /**
  * Application model
  *
@@ -1577,7 +1579,7 @@ class Mage_Core_Model_App
      *
      * @return MageDebugBar\MageDebugBar
      */
-    public function debugbar() {
+    public function getDebugbar() {
         if(!isset($this->_debugbar)) {
             $this->_debugbar = new MageDebugBar\MageDebugBar();
         }
