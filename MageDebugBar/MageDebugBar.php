@@ -1,7 +1,7 @@
 <?php
 namespace MageDebugBar;
 
-class MageDebugBar extends DebugBar\DebugBar {
+class MageDebugBar extends \DebugBar\DebugBar {
 
     public function __construct()
     {
