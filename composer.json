@@ -2,8 +2,15 @@
     "name": "bobd91/magedebugbar",
     "type": "magento-module",
     "require": {
+        "magento-hackathon/magento-composer-installer": "*",
         "maximebf/debugbar": "1.*"
     },
+    "repositories": [
+        {
+        "type": "composer",
+        "url": "http://packages.firegento.com"
+    }
+    ],
     "autoload": {
         "psr-0": {"MageDebugBar": ""}
     }
