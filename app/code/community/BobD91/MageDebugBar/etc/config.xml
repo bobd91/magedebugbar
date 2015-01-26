@@ -13,11 +13,13 @@
         </models>
         <events>
             <http_response_send_before>
-                <bobd91_magedebugbar>
-                    <type>model</type>
-                    <class>bobd91_magedebugbar/observer</class>
-                    <method>http_response_send_before</method>
-                </bobd91_magedebugbar>
+                <observers>
+                    <bobd91_magedebugbar>
+                        <type>singleton</type>
+                        <class>bobd91_magedebugbar/observer</class>
+                        <method>http_response_send_before</method>
+                    </bobd91_magedebugbar>
+                </observers>
             </http_response_send_before>
         </events>
     </global>
