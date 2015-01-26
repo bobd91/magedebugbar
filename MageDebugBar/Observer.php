@@ -6,9 +6,9 @@ class Observer {
 
     public function http_response_send_before($observer) {
         $response = $observer->getResponse();
-        $renderer = Mage::App()->getDebugBar()->getJavascriptRenderer();
+        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer("js/DebugBar");
         
-        $doc = Sunra\PhpSimple\HtmlDomParser::str_get_html($response->getBody());
+        $doc = \Sunra\PhpSimple\HtmlDomParser::str_get_html($response->getBody());
 
         $doc->set_callback(function($element) use ($renderer) {
             switch($element->tag) {
