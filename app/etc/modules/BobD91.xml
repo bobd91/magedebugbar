@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <BobD91_MageDebugBar>
-            <codePool>community</codePool>
-            <active>true</active>
-        </BobD91_MageDebugBar>
-    </modules>
-</config>
