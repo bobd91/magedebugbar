@@ -6,7 +6,7 @@ class Observer {
 
     public function http_response_send_before($observer) {
         $response = $observer->getResponse();
-        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer("js/DebugBar");
+        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer("/js/DebugBar");
         
         $doc = \Sunra\PhpSimple\HtmlDomParser::str_get_html($response->getBody());
 
