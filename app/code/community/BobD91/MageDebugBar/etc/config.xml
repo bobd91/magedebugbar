@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <BobD91_MageDebugBar>
+            <version>1.0.0</version>
+        </BobD91_MageDebugBar>
+    </modules>
+    <global>
+        <models>
+            <bobd91_magedebugbar>
+                <class>BobD91_MageDebugBar_Model</class>
+            </bobd91_magedebugbar>
+        </models>
+        <events>
+            <http_response_send_before>
+                <bobd91_magedebugbar>
+                    <type>model</type>
+                    <class>bobd91_magedebugbar/observer</class>
+                    <method>http_response_send_before</method>
+                </bobd91_magedebugbar>
+            </http_response_send_before>
+        </events>
+    </global>
+</config>

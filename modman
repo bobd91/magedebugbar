@@ -1,5 +1,12 @@
 # Magento changes
-app/code/community/Mage/Core/Model/App.php   app/code/community/Mage/Core/Model/App.php   
+app/code/community/Mage/Core/Model/App.php app/code/community/Mage/Core/Model/App.php
+
+# Magento additions
+app/code/community/BobD91/MageDebugBar/etc/config.xml app/code/community/BobD91/MageDebugBar/etc/config.xml
+app/code/community/BobD91/MageDebugBar/Model/Observer.php app/code/community/BobD91/MageDebugBar/Model/Observer.php
+app/etc/modules/BobD91.xml app/etc/modules/BobD91.xml
+app/etc/modules/BobD91_MageDebugBar.xml app/etc/modules/BobD91_MageDebugBar.xml
+
 
 # Composer
 ../.. lib/vendor
