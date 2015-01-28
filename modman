@@ -1,5 +1,6 @@
 # Magento changes
 app/code/community/Mage/Core/Model/App.php app/code/community/Mage/Core/Model/App.php
+app/code/community/Mage/Core/Model/Config.php app/code/community/Mage/Core/Model/Config.php
 
 # Magento additions
 app/code/community/BobD91/MageDebugBar/ app/code/community/BobD91/MageDebugBar/

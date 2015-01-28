@@ -781,7 +781,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
 
         $unsortedConfig = new Mage_Core_Model_Config_Base();
         $unsortedConfig->loadString('<config/>');
-        $fileConfig = new Mage_Core_Model_Config_Base();
+
+        // START MageDebugBar modifications
+        // $fileConfig = new Mage_Core_Model_Config_Base();
+        $fileConfig = new \MageDebugBar\ConfigBase();
+        // END MageDebugBar modifications
 
         // load modules declarations
         foreach ($moduleFiles as $file) {
@@ -826,7 +830,12 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             $sortedConfig->getNode('modules')->appendChild($node);
         }
 
+
+        Mage::App()->getDebugBar()['config']->collectSoftwareConfig($this);
+
         $this->extend($sortedConfig);
+
+        Mage::App()->getDebugBar()['config']->collectSoftwareConfig($this);
 
         Varien_Profiler::stop('config/load-modules-declaration');
         return $this;
@@ -1374,6 +1383,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     public function getResourceModelInstance($modelClass='', $constructArguments=array())
     {
         $factoryName = $this->_getResourceModelFactoryClassName($modelClass);
+
         if (!$factoryName) {
             return false;
         }
