@@ -2,23 +2,20 @@
 
 namespace MageDebugBar;
 
-class Observer {
+/**
+ * Observer for all MageDebugBar events
+ *
+ * To add an event to the MageDebugBar it has to be added
+ * here and in app/code/community/BobD91/MageDebugBar/Model/Observer.php
+ */
 
-    /**
-     * Use the same pattern for all observers to ensure that
-     * only developers can access the DebugBar
-     */
-    public function http_response_send_before($observer) {
-        if(\Mage::helper('core')->isDevAllowed()) {
-            $this->_http_response_send_before($observer);
-        }
-    }
+class EventObserver {
 
     /**
      * Called just before the Magento generated HTML is returned to the browser
      * Add the DebugBar HTML to the head and body
      */
-    private function _http_response_send_before($observer) {
+    public function http_response_send_before($observer) {
         $response = $observer->getResponse();
         $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer("/js/DebugBar");
 
@@ -59,7 +56,7 @@ class Observer {
         $end = substr($html, $bodyIndex);
         return $start . $head. $middle . $body. $end;
     }
-   
+
     /**
      * Return start position of closing tag just found by parser
      * The current positon is at end of closing tag so

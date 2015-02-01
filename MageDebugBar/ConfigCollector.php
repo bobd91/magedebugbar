@@ -6,6 +6,8 @@ class ConfigCollector extends \DebugBar\DataCollector\DataCollector
 {
     public function collect()
     {
+        $this->collectConfig(Mage::App()->getConfig());
+
         return "";
     }
 
@@ -14,7 +16,18 @@ class ConfigCollector extends \DebugBar\DataCollector\DataCollector
         return 'config';
     }
 
-    public function collectSoftwareConfig($config) {
-       # \Mage::log($config->getNode()->asNiceXml());
+    public function collectEvent($eventName, $args) {
+    }
+
+    public function collectEventObservers($area, $eventName, $observer) {
+    }
+
+    public function collectConfig($config) {
+    }
+
+    public function collectModuleConfig($config) {
+    }
+
+    public function collectLayoutConfig($config) {
     }
 }

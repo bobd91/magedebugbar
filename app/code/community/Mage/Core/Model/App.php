@@ -1272,6 +1272,9 @@ class Mage_Core_Model_App
 
     public function dispatchEvent($eventName, $args)
     {
+        // MageDebugBar addition
+        $this->getDebugBar()['events']->collectEvent($eventName, $args);
+
         foreach ($this->_events as $area=>$events) {
             if (!isset($events[$eventName])) {
                 $eventConfig = $this->getConfig()->getEventConfig($area, $eventName);
@@ -1290,6 +1293,10 @@ class Mage_Core_Model_App
                 }
                 $events[$eventName]['observers'] = $observers;
                 $this->_events[$area][$eventName]['observers'] = $observers;
+
+                // MageDebugBar addition
+                $this->getDebugBar()['events']->collectEventObservers($area, $eventName, $observers);
+
             }
             if (false===$events[$eventName]) {
                 continue;
@@ -1322,6 +1329,7 @@ class Mage_Core_Model_App
                 Varien_Profiler::stop('OBSERVER: '.$obsName);
             }
         }
+
         return $this;
     }
 
