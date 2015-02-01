@@ -1273,7 +1273,7 @@ class Mage_Core_Model_App
     public function dispatchEvent($eventName, $args)
     {
         // MageDebugBar addition
-        $this->getDebugBar()['events']->collectEvent($eventName, $args);
+        $this->getDebugBar()['event']->collectEvent($eventName, $args);
 
         foreach ($this->_events as $area=>$events) {
             if (!isset($events[$eventName])) {
@@ -1295,7 +1295,7 @@ class Mage_Core_Model_App
                 $this->_events[$area][$eventName]['observers'] = $observers;
 
                 // MageDebugBar addition
-                $this->getDebugBar()['events']->collectEventObservers($area, $eventName, $observers);
+                $this->getDebugBar()['event']->collectEventObservers($area, $eventName, $observers);
 
             }
             if (false===$events[$eventName]) {

@@ -6,8 +6,8 @@ class ConfigCollector extends \DebugBar\DataCollector\DataCollector
 {
     public function collect()
     {
-        $this->collectModuleConfig(Mage::App()->getConfig());
-        $this->collectLayoutConfig(Mage::App()->getLayout());
+        $this->collectModuleConfig(\Mage::App()->getConfig());
+        $this->collectLayoutConfig(\Mage::App()->getLayout());
         return "";
     }
 

@@ -16,10 +16,10 @@ class BobD91_MageDebugBar_Model_Observer {
     protected $_delegate;
 
     public function __construct() {
-        $_delegate = Mage::App()->getDebugBar()->getEventObserver();
+        $this->_delegate = Mage::App()->getDebugBar()->getEventObserver();
     }
 
-    public function http_send_response_before($observer) {
-        $_delegate->http_send_response_before($observer);
+    public function http_response_send_before($observer) {
+        $this->_delegate->http_response_send_before($observer);
     }
 }
