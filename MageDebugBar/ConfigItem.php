@@ -5,6 +5,7 @@ namespace MageDebugBar;
 class ConfigItem implements \JsonSerializable {
 
     protected
+        $_parent,
         $_name,
         $_attrs,
         $_elems,
@@ -12,7 +13,8 @@ class ConfigItem implements \JsonSerializable {
         $_line,
         $_data;
 
-    public function __construct($name = null, $attrs = [], $file = null, $line = null) {
+    public function __construct($parent = null, $name = null, $attrs = [], $file = null, $line = null) {
+        $this->_parent = $parent;
         $this->_name = $name;
         $this->_attrs = $attrs;
         $this->_elems = [];
@@ -26,7 +28,7 @@ class ConfigItem implements \JsonSerializable {
         if($elem) {
             $elem->overwrite($attrs, $file, $line);
         } else {
-            $elem = new ConfigItem($name, $attrs, $file, $line);
+            $elem = new ConfigItem($this, $name, $attrs, $file, $line);
             $this->_elems[] = $elem;
         }
         return $elem;
@@ -34,6 +36,7 @@ class ConfigItem implements \JsonSerializable {
 
     public function close() {
         $this->_data = trim($this->_data);
+        return $this->_parent;
     }
 
     public function find($name) {

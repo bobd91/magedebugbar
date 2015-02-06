@@ -38,17 +38,14 @@ class ConfigCollector extends \DebugBar\DataCollector\DataCollector
         }
         $fileID = $this->_addFile($filePath);
         $current = $this->_config;
-        $previous = [];
         $parser = xml_parser_create();
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
         xml_set_element_handler($parser,
-            function($parser, $name, $props) use (&$current, &$previous, $fileID) {
-                $previous[] = $current;
+            function($parser, $name, $props) use (&$current, $fileID) {
                 $current = $current->open($name, $props, $fileID, xml_get_current_line_number($parser));
             },
-            function($parser, $name) use (&$current, &$previous) {
-                $current->close();
-                $current = array_pop($previous);
+            function($parser, $name) use (&$current) {
+                $current = $current->close();
             }
         );
         xml_set_character_data_handler($parser, 
