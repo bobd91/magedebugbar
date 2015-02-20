@@ -17,9 +17,25 @@ class EventObserver {
      */
     public function http_response_send_before($observer) {
         $response = $observer->getResponse();
-        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer("/js/DebugBar");
+        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer();
 
         $response->setBody($this->_insertHeadBody($response->getBody(), $renderer->renderHead(), $renderer->render()));
+    }
+
+    /**
+     * Called before rendering a block
+     * Collect details of block, PHP class and, optionally, template
+     */
+    public function core_block_abstract_to_html_before($observer) {
+        \Mage::App()->getDebugBar()['layout']->collectStartBlock($observer->getData('block'));
+    }
+
+    /**
+     * Called after rendering a block
+     * Used with html_before to get parent/child relationships
+     */
+    public function core_block_abstract_to_html_after($observer) {
+        \Mage::App()->getDebugBar()['layout']->collectEndBlock($observer->getData('block'));
     }
 
     /**

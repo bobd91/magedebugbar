@@ -22,4 +22,12 @@ class BobD91_MageDebugBar_Model_Observer {
     public function http_response_send_before($observer) {
         $this->_delegate->http_response_send_before($observer);
     }
+
+    public function core_block_abstract_to_html_before($observer) {
+        $this->_delegate->core_block_abstract_to_html_before($observer);
+    }
+
+    public function core_block_abstract_to_html_after($observer) {
+        $this->_delegate->core_block_abstract_to_html_after($observer);
+    }
 }

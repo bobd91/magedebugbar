@@ -21,6 +21,24 @@
                     </bobd91_magedebugbar>
                 </observers>
             </http_response_send_before>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <bobd91_magedebugbar>
+                        <type>singleton</type>
+                        <class>bobd91_magedebugbar/observer</class>
+                        <method>core_block_abstract_to_html_before</method>
+                    </bobd91_magedebugbar>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <bobd91_magedebugbar>
+                        <type>singleton</type>
+                        <class>bobd91_magedebugbar/observer</class>
+                        <method>core_block_abstract_to_html_after</method>
+                    </bobd91_magedebugbar>
+                </observers>
+            </core_block_abstract_to_html_after>
         </events>
     </global>
 </config>
