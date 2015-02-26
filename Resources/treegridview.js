@@ -29,7 +29,8 @@ var TreeGridView =
 
             addHeadings: function(container) {
                 if(this.model.headings) {
-                    var tr = $("<tr />").appendTo(container);
+                    var thead = $("<thead />").appendTo(container);
+                    var tr = $("<tr />").appendTo(thead);
                     this.model.headings.forEach(function(v) {
                         $("<th>" + v + "</th>").appendTo(tr);
                     });

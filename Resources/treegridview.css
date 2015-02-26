@@ -8,6 +8,7 @@
     white-space: nowrap;
     position: relative;
     text-align: right;
+    overflow: hidden;
     }
 
 .treegridview-container td:first-child {

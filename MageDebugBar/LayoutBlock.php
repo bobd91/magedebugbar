@@ -4,18 +4,36 @@ namespace MageDebugBar;
 
 class LayoutBlock implements \JsonSerializable {
     protected $_blocks = [];
-    protected $_parent;
-    protected $_name;
-    protected $_type;
-    protected $_template;
+    protected $_parent = "";
+    protected $_name = "";
+    protected $_type = "";
+    protected $_block_file = "";
+    protected $_template = "";
+    protected $_template_file = "";
 
     public function __construct($parent = null, $block = null) {
         if($block) {
             $this->_parent = $parent;
             $this->_name = $block->getIsAnonymous() ? "(anonymous)" : $block->getNameInLayout();
             $this->_type = $block->getData('type');
-            $this->_template = method_exists($block, "getTemplate") ? $block->getTemplate() : "";
+            $this->_block_file = $this->_baseDir((new \ReflectionClass($block))->getFileName());
+            if($block instanceof \Mage_Core_Block_Template) {
+                $this->_template = $block->getTemplate();
+                $this->_template_file = $this->_templateDir($block->getTemplateFile());
+            }
         }
+    }
+
+    protected function _baseDir($path) {
+        if(0 == strpos($path, MAGENTO_ROOT)) {
+            return substr($path, strlen(MAGENTO_ROOT));
+        } else {
+            return $path;
+        }
+    }
+
+    protected function _templateDir($template) {
+        return $this->_baseDir(\Mage::getBaseDir('design') . DS . $template);
     }
 
     public function addBlock($block) {
@@ -32,8 +50,12 @@ class LayoutBlock implements \JsonSerializable {
         $a = [];
         $a['values'] = [
             $this->_name ? $this->_name : 'Layout', 
-            $this->_type ? $this->_type : '', 
-            $this->_template ? $this->_template : ''
+            $this->_type,
+            $this->_template
+        ];
+        $a['files'] = [
+            $this->_block_file,
+            $this->_template_file
         ];
         if(count($this->_blocks)) {
             $a['children'] = [];

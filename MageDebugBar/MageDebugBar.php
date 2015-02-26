@@ -13,11 +13,16 @@ class MageDebugBar extends \DebugBar\DebugBar {
 //        $this->addCollector(new RequestCollector());
 
         $this->getJavascriptRenderer("/js/DebugBar")->addAssets(
-            ['magedebugbar.css', 'treegridview.css'],
-            ['magedebugbar.js', 'treegridview.js'],
+            ['magedebugbar.css', 'treegridview.css', 'fileviewer.css'],
+            ['magedebugbar.js', 'treegridview.js', 'fileviewer.js'],
             '/js/MageDebugBar',
             '/js/MageDebugBar'
         ); 
+
+        $this->getJavascriptRenderer()->addAssets(
+            [],
+            ["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"]
+        );
     }
 
     /**
