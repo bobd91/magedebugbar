@@ -4,7 +4,7 @@ app/code/community/Mage/Core/Model/App.php app/code/community/Mage/Core/Model/Ap
 # Magento additions
 app/code/community/BobD91/MageDebugBar/ app/code/community/BobD91/MageDebugBar/
 app/etc/modules/BobD91_MageDebugBar.xml app/etc/modules/BobD91_MageDebugBar.xml
-magedebug.php magedebug.php
+magedebugbar.php magedebugbar.php
 
 # Composer
 # ../.. lib/vendor

@@ -27,54 +27,69 @@ if (typeof(MageDebugBar) == 'undefined') {
             }.bind(this));
 
             var mousemove = function(e) {
-                var w = Math.min(this.$el.width() - this.$resizehdle.width(), Math.max(100, orig_w - pos_x + e.pageX));
-                this.$left.width(w);
-                this.$right.css('margin-left', w + this.$resizehdle.width());
+                this.resize();
             }.bind(this);
 
             var mouseup = function() {
                 this.$el.off('mousemove', mousemove).off('mouseup', mouseup);
                 this.$el.css('cursor', orig_cursor);
             }.bind(this);
- 
+
             this.bindAttr('data', function(data) {
+                this.data = data;
                 this.$right.css('margin-left', this.$left.width() + this.$resizehdle.width());
 
                 this.$left.children().remove();
                 this.$right.children().remove();
 
-                var treeview = new TreeGridView(this.makeRootModel(data.blocks));
-                var fileview = new FileViewer(new editCustomizer(data));
-                treeview.appendTo(this.$left);
-                fileview.appendTo(this.$right);
+                this.treeview = new TreeGridView(this.makeRootModel(data.blocks));
+                this.fileviewer = new FileViewer();
+                this.treeview.appendTo(this.$left);
+                this.fileviewer.appendTo(this.$right);
 
-                $(treeview).on('click', function(e, row, col) {
-                    if(col == 0) {
-                        var name = row.branch.values[col];
-                        var config = this.findLayoutConfig(name, data.config.handles);
-                        if(config) {
-                            fileview.load(data.config.files[config.file], config.line);
-                        }
-                    } else {
-                        var file = row.branch.files[col -1];
-                        fileview.load(file);
+                $(this.treeview).on('click', function(e, row, col) {
+                    switch(col) {
+                    case 0: // Block name
+                        this.loadBlock(row.branch.values[col]);
+                        break;
+                    case 1: // Block class
+                            this.loadBlockClass(row.branch.values[col]);
+                        break;
+                    case 2: // Template file
+                            this.loadFile(row.branch.template);
+                        break;
                     }
                 }.bind(this));
 
             });
         },
 
-        findLayoutConfig: function(name, handles) {
+        resize: function() {
+                var w = Math.min(this.$el.width() - this.$resizehdle.width(), Math.max(100, orig_w - pos_x + e.pageX));
+                this.$left.width(w);
+                this.$right.css('margin-left', w + this.$resizehdle.width());
+
+                if(this.treeview) {
+                    this.treeview.resize();
+                }
+                if(this.fileviewer) {
+                    this.fileviewer.resize();
+                }
+        },
+ 
+
+        findBlock: function(name) {
+            var handles = this.data.config.handles;
             for(var h = 0 ; h < handles.length ; h++) {
                 var config = handles[h].config;
                 for(var c = 0 ; c < config.length ; c++) {
-                   var res = this.findLayoutItem(name, config[c]);
+                   var res = this.findBlockInItem(name, config[c]);
                    if(res) return res;
                 }
             }
         },
 
-        findLayoutItem: function(name, item) {
+        findBlockInItem: function(name, item) {
             if(item.name === 'block' && item.attrs) {
                 var attrs = item.attrs;
                 for(var a = 0 ; a < attrs.length ; a++) {
@@ -84,8 +99,16 @@ if (typeof(MageDebugBar) == 'undefined') {
             if(item.elems) {
                 var elems = item.elems;
                 for(var e = 0 ; e < elems.length ; e++) {
-                    var res = this.findLayoutItem(name, elems[e]);
+                    var res = this.findBlockInItem(name, elems[e]);
                     if(res) return res;
+                }
+            }
+        },
+
+        findAttr: function(name, attrs) {
+            for(var a = 0 ; a < attrs.length ; a++) {
+                if(name in attrs[a]) {
+                    return attrs[a][name];
                 }
             }
         },
@@ -98,32 +121,201 @@ if (typeof(MageDebugBar) == 'undefined') {
             };
         },
 
-    });
+        loadConfigItem: function(name) {
+            this.load("config=" + name);
+        },
 
+        loadBlockClass: function(name, method) {
+           var qstring =  "block=" + name;
+           if(method) {
+              qstring += "&method=" + method;
+           }
+          this.load(qstring);
+        },
 
-    var editCustomizer = function(config) {
-        this.config = config;
-    };
+        loadHelperClass: function(name, method) {
+           var qstring =  "helper=" + name;
+           if(method) {
+              qstring += "&method=" + method;
+           }
+          this.load(qstring);
+        },
 
-    $.extend(editCustomizer.prototype, {
-        
-        forMimeType: function(mimeType) {
-            switch(mimeType) {
-                case 'text/xml': return new configCustomizer(this.config);
-                default: return new nullCustomizer();
+        // Helper comes as <helper class alias>/method
+        loadHelper: function(helper) {
+            var bits = helper.split('/');
+            var alias = bits.slice(0, -1).join('/');
+            var method = bits[bits.length - 1];
+            this.loadHelperClass(alias, method);
+        },
+
+        // Block name and method
+        // Use config to resolve block name to block type
+        loadBlockMethod: function(name, method) {
+            var block = this.findBlock(name);
+            if(block) {
+                var alias = this.findAttr('type', block.attrs);
+                this.loadBlockClass(alias, method);
+            }
+        },
+
+        loadTemplate: function(template) {
+            var file = this.findTemplateFile(template);
+            if(file) {
+                this.loadFile(file);
+            }
+        },
+
+        // Load block in layout config
+        loadBlock: function(name) {
+            var block = this.findBlock(name);
+            if(block) {
+                this.loadFile(this.configFileName(block.file), block.line);
+            }
+        },
+
+        findTemplateFile: function(template, config) {
+            config = config || [this.data.blocks];
+            for(var i = 0 ; i < config.length ; i++) {
+                if(config[i].values[2] === template) {
+                    return config[i].template;
+                }
+                if(config[i].children) {
+                    var res = this.findTemplateFile(template, config[i].children);
+                    if(res) return res;
+
+                }
+            }
+        },
+            
+        // return config file name given file number
+        configFileName: function(fileNo) {
+            return this.data.config.files[fileNo];
+        },
+
+        loadFile: function(file, line) {
+            var qstring = "file=" + file;
+            if(line) {
+               qstring += "&line=" + line;
+            }
+            this.load(qstring);
+        },
+            
+        load: function(qstring) {
+            this.get(qstring)
+                .then(function(response) {
+                    this.loadResponse(JSON.parse(response));
+                }.bind(this))
+                .catch(function(err) {
+                    console.err(err);
+                });
+        },
+
+        loadResponse: function(response) {
+            switch(response.type) {
+            case 'file': this.fileviewer.load(response, this.viewHandler(response['mime-type'])); break;
+            }
+        },
+
+        // Modified from http://www.html5rocks.com/en/tutorials/es6/promises/
+        get: function(qstring) {
+            return new Promise(function(resolve, reject) {
+                var req = new XMLHttpRequest();
+                req.open('GET', '/magedebugbar.php?' + qstring);
+
+                req.onload = function() {
+                    // This is called even on 404 etc
+                    // so check the status
+                    if (req.status == 200) {
+                        // Resolve the promise with the response text
+                        resolve(req.response);
+                    }
+                    else {
+                        // Otherwise reject with the status text
+                        // which will hopefully be a meaningful error
+                        reject(Error(req.statusText));
+                    }
+                };
+
+                // Handle network errors
+                req.onerror = function() {
+                    reject(Error("Network Error"));
+                };
+
+                // Make the request
+                req.send();
+            });
+        },
+
+        viewHandler: function(mimeType) {
+            if(mimeType === 'text/xml') {
+                return new LayoutViewHandler(this);
             }
         }
+
     });
 
-    var configCustomizer = function(config) {
-        this.config = config;
+
+    var LayoutViewHandler = function(layout) {
+        this.layout = layout;
     };
 
-    $.extend(configCustomizer.prototype, {
-        customize: function(session) {
+    $.extend(LayoutViewHandler.prototype, {
+        atPosition: function(session, token, pos) {
+            var action = this.findAction(session, pos);
+            if(action) {
+                if(action.type === 'block' || token.type === 'string.attribute-value.xml') {
+                    return action;
+                }
+            }
+        },
+
+        findAction: function(session, pos) {
+            var actions = this.getActions(session);
+            var row = pos.row;
+            var rowActions = actions[row];
+            if(rowActions) {
+                var col = pos.column;
+                var len = rowActions.length;
+                for(var i = 0 ; i < len ; i++) {
+                    var action = rowActions[i];
+                    // Block actions only have to be on correct row
+                    if(action.type === 'block') {
+                        return action;
+                    }
+                    // Odd token recognition by Ace editor
+                    // We have to allow extra column at
+                    // the end but not at the beginning
+                    if(col > action.col2 + 1) {
+                        continue;
+                    } else if(col >= action.col1) {
+                        return action;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        },
+
+        getActions: function(session) { 
+            if(!this.actions) {
+                this.initActions(session);
+            }
+            return this.actions;
+        },
+
+        initActions: function(session) {
+            this.actions = [];
+            this.session = session;
             var TokenIterator = require("ace/token_iterator");
             var iterator = new TokenIterator.TokenIterator(session, 0, 0);
             this.document(iterator);
+        },
+
+        validHandle: function(handle) {
+            return this.layout.data.config.handles.some(function(v) {
+                return handle === v.name;
+            });
         },
 
         // Inside tag, just had element name token
@@ -131,7 +323,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         // Process up to end of element tag
         // Return true if element may contain children
         // i.e. not a self-closing tag
-        attributes: function(iterator, attrs) {
+        attributes: function(iterator, attrs, def) {
             attrs = attrs || [];
             var token;
             while(token = iterator.stepForward()) {
@@ -140,12 +332,19 @@ if (typeof(MageDebugBar) == 'undefined') {
                     name = token.value;
                     break;
                 case 'string.attribute-value.xml':
+                    var val = this.attributeValue(token.value);
                     if(-1 !== $.inArray(name, attrs)) {
-                        this[name + 'Attribute'](iterator);
+                        this[name + 'Attribute'](iterator, val);
+                    } else if(def) {
+                        def.bind(this)(iterator, name, val);
                     }
                     break;
-                case: 'meta.tag.punctuation.tag-close.xml':
-                    return '>' === token.value;
+                case 'meta.tag.punctuation.tag-close.xml':
+                    var open = '>' === token.value;
+                    if(!open) {
+                        this.closeElement();
+                    }
+                    return open;
                 }
             }    
         },
@@ -160,6 +359,7 @@ if (typeof(MageDebugBar) == 'undefined') {
             while(token = iterator.stepForward()) {
                 switch(token.type) {
                 case 'meta.tag.tag-name.xml':
+                    this.openElement();
                     if(-1 !== $.inArray(token.value, elems)) {
                         this[token.value + 'Element'](iterator);
                     } else if(def) {
@@ -169,20 +369,37 @@ if (typeof(MageDebugBar) == 'undefined') {
                     }
                     break;
                 case 'meta.tag.punctuation.end-tag-open.xml':
+                    this.closeElement();
                     this.endTag(iterator);
+                    return;
                 }
             }
         },
 
+        openElement: function() {
+            this.level = this.level || 0;
+            this.level++;
+        },
+
+        closeElement: function() {
+            this.level--;
+            this.popBlockNames();
+        },
+
+        // Remove surrounding quotes from attribute value
+        attributeValue: function(attr) {
+            return attr.slice(1, -1);
+        },
+
         // Skip over unwanted element
-        anyElem(iterator) {
+        anyElem: function(iterator) {
             if(this.attributes(iterator)) {
                 this.elements(iterator);
             }
         },
 
         // Detected </ so skip past rest of end tag
-        endTag(iterator) {
+        endTag: function(iterator) {
             iterator.stepForward(); // Element name
             iterator.stepForward(); // >
         },
@@ -190,7 +407,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         document: function(iterator) {
             for(var token = iterator.getCurrentToken() ; token !== null ; token = iterator.stepForward()) {
                 if(token.value === 'layout' && token.type === 'meta.tag.tag-name.xml') {
-                    layoutElement(iterator);
+                    this.layoutElement(iterator);
                     break;
                 }
             }
@@ -204,15 +421,24 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         handleElement: function(iterator, name) {
             if(this.attributes(iterator)) {
-                var elems = (-1 !== $.inArray(name, this.getHandles()))
-                             ? ['block', 'reference', 'remove']
-                             : [];
-                this.elements(iterator, elems);
+                if(this.validHandle(name)) {
+                    this.elements(iterator, ['block', 'reference', 'remove']);
+                } else {
+                    this.disableHandle(iterator);
+                }
             }
         },
 
+        disableHandle: function(iterator) {
+            var row1 = iterator.getCurrentTokenRow();
+            this.elements(iterator, []);
+            var row2 = iterator.getCurrentTokenRow();
+
+            this.addAction(row1, 0, row2, 0);
+        },
+
         blockElement: function(iterator) {
-            if(this.attributes(iterator, ['name', 'type', 'template'])) {
+            if(this.attributes(iterator, ['type', 'template', 'before', 'after'], this.checkBlockNameAttribute)) {
                 this.elements(iterator, ['block', 'action', 'remove']);
             }
         },
@@ -231,46 +457,106 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         actionElement: function(iterator) {
             if(this.attributes(iterator, ['method', 'module', 'ifconfig'])) {
-                this.elements(iterator, [], this.params);
+                this.elements(iterator, [], this.paramsElement);
             }
         },
 
-        params: function(iterator, name) {
+        paramsElement: function(iterator, name) {
             if(this.attributes(iterator, ['helper'])) {
                 this.elements(iterator);
             }
         },
 
-        nameAttribute: function(iterator) {
-            // TODO: Find name in config and link to marker
-            // Load last referenced type
+        nameAttribute: function(iterator, name) {
+            this.pushBlockName(name);
+            this.newAction(iterator, name, this.layout.loadBlock.bind(this.layout, name)); 
         },
 
-        typeAttribute: function(iterator) {
-            // TODO: marker linked to load type call
+        // special for block names as we need to push the block name
+        // but not add an action
+        checkBlockNameAttribute: function(iterator, name, value) {
+            if('name' === name) { // Only the name attribute
+                this.pushBlockName(value);
+            }
         },
 
-        templateAttribute: function(iterator) {
-            // TODO: Find temlklate in config and link to mrker
+        beforeAttribute: function(iterator, name) {
+            if(name !== '-' && name !== '*') {
+                this.newAction(iterator,  name, this.layout.loadBlock.bind(this.layout, name));
+            }
         },
 
-        methodAttribute: function(iterator) {
-            // TODO: Locate last referenced type and link to marker
+        afterAttribute: function(iterator, name) {
+            if(name !== '-' && name != '*') {
+                this.newAction(iterator, name, this.layout.loadBlock.bind(this.layout, name));
+            }
         },
 
-        moduleAttribute: function(iterator) {
-            // TODO: marker linked to helper module, __ function
+        typeAttribute: function(iterator, type) {
+            this.newAction(iterator, type, this.layout.loadBlockClass.bind(this.layout, type));
         },
 
-        ifconfigAttribute: function(iterator) {
-            // TODO: Marker linked to global config flag
+        templateAttribute: function(iterator, template) {
+            var file = this.layout.findTemplateFile(template);
+            var action = file
+                    ? this.layout.loadFile.bind(this.layout, file)
+                    : null;
+            this.newAction(iterator, template, action);
+        },
+
+        methodAttribute: function(iterator, method) {
+            var name = this.currentBlockName();
+            this.newAction(iterator, method, this.layout.loadBlockMethod.bind(this.layout, name, method));
+        },
+
+        moduleAttribute: function(iterator, module) {
+            this.newAction(iterator, module, this.layout.loadHelperClass.bind(this.layout, module, '__'));
+        },
+
+        ifconfigAttribute: function(iterator, config) {
+            this.newAction(iterator, config, this.layout.loadConfigItem.bind(this.layout, config));
+        },
+
+        helperAttribute: function(iterator, helper) {
+            this.newAction(iterator, helper, this.layout.loadHelper.bind(this.layout, helper));
+        },
+
+        newAction: function(iterator, text, action) {
+            var row = iterator.getCurrentTokenRow();
+            var col1 = 1 + iterator.getCurrentTokenColumn();
+            var col2 = col1 + text.length;
+        
+            this.addAction(row, col1, row, col2, action);
+        },
+
+        addAction: function(row1, col1, row2, col2, action) {
+            var type = (row1 === row2) ? "line" : "block";
+            var data = { row1: row1, col1: col1, row2: row2, col2: col2, action: action, type: type};
+            for(var row = row1 ; row <= row2 ; row++ ) {
+                this.actions[row] = this.actions[row] || [];
+                this.actions[row].push(data);
+            }
+        },
+
+        addDisabledAction: function(row1, col1, row2, col2) {
+        },
+
+        pushBlockName: function(name) {
+            this.blockNames = this.blockNames || [];
+            this.blockNames.push({ name: name, level: this.level });
+        },
+
+        popBlockNames: function() {
+            this.blockNames = this.blockNames || [];
+            while(this.blockNames.length && this.blockNames[this.blockNames.length - 1].level > this.level) {
+                this.blockNames.pop();
+            }
+        },
+
+        currentBlockName: function() {
+            return this.blockNames[this.blockNames.length - 1].name;
         }
+
     });
 
-    var nullCustomizer = function() {}
-
-    $.extend(nullCustomizer.prototype, {
-        customize: function(s) {}
-    });
- 
 })(jQuery);

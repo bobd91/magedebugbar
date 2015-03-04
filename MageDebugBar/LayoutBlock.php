@@ -7,7 +7,6 @@ class LayoutBlock implements \JsonSerializable {
     protected $_parent = "";
     protected $_name = "";
     protected $_type = "";
-    protected $_block_file = "";
     protected $_template = "";
     protected $_template_file = "";
 
@@ -16,7 +15,6 @@ class LayoutBlock implements \JsonSerializable {
             $this->_parent = $parent;
             $this->_name = $block->getIsAnonymous() ? "(anonymous)" : $block->getNameInLayout();
             $this->_type = $block->getData('type');
-            $this->_block_file = $this->_baseDir((new \ReflectionClass($block))->getFileName());
             if($block instanceof \Mage_Core_Block_Template) {
                 $this->_template = $block->getTemplate();
                 $this->_template_file = $this->_templateDir($block->getTemplateFile());
@@ -26,7 +24,7 @@ class LayoutBlock implements \JsonSerializable {
 
     protected function _baseDir($path) {
         if(0 == strpos($path, MAGENTO_ROOT)) {
-            return substr($path, strlen(MAGENTO_ROOT));
+            return substr($path, 1 + strlen(MAGENTO_ROOT));
         } else {
             return $path;
         }
@@ -53,10 +51,9 @@ class LayoutBlock implements \JsonSerializable {
             $this->_type,
             $this->_template
         ];
-        $a['files'] = [
-            $this->_block_file,
-            $this->_template_file
-        ];
+        if($this->_template_file) {
+            $a['template'] = $this->_template_file;
+        }
         if(count($this->_blocks)) {
             $a['children'] = [];
             foreach($this->_blocks as $block) {
