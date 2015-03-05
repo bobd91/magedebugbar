@@ -43,29 +43,40 @@ class EventObserver {
      *
      * Searching for </head> and </body> might be enough but 
      * <script> tags could easily contain strings with </...> in
-     * so we have to cater for the worse case and actually parse the html
+     * so if we find multiple close tags we try to cater for
+     * the worse case and actually parse the html
+     * Unfortunately the XML parses take an exception to some HTML
+     * if which case we aere out of options
      */
     private function _insertHeadBody($html, $head, $body) {
         // Positions in Magento HTML at start of </head> and </body> tags
-        $headIndex = $bodyIndex = 0;
+        $headIndex = $this->_findUnique($html, '</head>');
+        $bodyIndex = $this->_findUnique($html, '</body>');;
 
-        // Set up the xml parser to examine closing head and body tags
-        $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-        xml_set_element_handler($parser, false, function($parser, $name) use (&$headIndex, &$bodyIndex) {
-            switch($name) {
-            case 'head': $headIndex = $this->_closeTagIndex($parser, $name); break;
-            case 'body': $bodyIndex = $this->_closeTagIndex($parser, $name); break;
-            }
-        });
+        if($headIndex == false || $bodyIndex == false) {
+            // Set up the xml parser to examine closing head and body tags
+            $parser = xml_parser_create();
+            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+            xml_set_element_handler($parser, false, function($parser, $name) use (&$headIndex, &$bodyIndex) {
+                switch($name) {
+                case 'head': $headIndex = $this->_closeTagIndex($parser, $name); break;
+                case 'body': $bodyIndex = $this->_closeTagIndex($parser, $name); break;
+                }
+            });
 
-        // PHP does not give enough control over libxml2 to avoid entity errors
-        // and valid HTML entities are not necessarily valid XML entities 
-        // so we blank out all entities first
-        $mangled = preg_replace_callback('/&[a-z]+;/', function($match) { return str_repeat(' ', strlen($match[0])); }, $html);
+            // PHP does not give enough control over libxml2 to avoid entity errors
+            // and valid HTML entities are not necessarily valid XML entities 
+            // so we blank out all entities first
+            $mangled = preg_replace_callback('/&[a-z]+;/', function($match) { return str_repeat(' ', strlen($match[0])); }, $html);
 
-        xml_parse($parser, $mangled, true);
-        xml_parser_free($parser);
+            xml_parse($parser, $mangled, true);
+            xml_parser_free($parser);
+        }
+
+        
+        if($headIndex == false || $bodyIndex == false) {
+            return $html;
+        }
 
         $start = substr($html, 0, $headIndex);
         $middle = substr($html, $headIndex, $bodyIndex - $headIndex);
@@ -81,5 +92,14 @@ class EventObserver {
     private function _closeTagIndex($parser, $name) {
         return  xml_get_current_byte_index($parser) - (3 + strlen($name));
     }
+
+    // Return index of $needle in $haystack as long as there is only one needle in haystack
+    // Otherwise return false
+    private function _findUnique($haystack, $needle) {
+        $pos = strpos($haystack, $needle);
+        return $pos == strrpos($haystack, $needle) 
+                ? $pos 
+                : false;
+    } 
 
 }
