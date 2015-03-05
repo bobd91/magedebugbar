@@ -6,6 +6,7 @@ app/code/community/BobD91/MageDebugBar/ app/code/community/BobD91/MageDebugBar/
 app/etc/modules/BobD91_MageDebugBar.xml app/etc/modules/BobD91_MageDebugBar.xml
 magedebugbar.php magedebugbar.php
 
+
 # Composer
 # ../.. lib/vendor
 

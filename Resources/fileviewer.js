@@ -11,8 +11,8 @@
         appendTo: function(element) {
             this.super.appendTo.call(this, element);
             this.editor = ace.edit('fileviewer');
-            this.emptySession = this.editor.getSession();
             this.editor.setReadOnly(true);
+            this.editor.setShowPrintMargin(false);
             this.editor.setTheme("ace/theme/chrome");
 
             this.editor.on('mousemove', this.mousemoveCombiner());
@@ -24,8 +24,7 @@
             if(tab) {
                 this.getContent(tab).setLine(fileinfo.line);
             } else {
-                var view = new FileView(this.editor, fileinfo, customizer);
-                tab = this.addTab(this.filename(fileinfo.path), fileinfo.path, true, view);
+                tab = this.addTab(new FileView(this.editor, fileinfo, customizer));
             }
             this.activateTab(tab);
         },
@@ -79,13 +78,13 @@
             }
         },
 
-        filename: function(path) {
-            return path.substr(1 + path.lastIndexOf('/'));
-        }
     });
 
     FileView = Class.create({
         constructor: function(editor, fileinfo, customizer) {
+            this.label = this.filename(fileinfo.path);
+            this.title = fileinfo.path
+            this.closeable = true, 
             this.editor = editor;
             this.fileinfo = fileinfo;
             if(!customizer) {
@@ -189,6 +188,10 @@
             }
             return false;
         },
+
+        filename: function(path) {
+            return path.substr(1 + path.lastIndexOf('/'));
+        }
 
     });
 

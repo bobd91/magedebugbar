@@ -10,6 +10,7 @@ class LayoutCollector
     protected $_current;
     protected $_config;
 
+
     public function __construct() {
         $this->_root = new LayoutBlock();
         $this->_current = $this->_root;
@@ -18,7 +19,7 @@ class LayoutCollector
     public function collect()
     {
         assert($this->_current == $this->_root);
-        return [ 'blocks' => $this->_root, 'config' => $this->_getLayoutConfig() ];
+        return [ 'blocks' => $this->_root, 'config' => $this->_getLayoutConfig(), 'store' => \Mage::app()->getStore()->getStoreId() ];
     }
 
     public function getName()

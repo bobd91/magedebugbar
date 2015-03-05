@@ -27,6 +27,8 @@ if (typeof(MageDebugBar) == 'undefined') {
             }.bind(this));
 
             var mousemove = function(e) {
+                var w = Math.min(this.$el.width() - this.$resizehdle.width(), Math.max(100, orig_w - pos_x + e.pageX));
+                this.$left.width(w);
                 this.resize();
             }.bind(this);
 
@@ -65,13 +67,14 @@ if (typeof(MageDebugBar) == 'undefined') {
         },
 
         resize: function() {
-                var w = Math.min(this.$el.width() - this.$resizehdle.width(), Math.max(100, orig_w - pos_x + e.pageX));
-                this.$left.width(w);
-                this.$right.css('margin-left', w + this.$resizehdle.width());
 
+                this.$right.css('margin-left', this.$left.width() + this.$resizehdle.width());
+
+                /* Not needed ATM
                 if(this.treeview) {
                     this.treeview.resize();
                 }
+               */
                 if(this.fileviewer) {
                     this.fileviewer.resize();
                 }
@@ -80,29 +83,29 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         findBlock: function(name) {
             var handles = this.data.config.handles;
-            for(var h = 0 ; h < handles.length ; h++) {
-                var config = handles[h].config;
-                for(var c = 0 ; c < config.length ; c++) {
-                   var res = this.findBlockInItem(name, config[c]);
-                   if(res) return res;
-                }
+            for(var i = 0 ; i < handles.length ; i++) {
+                var res = this.findBlockInElems(name, handles[i].elems);
+                if(res) return res;
             }
         },
 
-        findBlockInItem: function(name, item) {
-            if(item.name === 'block' && item.attrs) {
-                var attrs = item.attrs;
-                for(var a = 0 ; a < attrs.length ; a++) {
-                    if(name === attrs[a].name) return item;
-                }
-            }
-            if(item.elems) {
-                var elems = item.elems;
-                for(var e = 0 ; e < elems.length ; e++) {
-                    var res = this.findBlockInItem(name, elems[e]);
+        findBlockInElems: function(name, elems) {
+            if(elems) {
+                for(var i = 0 ; i < elems.length ; i++) {
+                    var res = this.findBlockInElem(name, elems[i]);
                     if(res) return res;
                 }
             }
+        }, 
+
+        findBlockInElem: function(name, elem) {
+            if(elem.name === 'block' && elem.attrs) {
+                var attrs = elem.attrs;
+                for(var i = 0 ; i < attrs.length ; i++) {
+                    if(name === attrs[i].name) return elem;
+                }
+            }
+            return this.findBlockInElems(name, elem.elems);
         },
 
         findAttr: function(name, attrs) {
@@ -121,8 +124,8 @@ if (typeof(MageDebugBar) == 'undefined') {
             };
         },
 
-        loadConfigItem: function(name) {
-            this.load("config=" + name);
+        loadStoreConfigFlag: function(flag) {
+            this.load("store=" + this.data.store + "&config-flag=" + flag);
         },
 
         loadBlockClass: function(name, method) {
@@ -214,6 +217,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         loadResponse: function(response) {
             switch(response.type) {
             case 'file': this.fileviewer.load(response, this.viewHandler(response['mime-type'])); break;
+            case 'alert': alert(response.message);  break;
             }
         },
 
@@ -438,7 +442,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         },
 
         blockElement: function(iterator) {
-            if(this.attributes(iterator, ['type', 'template', 'before', 'after'], this.checkBlockNameAttribute)) {
+            if(this.attributes(iterator, ['type', 'template', 'before', 'after', 'module'], this.checkBlockNameAttribute)) {
                 this.elements(iterator, ['block', 'action', 'remove']);
             }
         },
@@ -514,7 +518,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         },
 
         ifconfigAttribute: function(iterator, config) {
-            this.newAction(iterator, config, this.layout.loadConfigItem.bind(this.layout, config));
+            this.newAction(iterator, config, this.layout.loadStoreConfigFlag.bind(this.layout, config));
         },
 
         helperAttribute: function(iterator, helper) {

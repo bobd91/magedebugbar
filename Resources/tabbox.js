@@ -41,12 +41,12 @@
             tab.data('tab-content', content);
         },
 
-        addTab: function(label, title, closeable, content) {
-            var tab = $('<li />').text(label);
-            if(title) {
-                tab.attr('title', title);
+        addTab: function(content) {
+            var tab = $('<li />').text(content.label);
+            if(content.title) {
+                tab.attr('title', content.title);
             }
-            if(closeable) {
+            if(content.closeable) {
                 var close = $('<div />').addClass('tab-close');
                 close.appendTo(tab);
             }
@@ -87,7 +87,10 @@
 
 
     TabContent = Class.create({
-        constructor: function(ui) {
+        constructor: function(label, ui, closeable, title) {
+            this.label = label;
+            this.title = title;
+            this.closeable = closeable;
             this.$ui = ui;
         },
 

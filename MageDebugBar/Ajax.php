@@ -20,7 +20,18 @@ class Ajax {
                 // Not found
                 http_response_code(404);
             }
+        } else if(isset($_GET['config-flag'])) {
+            $this->_configFlag($_GET['config-flag'], $_GET['store']);
         }
+    }
+
+    protected function _configFlag($flag, $store) {
+        $res = \Mage::getStoreConfigFlag($flag, $store) ? 'True' : 'False';
+        $message = "$flag = $res";
+        echo json_encode([
+            'type' => 'alert',
+            'message' => $message
+        ]);
     }
 
     protected function _processClass($class) {

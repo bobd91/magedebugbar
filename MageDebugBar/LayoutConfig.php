@@ -5,10 +5,11 @@ namespace MageDebugBar;
 class LayoutConfig {
 
     public function __construct($handles) {
+        $this->handles = [];
         foreach($handles as $handle) {
             $h = new \StdClass;
             $h->name = $handle;
-            $h->config = [];
+            $h->elems = [];
             $this->handles[] = $h;
         }
     }
@@ -46,7 +47,7 @@ class LayoutConfig {
         foreach($this->handles as $handle) {
             foreach($layout->findAll($handle->name) as $handleConfig) {
                 foreach($handleConfig->elems as $elem) {
-                    $handle->config[] = $elem;
+                    $handle->elems[] = $elem;
                 }
             }
         }
