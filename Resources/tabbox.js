@@ -13,6 +13,7 @@
 
         appendTo: function(element) {
             this.$box.appendTo(element);
+            this.resize();
         },
 
         resize: function(e) {
@@ -51,7 +52,7 @@
                 close.appendTo(tab);
             }
             this.$tabs.append(tab);
-            content.add(this.$content);
+            content.add(this);
 
             this.setContent(tab, content);
 
@@ -72,16 +73,34 @@
                     // Closed the furthest right tab
                     index--;
                 }
-                var newActive = $('.tab-box > ul li').eq(index);
+                var newActive = this.$tabs.children().eq(index);
                 this.activateTab(newActive);
+            }
+            if(0 == this.tabCount()) {
+                this.hideContent();
             }
         },
 
         activateTab: function(tab) {
-            $('.tab-active').removeClass('tab-active');
+            this.$box.find('.tab-active').removeClass('tab-active');
             tab.addClass('tab-active');
             this.getContent(tab).activate();
+            if(1 == this.tabCount()) {
+                this.showContent();
+            }
         },
+
+        tabCount: function() {
+            return this.$tabs.children().length;
+        },
+
+        hideContent: function() {
+            this.$content.css('visibility', 'hidden');
+        },
+
+        showContent: function() {
+            this.$content.css('visibility', 'visible');
+        }
 
     });
 
@@ -94,8 +113,9 @@
             this.$ui = ui;
         },
 
-        add: function(container) {
-            this.$ui.appendTo(container);
+        add: function(tabbox) {
+            this.tabbox = tabbox;
+            this.$ui.appendTo(tabbox.$content);
         },
 
         activate: function() {

@@ -1,0 +1,16 @@
+
+.magedebugbar-layout-pageview {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.magedebugbar-layout-block-hover {
+    position: absolute;
+    background: rgba(127, 127, 255, .3);
+    display: none;
+    z-index: 9999; /* one less than phpdebugbar */
+}
+

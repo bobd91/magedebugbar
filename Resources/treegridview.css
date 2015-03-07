@@ -7,17 +7,17 @@
 .treegridview-container td {
     white-space: nowrap;
     position: relative;
-    text-align: right;
+    text-align: left;
     overflow: hidden;
     }
 
-.treegridview-container td:first-child {
-    text-align:left;
-}
-
 .treegridview-container th {
-    background: #bfbfbf;
+    background: #eeeeee;
     }
+
+.treegridview-container th:first-child {
+    padding-left: .3em;
+}
 
   .treegridview-hover { background: #dff3f5; }
 

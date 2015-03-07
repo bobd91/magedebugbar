@@ -15,6 +15,7 @@ var TreeGridView =
                 this.addHeadings(container);
                 this.addRoot(container);
                 this.addHandlers(container);
+                return container;
             },
 
             addColGroup: function(container) {
@@ -38,41 +39,43 @@ var TreeGridView =
             },
 
             addRoot: function(container) {
-                var row = this
-                    .makeRow(this.model.root, 1)
-                    .appendTo(container)
-                    .hover(this.hover.bind(this), this.unhover.bind(this))
-                    .data('branch', this.model.root)
-                    .data('level', 1);
-
-                this.open({ target: row.find(this.cssClassSelector("closed")) });
+                var children = this.model.root[this.model.children];
+                this.insertChildren(children, 1, container, true);
+                if(children.length == 1) {
+                    this.open({ target: container.find(this.cssClassSelector("closed")) });
+                }
             },
 
             makeRow: function(branch, level) {
                 var tr = $("<tr />");
-                branch.values.forEach(function(v, i) {
+                this.model.values.forEach(function(v, i) {
                     var td = $("<td />").appendTo(tr);
                     if(i == 0) {
-                        td.css("padding-left",  (level - 1) + "em");
-                        var cls = this.cssClass('children' in branch ? "closed" : "leaf");
+                        td.css("padding-left",  (level - 1) + ".3em");
+                        var cls = this.cssClass(this.hasChildren(branch) ? "closed" : "leaf");
                         $("<div />")
                             .addClass(cls)
                             .appendTo(td);
                     }
-                    var cell = $("<div>" + v + "</div>")
+                    var cell = $("<div>" + branch[v] + "</div>")
                         .addClass(this.cssClass("cell"))
                         .appendTo(td);
                     if(i == 0) {
-                        cell.css("padding-left", "1em");
+                        cell.css("margin-left", "1em");
                     }
                 }, this);
                 return tr;
+            },
+
+            hasChildren: function(branch) {
+                return 0 < branch[this.model.children].length;
             },
 
             addHandlers: function(container) {
                 container.on("click", this.cssClassSelector("open"), this.close.bind(this));
                 container.on("click", this.cssClassSelector("closed"), this.open.bind(this));
                 container.on("click", this.cssClassSelector("cell"), this.click.bind(this));
+                container.on("hover", this.cssClassSelector("hover"), this.hover.bind(this));
             },
 
             open: function(event) {
@@ -81,12 +84,9 @@ var TreeGridView =
                     .removeClass(this.cssClass("closed"))
                     .addClass(this.cssClass("opening"));
                 var row = this.findRow(event);
-                var prev = row.element;
-                Promise.resolve(row.branch.children)
+                Promise.resolve(row.branch[this.model.children])
                     .then(function(children) {
-                        children.forEach(function(v) { 
-                            prev = this.insertRow(v, 1 + row.level, prev);
-                        }, this)
+                        this.insertChildren(children, 1 + row.level, row.element);
                     }.bind(this))
                     .catch(function(err) {
                         console.err(err);
@@ -96,6 +96,13 @@ var TreeGridView =
                             .removeClass(this.cssClass("opening"))
                             .addClass(this.cssClass("open"));
                     }.bind(this));
+            },
+
+            insertChildren: function(children, level, prev, append) {
+                children.forEach(function(v) { 
+                    prev = this.insertRow(v, level, prev, append);
+                    append = false;
+                }, this);
             },
 
             findRow: function(event) {
@@ -117,9 +124,14 @@ var TreeGridView =
             },
 
 
-            insertRow: function(branch, level, element) {
-                return this.makeRow(branch, level)
-                    .insertAfter(element)
+            insertRow: function(branch, level, element, append) {
+                var row = this.makeRow(branch, level);
+                if(append) {
+                    row = row.appendTo(element);
+                } else {
+                    row = row.insertAfter(element);
+                }
+                return row
                     .hover(this.hover.bind(this), this.unhover.bind(this))
                     .data('branch', branch)
                     .data('level', level);
@@ -146,10 +158,12 @@ var TreeGridView =
 
             hover: function(event) {
                 $(event.currentTarget).addClass(this.cssClass("hover"));
+                $(this).trigger('hover', [true, this.findRow(event)]);
             },
 
             unhover: function(event) {
                 $(event.currentTarget).removeClass(this.cssClass("hover"));
+                $(this).trigger('hover', [false, this.findRow(event)]);
             },
 
             cssClass: function(clas) {

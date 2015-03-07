@@ -2,23 +2,21 @@
 
 namespace MageDebugBar;
 
-class LayoutBlock implements \JsonSerializable {
-    protected $_blocks = [];
+class LayoutBlock {
     protected $_parent = "";
-    protected $_name = "";
-    protected $_type = "";
-    protected $_template = "";
-    protected $_template_file = "";
 
     public function __construct($parent = null, $block = null) {
         if($block) {
             $this->_parent = $parent;
-            $this->_name = $block->getIsAnonymous() ? "(anonymous)" : $block->getNameInLayout();
-            $this->_type = $block->getData('type');
+            $this->name = $block->getNameInLayout();
+            $this->type = $block->getData('type');
+            $this->blocks = [];
             if($block instanceof \Mage_Core_Block_Template) {
-                $this->_template = $block->getTemplate();
-                $this->_template_file = $this->_templateDir($block->getTemplateFile());
+                $this->template = $block->getTemplate();
+                $this->template_file = $this->_templateDir($block->getTemplateFile());
             }
+            // Avoid 'null' and 'undefined' in JSON
+            if(!(isset($this->template) && $this->template)) $this->template = "";
         }
     }
 
@@ -36,30 +34,11 @@ class LayoutBlock implements \JsonSerializable {
 
     public function addBlock($block) {
         $b = new LayoutBlock($this, $block);
-        $this->_blocks[] = $b;
+        $this->blocks[] = $b;
         return $b; 
     }
 
     public function getParent() {
         return $this->_parent;
-    }
-
-    public function jsonSerialize() {
-        $a = [];
-        $a['values'] = [
-            $this->_name ? $this->_name : 'Layout', 
-            $this->_type,
-            $this->_template
-        ];
-        if($this->_template_file) {
-            $a['template'] = $this->_template_file;
-        }
-        if(count($this->_blocks)) {
-            $a['children'] = [];
-            foreach($this->_blocks as $block) {
-                $a['children'][] = $block->jsonSerialize();
-            }
-        }
-        return $a;
     }
 }

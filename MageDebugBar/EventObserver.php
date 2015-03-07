@@ -11,15 +11,31 @@ namespace MageDebugBar;
 
 class EventObserver {
 
+    // Don't put identifying <div> around these elements as they are not display elements
+    const DONT_MARK_ELEMENTS = ['html', 'head', 'title', 'meta', 'base', 'style', 'script', 'link', 'object', 'body'];
+    const MAX_ELEM_LENGTH = 6;
+
     /**
      * Called just before the Magento generated HTML is returned to the browser
      * Add the DebugBar HTML to the head and body
      */
     public function http_response_send_before($observer) {
         $response = $observer->getResponse();
-        $renderer = \Mage::App()->getDebugBar()->getJavascriptRenderer();
+        $debugbar = \Mage::App()->getDebugBar();
+        $renderer = $debugbar->getJavascriptRenderer();
 
-        $response->setBody($this->_insertHeadBody($response->getBody(), $renderer->renderHead(), $renderer->render()));
+        if(self::isAjaxCall()) {
+            $debugbar->setStorage(new DebugBar\Storage\FileStorage(\Mage::getBaseDir('var') . DS . 'magedebugbar'));
+            $renderer->sendDataInHeaders(true);
+            $renderer->setOpenHandler('magedebugbar.php');
+            $renderer->collect();
+        } else {
+            $response->setBody($this->_insertHeadBody($response->getBody(), $renderer->renderHead(), $renderer->render()));
+        }
+    }
+
+    public static function isAjaxCall() {
+        return isset($SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
     /**
@@ -36,6 +52,35 @@ class EventObserver {
      */
     public function core_block_abstract_to_html_after($observer) {
         \Mage::App()->getDebugBar()['layout']->collectEndBlock($observer->getData('block'));
+        $this->_markBlock($observer->getData('block'), $observer->getData('transport'));
+    }
+
+    protected function _markBlock($block, $transport) {
+        $html = $transport->getHtml();
+        if($this->_shouldMarkHtml($html)) {
+            $name = $block->getNameInLayout();
+            $html = "<span data-block='$name'></span>$html<span data-block='$name'></span>";
+            $transport->setHtml($html);
+        }
+    }
+
+    protected function _shouldMarkHtml($html) {
+        $trim = trim($html);
+        if(0 === strlen($trim)) {
+            return false;
+        }
+        if('<' === substr($trim, 0, 1)) {
+            if('!' === substr($trim, 1, 1)) {
+                return false; // <!DOCTYPE
+            }
+            $rest = strtolower(substr($trim, 1, 6));
+            foreach(self::DONT_MARK_ELEMENTS as $not) {
+                if($not === substr($rest, 0, strlen($not))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

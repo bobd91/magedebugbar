@@ -37,6 +37,17 @@ if (typeof(MageDebugBar) == 'undefined') {
                 this.$el.css('cursor', orig_cursor);
             }.bind(this);
 
+            // Resize contents when phpdebugbar splitter is moved 
+            // Unfortunately we want to resize after phpdebugbar but
+            // it doesn't fire any events and we have no way if knowing
+            // if our mousemove listener will fire before or after its
+            // So we have to make sure we put an event on the end of the queue
+            $('.phpdebugbar-drag-capture').on('mousemove', function(e) {
+                window.setTimeout(function() {
+                    this.resize();
+                }.bind(this), 0);
+            }.bind(this));
+
             this.bindAttr('data', function(data) {
                 this.data = data;
                 this.$right.css('margin-left', this.$left.width() + this.$resizehdle.width());
@@ -44,40 +55,17 @@ if (typeof(MageDebugBar) == 'undefined') {
                 this.$left.children().remove();
                 this.$right.children().remove();
 
-                this.treeview = new TreeGridView(this.makeRootModel(data.blocks));
+                this.layoutviewer = new LayoutViewer(this, data);
                 this.fileviewer = new FileViewer();
-                this.treeview.appendTo(this.$left);
+                this.layoutviewer.appendTo(this.$left);
                 this.fileviewer.appendTo(this.$right);
-
-                $(this.treeview).on('click', function(e, row, col) {
-                    switch(col) {
-                    case 0: // Block name
-                        this.loadBlock(row.branch.values[col]);
-                        break;
-                    case 1: // Block class
-                            this.loadBlockClass(row.branch.values[col]);
-                        break;
-                    case 2: // Template file
-                            this.loadFile(row.branch.template);
-                        break;
-                    }
-                }.bind(this));
-
             });
         },
 
         resize: function() {
-
                 this.$right.css('margin-left', this.$left.width() + this.$resizehdle.width());
-
-                /* Not needed ATM
-                if(this.treeview) {
-                    this.treeview.resize();
-                }
-               */
-                if(this.fileviewer) {
-                    this.fileviewer.resize();
-                }
+                if(this.layoutviewer) this.layoutviewer.resize();
+                if(this.fileviewer) this.fileviewer.resize();
         },
  
 
@@ -118,6 +106,8 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         makeRootModel: function(data) {
             return {
+                values: ['name', 'type', 'template'],
+                children: 'blocks',
                 columns: [csscls('name'), csscls('type'), csscls('template')],
                 headings: ['Name', 'Type', 'Template'],
                 root: data
@@ -180,11 +170,11 @@ if (typeof(MageDebugBar) == 'undefined') {
         findTemplateFile: function(template, config) {
             config = config || [this.data.blocks];
             for(var i = 0 ; i < config.length ; i++) {
-                if(config[i].values[2] === template) {
-                    return config[i].template;
+                if(config[i].template === template) {
+                    return config[i].template_file;
                 }
-                if(config[i].children) {
-                    var res = this.findTemplateFile(template, config[i].children);
+                if(config[i].blocks) {
+                    var res = this.findTemplateFile(template, config[i].blocks);
                     if(res) return res;
 
                 }

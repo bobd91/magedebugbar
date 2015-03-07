@@ -31,7 +31,9 @@
 
         resize: function() {
             this.super.resize.call(this);
-            this.editor.resize();
+            if(this.editor) {
+                this.editor.resize();
+            }
         },
 
         mousemoveCombiner: function() {
@@ -113,9 +115,7 @@
             this.gotoLine();
         },
 
-        remove: function() {
-            //this.editor.setSession(null);
-        },
+        remove: function() { },
 
         gotoLine: function() {
             if(this.line) {
