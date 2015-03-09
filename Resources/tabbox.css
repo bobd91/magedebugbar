@@ -28,11 +28,13 @@
 
     .tab-box > ul li.tab-active {
         border-color: #bebebe;
+        background: white;
     }
 
     .tab-content {
         position: relative;
         width: 100%;
+        overflow: auto;
     }
 
     .tab-content > div {

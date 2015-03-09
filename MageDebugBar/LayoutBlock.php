@@ -5,9 +5,10 @@ namespace MageDebugBar;
 class LayoutBlock {
     protected $_parent = "";
 
-    public function __construct($parent = null, $block = null) {
+    public function __construct($parent = null, $block = null, $id = 0) {
         if($block) {
             $this->_parent = $parent;
+            $this->id = $id;
             $this->name = $block->getNameInLayout();
             $this->type = $block->getData('type');
             $this->blocks = [];
@@ -32,13 +33,17 @@ class LayoutBlock {
         return $this->_baseDir(\Mage::getBaseDir('design') . DS . $template);
     }
 
-    public function addBlock($block) {
-        $b = new LayoutBlock($this, $block);
+    public function addBlock($block, $id) {
+        $b = new LayoutBlock($this, $block, $id);
         $this->blocks[] = $b;
         return $b; 
     }
 
     public function getParent() {
         return $this->_parent;
+    }
+
+    public function id() {
+        return $this->id;
     }
 }

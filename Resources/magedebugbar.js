@@ -463,7 +463,7 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         nameAttribute: function(iterator, name) {
             this.pushBlockName(name);
-            this.newAction(iterator, name, this.layout.loadBlock.bind(this.layout, name)); 
+            this.nameAction(iterator,  name);
         },
 
         // special for block names as we need to push the block name
@@ -476,13 +476,13 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         beforeAttribute: function(iterator, name) {
             if(name !== '-' && name !== '*') {
-                this.newAction(iterator,  name, this.layout.loadBlock.bind(this.layout, name));
+                this.nameAction(iterator, name);
             }
         },
 
         afterAttribute: function(iterator, name) {
             if(name !== '-' && name != '*') {
-                this.newAction(iterator, name, this.layout.loadBlock.bind(this.layout, name));
+                this.nameAction(iterator, name);
             }
         },
 
@@ -515,6 +515,13 @@ if (typeof(MageDebugBar) == 'undefined') {
             this.newAction(iterator, helper, this.layout.loadHelper.bind(this.layout, helper));
         },
 
+        nameAction: function(iterator, name) {
+            var action = this.layout.findBlock(name) 
+                         ? this.layout.loadBlock.bind(this.layout, name)
+                         : null;
+            this.newAction(iterator, name, action);
+        },
+
         newAction: function(iterator, text, action) {
             var row = iterator.getCurrentTokenRow();
             var col1 = 1 + iterator.getCurrentTokenColumn();
@@ -530,9 +537,6 @@ if (typeof(MageDebugBar) == 'undefined') {
                 this.actions[row] = this.actions[row] || [];
                 this.actions[row].push(data);
             }
-        },
-
-        addDisabledAction: function(row1, col1, row2, col2) {
         },
 
         pushBlockName: function(name) {

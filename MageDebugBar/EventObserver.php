@@ -49,17 +49,17 @@ class EventObserver {
     /**
      * Called after rendering a block
      * Used with html_before to get parent/child relationships
+     * Also add markers to html to allow blocks to be highlighted on the client
      */
     public function core_block_abstract_to_html_after($observer) {
-        \Mage::App()->getDebugBar()['layout']->collectEndBlock($observer->getData('block'));
-        $this->_markBlock($observer->getData('block'), $observer->getData('transport'));
+        $blockid = \Mage::App()->getDebugBar()['layout']->collectEndBlock($observer->getData('block'));
+        $this->_markBlock($blockid, $observer->getData('transport'));
     }
 
-    protected function _markBlock($block, $transport) {
+    protected function _markBlock($blockid, $transport) {
         $html = $transport->getHtml();
         if($this->_shouldMarkHtml($html)) {
-            $name = $block->getNameInLayout();
-            $html = "<span data-block='$name'></span>$html<span data-block='$name'></span>";
+            $html = "<span data-blockid='$blockid'></span>$html<span data-blockid='$blockid'></span>";
             $transport->setHtml($html);
         }
     }

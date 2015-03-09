@@ -10,6 +10,7 @@ class LayoutCollector
     protected $_current;
     protected $_config;
 
+    protected $_id = 0;
 
     public function __construct() {
         $this->_root = new LayoutBlock();
@@ -28,11 +29,17 @@ class LayoutCollector
     }
 
     public function collectStartBlock($block) {
-        $this->_current = $this->_current->addBlock($block);
+        $this->_current = $this->_current->addBlock($block, $this->_nextId());
     }
 
     public function collectEndBlock($block) {
+        $blockid = $this->_current->id();
         $this->_current = $this->_current->getParent();
+        return $blockid;
+    }
+
+    protected function _nextId() {
+        return $this->_id++;
     }
 
     // Modified version of Mage_Core_Model_Layout_Update::getFileLayoutUpdatesXml

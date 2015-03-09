@@ -9,7 +9,7 @@
 
 .magedebugbar-layout-block-hover {
     position: absolute;
-    background: rgba(127, 127, 255, .3);
+    background: rgba(127, 127, 255, .4);
     display: none;
     z-index: 9999; /* one less than phpdebugbar */
 }
