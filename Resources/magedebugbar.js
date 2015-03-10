@@ -136,10 +136,8 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         // Helper comes as <helper class alias>/method
         loadHelper: function(helper) {
-            var bits = helper.split('/');
-            var alias = bits.slice(0, -1).join('/');
-            var method = bits[bits.length - 1];
-            this.loadHelperClass(alias, method);
+            var h = new HelperArg(helper);
+            this.loadHelperClass(h.alias, h.method);
         },
 
         // Block name and method
@@ -556,5 +554,13 @@ if (typeof(MageDebugBar) == 'undefined') {
         }
 
     });
+
+HelperArg = Class.create({
+    constructor: function(helper) {
+            var bits = helper.split('/');
+            this.alias = bits.slice(0, -1).join('/');
+            this.method = bits[bits.length - 1];
+    },
+});
 
 })(jQuery);

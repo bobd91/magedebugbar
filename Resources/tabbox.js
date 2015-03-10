@@ -48,7 +48,9 @@
                 tab.attr('title', content.title);
             }
             if(content.closeable) {
-                var close = $('<div />').addClass('tab-close');
+                var close = $('<span />').addClass('tab-close');
+                $('<i />').addClass('tab-cross-icon').appendTo(close);
+                $('<i />').addClass('tab-close-icon fa fa-times-circle icon').appendTo(close);
                 close.appendTo(tab);
             }
             this.$tabs.append(tab);

@@ -47,26 +47,33 @@
 
     .tab-close {
         display: inline-block;
+        width: .8em;
+        margin-left: .3em;
+    }
+
+    .tab-close .tab-cross-icon,
+    .tab-close .tab-close-icon {
+        color: #C0C0C0;
+        text-align: center;
+        display: none;
+    }
+
+    .tab-close:hover .tab-close-icon {
+        display: inline;
+    }
+
+    li.tab-active .tab-cross-icon,
+    li:hover .tab-cross-icon {
+        display: inline;
+    }
+
+    .tab-close:hover .tab-cross-icon {
+        display: none;
+    }
+
+    .tab-cross-icon:before {
         color: #808080;
-        font-weight: bold;
-        line-height: .6;
-        margin-left: .2em;
-        padding: .2em .2em;
-        visibility: hidden;
-    }
-
-    .tab-close:hover {
-        border-radius: 50%;
-            background: #b7b7b7;
-                color: white;
-    }
-
-    li.tab-active .tab-close,
-    li:hover .tab-close {
-        visibility: visible;
-    }
-
-
-    .tab-close:before {
         content: '\00D7'; /* &times; */
+        font-weight: bold;
     }
+

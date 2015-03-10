@@ -55,13 +55,14 @@ var TreeGridView =
                         var cls = this.cssClass(this.hasChildren(branch) ? "closed" : "leaf");
                         $("<div />")
                             .addClass(cls)
+                            .addClass('fa fa-play icon')
                             .appendTo(td);
                     }
                     var cell = $("<div>" + branch[v] + "</div>")
                         .addClass(this.cssClass("cell"))
                         .appendTo(td);
                     if(i == 0) {
-                        cell.css("margin-left", "1em");
+                        cell.css("margin-left", ".5em");
                     }
                 }, this);
                 return tr;
@@ -82,7 +83,8 @@ var TreeGridView =
                 var target = $(event.target);
                 target
                     .removeClass(this.cssClass("closed"))
-                    .addClass(this.cssClass("opening"));
+                    .removeClass('fa-play icon')
+                    .addClass('fa-spinner fa-pulse')
                 var row = this.findRow(event);
                 Promise.resolve(row.branch[this.model.children])
                     .then(function(children) {
@@ -93,8 +95,9 @@ var TreeGridView =
                     })
                     .then(function() {
                         target
-                            .removeClass(this.cssClass("opening"))
-                            .addClass(this.cssClass("open"));
+                            .removeClass('fa-spinner fa-pulse')
+                            .addClass(this.cssClass("open"))
+                            .addClass('fa-play fa-rotate-90 icon');
                     }.bind(this));
             },
 
@@ -149,7 +152,8 @@ var TreeGridView =
                     .remove();
                 $(event.target)
                     .removeClass(this.cssClass("open"))
-                    .addClass(this.cssClass("closed"));
+                    .removeClass('fa-rotate-90')
+                    .addClass(this.cssClass("closed"))
             },
 
             click: function(event) {

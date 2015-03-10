@@ -14,3 +14,37 @@
     z-index: 9999; /* one less than phpdebugbar */
 }
 
+.magedebugbar-layout-block-icon,
+.magedebugbar-layout-reference-icon,
+.magedebugbar-layout-remove-icon,
+.magedebugbar-layout-action-icon {
+    font-size: 12px;
+    margin-right: .3em;
+}
+
+.magedebugbar-layout-block-icon {
+    color: blue;
+}
+
+.magedebugbar-layout-reference-icon {
+    color: purple;
+}
+
+.magedebugbar-layout-remove-icon {
+    color: red;
+}
+
+.magedebugbar-layout-action-icon {
+    color: green;
+}
+
+
+.magedebugbar-layout-ifaction-icon {
+    color: orange;
+}
+
+
+
+
+
+
