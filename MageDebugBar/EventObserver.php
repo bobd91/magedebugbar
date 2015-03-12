@@ -66,7 +66,7 @@ class EventObserver {
     protected function _shouldMarkHtml($html) {
         $trim = trim($html);
         if(0 === strlen($trim)) {
-            return true;
+            return false;
         }
         if('<' === substr($trim, 0, 1)) {
             if('!' === substr($trim, 1, 1)) {
