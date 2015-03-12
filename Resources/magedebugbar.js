@@ -88,20 +88,9 @@ if (typeof(MageDebugBar) == 'undefined') {
 
         findBlockInElem: function(name, elem) {
             if(elem.name === 'block' && elem.attrs) {
-                var attrs = elem.attrs;
-                for(var i = 0 ; i < attrs.length ; i++) {
-                    if(name === attrs[i].name) return elem;
-                }
+                if(name === elem.attrs.name) return elem;
             }
             return this.findBlockInElems(name, elem.elems);
-        },
-
-        findAttr: function(name, attrs) {
-            for(var a = 0 ; a < attrs.length ; a++) {
-                if(name in attrs[a]) {
-                    return attrs[a][name];
-                }
-            }
         },
 
         makeRootModel: function(data) {
@@ -145,7 +134,7 @@ if (typeof(MageDebugBar) == 'undefined') {
         loadBlockMethod: function(name, method) {
             var block = this.findBlock(name);
             if(block) {
-                var alias = this.findAttr('type', block.attrs);
+                var alias = block.attrs.type;
                 this.loadBlockClass(alias, method);
             }
         },

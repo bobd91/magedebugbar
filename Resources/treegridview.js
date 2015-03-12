@@ -11,11 +11,18 @@ var TreeGridView =
                 var container = $("<table />")
                     .addClass(this.cssClass("container"))
                     .appendTo(element);
+                this.container = container;
                 this.addColGroup(container);
                 this.addHeadings(container);
                 this.addRoot(container);
                 this.addHandlers(container);
                 return container;
+            },
+
+            resetRoot: function(root) {
+                this.container.has('tbody').children().remove();
+                this.model.root = root;
+                this.addRoot(this.container);
             },
 
             addColGroup: function(container) {
@@ -40,9 +47,13 @@ var TreeGridView =
 
             addRoot: function(container) {
                 var children = this.model.root[this.model.children];
+                var target;
                 this.insertChildren(children, 1, container, true);
                 if(children.length == 1) {
-                    this.open({ target: container.find(this.cssClassSelector("closed")) });
+                    target =  container.find(this.cssClassSelector("closed"));
+                    if(target.length) {
+                        this.open({ target: target });
+                    }
                 }
             },
 

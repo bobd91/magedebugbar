@@ -28,6 +28,7 @@
   .treegridview-leaf,
   .treegridview-open,
   .treegridview-closed {
+      color: #808080;
       font-size: 10px;
   }
 

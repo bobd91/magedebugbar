@@ -25,10 +25,9 @@ class EventObserver {
         $renderer = $debugbar->getJavascriptRenderer();
 
         if(self::isAjaxCall()) {
-            $debugbar->setStorage(new DebugBar\Storage\FileStorage(\Mage::getBaseDir('var') . DS . 'magedebugbar'));
-            $renderer->sendDataInHeaders(true);
-            $renderer->setOpenHandler('magedebugbar.php');
-            $renderer->collect();
+            /* No Ajax support at the moment
+             * Leave the result unmodified
+            */
         } else {
             $response->setBody($this->_insertHeadBody($response->getBody(), $renderer->renderHead(), $renderer->render()));
         }

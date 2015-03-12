@@ -44,6 +44,9 @@
 
         addTab: function(content) {
             var tab = $('<li />').text(content.label);
+            if(content.html) {
+                content.html.appendTo(tab);
+            }
             if(content.title) {
                 tab.attr('title', content.title);
             }
@@ -108,11 +111,12 @@
 
 
     TabContent = Class.create({
-        constructor: function(label, ui, closeable, title) {
+        constructor: function(label, ui, closeable, title, html) {
             this.label = label;
             this.title = title;
             this.closeable = closeable;
             this.$ui = ui;
+            this.html = html;
         },
 
         add: function(tabbox) {

@@ -9,10 +9,13 @@ class LayoutConfigItem {
     public function __construct($parent = null, $name = null, $attrs = [], $file = null, $line = null) {
         $this->_parent = $parent;
         $this->name = $name;
+        $this->attrs = $attrs;
         // From associative array to index based to preserve order on client
+        /*
         foreach($attrs as $name => $value) {
             $this->attrs[] = [$name => $value];
         }
+        */
         $this->elems = [];
         $this->file = $file;
         $this->line = $line;

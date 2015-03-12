@@ -1,10 +1,14 @@
 
-.magedebugbar-layout-pageview {
+.magedebugbar-layout-view {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.tab-active #magedebugbar-layout-handle-chooser {
+    background: white;
 }
 
 .magedebugbar-layout-block-hover {
@@ -14,11 +18,16 @@
     z-index: 9999; /* one less than phpdebugbar */
 }
 
-.magedebugbar-layout-block-icon,
-.magedebugbar-layout-reference-icon,
-.magedebugbar-layout-remove-icon,
-.magedebugbar-layout-action-icon {
+.magedebugbar-layout-view table {
+    font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
     font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    color: #1a1aa6;
+}
+
+.magedebugbar-layout-icon {
+    font-size: 10px;
     margin-right: .3em;
 }
 
@@ -26,8 +35,8 @@
     color: blue;
 }
 
-.magedebugbar-layout-reference-icon {
-    color: purple;
+.magedebugbar-layout-forced-block-icon {
+    color: gray;
 }
 
 .magedebugbar-layout-remove-icon {
@@ -39,11 +48,16 @@
 }
 
 
-.magedebugbar-layout-ifaction-icon {
+.magedebugbar-layout-if-action-icon {
     color: orange;
 }
 
-
+#magedebugbar-layout-handle-chooser {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-left: 0.4em;
+    vertical-align: middle-top;
+}
 
 
 
