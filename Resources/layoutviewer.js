@@ -12,7 +12,17 @@
 
             this.$hover = $('<div />').addClass(csscls('block-hover'));
             $('body').append(this.$hover);
+
+            this.tooltip = new ToolTips();
         },
+
+        showTip: function(text) {
+            this.tooltip.show(this.$hover, text);
+        },
+
+        hideTip: function() {
+            this.tooltip.hide();
+        }
     });
 
     var PageView = Class.extend(TabContent, {
@@ -46,10 +56,12 @@
                                 height: res.bottom - res.top
                             })
                             .show();
+                            this.tabbox.showTip(row.branch.name);
                         }
                     }
                 } else {
                     this.tabbox.$hover.hide();
+                    this.tabbox.hideTip();
                 }
             }.bind(this));
         },

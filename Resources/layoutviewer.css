@@ -15,7 +15,7 @@
     position: absolute;
     background: rgba(127, 127, 255, .4);
     display: none;
-    z-index: 9999; /* one less than phpdebugbar */
+    z-index: 9998; /* one less than tooltips */
 }
 
 .magedebugbar-layout-view table {

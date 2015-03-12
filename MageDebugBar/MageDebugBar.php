@@ -13,8 +13,8 @@ class MageDebugBar extends \DebugBar\DebugBar {
 //        $this->addCollector(new RequestCollector());
 
         $this->getJavascriptRenderer("/js/DebugBar")->addAssets(
-            ['magedebugbar.css', 'treegridview.css', 'fileviewer.css', 'tabbox.css', 'layoutviewer.css'],
-            ['class.js', 'magedebugbar.js', 'treegridview.js', 'tabbox.js', 'fileviewer.js', 'layoutviewer.js'],
+            ['tooltips.css', 'magedebugbar.css', 'treegridview.css', 'fileviewer.css', 'tabbox.css', 'layoutviewer.css'],
+            ['class.js', 'tooltips.js', 'magedebugbar.js', 'treegridview.js', 'tabbox.js', 'fileviewer.js', 'layoutviewer.js'],
             '/js/MageDebugBar',
             '/js/MageDebugBar'
         ); 
