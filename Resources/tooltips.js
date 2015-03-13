@@ -19,9 +19,6 @@
         tipBoxWidth: 9,
 
         show: function(elem, text) {
-
-console.log($('body').scrollTop(), $('body').scrollLeft(), $('.phpdebugbar').offset().top);
-
             this.clearPositionClass();
             this.$tip.text(text);
 
@@ -61,7 +58,7 @@ console.log($('body').scrollTop(), $('body').scrollLeft(), $('.phpdebugbar').off
         },
 
         hide: function() {
-//            this.$tip.hide();
+            this.$tip.hide();
         },
 
         displayFn: function(ok) {
