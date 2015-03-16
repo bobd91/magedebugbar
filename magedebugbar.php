@@ -62,9 +62,4 @@ $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 's
 
 Mage::app($mageRunCode, $mageRunType);
 
-if(Mage::helper('core')->isDevAllowed()) {
-    (new MageDebugBar\Ajax())->run();
-} else {
-    // Forbidden
-    http_response_code(403);
-}
+(new MageDebugBar\Ajax())->run();

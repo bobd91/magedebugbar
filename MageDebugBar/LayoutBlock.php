@@ -3,7 +3,17 @@
 namespace MageDebugBar;
 
 class LayoutBlock {
+
     protected $_parent = "";
+
+    // Public attributes are exposed to json_encode
+    // and so downloaded to the browser
+    public $name;
+    public $type;
+    public $blocks;
+    public $id;
+    public $template;
+    public $template_file;
 
     public function __construct($parent = null, $block = null, $id = 0) {
         if($block) {
@@ -12,25 +22,27 @@ class LayoutBlock {
             $this->name = $block->getNameInLayout();
             $this->type = $block->getData('type');
             $this->blocks = [];
-            if($block instanceof \Mage_Core_Block_Template) {
+            if(method_exists($block, 'getTemplate') && method_exists($block, 'getTemplateFile')) {
                 $this->template = $block->getTemplate();
                 $this->template_file = $this->_templateDir($block->getTemplateFile());
             }
             // Avoid 'null' and 'undefined' in JSON
-            if(!(isset($this->template) && $this->template)) $this->template = "";
+            if(!(isset($this->template) && $this->template)) {
+                $this->template = $this->template_file = "";
+            }
         }
     }
 
     protected function _baseDir($path) {
-        if(0 == strpos($path, MAGENTO_ROOT)) {
-            return substr($path, 1 + strlen(MAGENTO_ROOT));
+        if(0 == strpos($path, Magento::getBaseDir())) {
+            return substr($path, 1 + strlen(Magento::getBaseDir()));
         } else {
             return $path;
         }
     }
 
     protected function _templateDir($template) {
-        return $this->_baseDir(\Mage::getBaseDir('design') . DS . $template);
+        return $this->_baseDir(Magento::getBaseDir('design') . '/' . $template);
     }
 
     public function addBlock($block, $id) {

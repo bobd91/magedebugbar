@@ -59,6 +59,6 @@ class LayoutConfig {
     }
 
     protected function _relativePath($path) {
-        return substr($path, 1 + strlen(\Mage::getBaseDir()));
+        return substr($path, 1 + strlen(Magento::getBaseDir()));
     }
 }

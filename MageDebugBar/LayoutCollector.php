@@ -20,7 +20,7 @@ class LayoutCollector
     public function collect()
     {
         assert($this->_current == $this->_root);
-        return [ 'blocks' => $this->_root, 'config' => $this->_getLayoutConfig(), 'store' => \Mage::app()->getStore()->getStoreId() ];
+        return [ 'blocks' => $this->_root, 'config' => $this->_getLayoutConfig(), 'store' => Magento::getStoreId() ];
     }
 
     public function getName()
@@ -44,15 +44,15 @@ class LayoutCollector
 
     // Modified version of Mage_Core_Model_Layout_Update::getFileLayoutUpdatesXml
     protected function _getLayoutConfig() {
-        $storeId = \Mage::app()->getStore()->getId();
-        $design = \Mage::getSingleton('core/design_package');
+        $storeId = Magento::getStoreId();
+        $design = Magento::getSingleton('core/design_package');
         $area = $design->getArea();
-        $package = $design->getpackageName();
+        $package = $design->getPackageName();
         $theme = $design->getTheme('layout');
 
-        $updatesRoot = \Mage::app()->getConfig()->getNode($area.'/layout/updates');
+        $updatesRoot = Magento::getConfigNode($area.'/layout/updates');
         $updates = $updatesRoot->asArray();
-        $themeUpdates = \Mage::getSingleton('core/design_config')->getNode("$area/$package/$theme/layout/updates");
+        $themeUpdates = Magento::getSingleton('core/design_config')->getNode("$area/$package/$theme/layout/updates");
         if ($themeUpdates && is_array($themeUpdates->asArray())) {
             //array_values() to ensure that theme-specific layouts don't override, but add to module layouts
             $updates = array_merge($updates, array_values($themeUpdates->asArray()));
@@ -61,7 +61,7 @@ class LayoutCollector
         foreach ($updates as $updateNode) {
             if (!empty($updateNode['file'])) {
                 $module = isset($updateNode['@']['module']) ? $updateNode['@']['module'] : false;
-                if ($module && \Mage::getStoreConfigFlag('advanced/modules_disable_output/' . $module, $storeId)) {
+                if ($module && Magento::getStoreConfigFlag('advanced/modules_disable_output/' . $module, $storeId)) {
                     continue;
                 }
                 $updateFiles[] = $updateNode['file'];
@@ -69,7 +69,7 @@ class LayoutCollector
         }
         // custom local layout updates file - load always last
         $updateFiles[] = 'local.xml';
-        $config = new LayoutConfig(\Mage::app()->getLayout()->getUpdate()->getHandles());
+        $config = new LayoutConfig(Magento::getLayoutHandles());
         foreach ($updateFiles as $file) {
             $config->loadFile($design->getLayoutFilename($file, array(
                 '_area'    => $area,

@@ -6,16 +6,19 @@ class LayoutConfigItem {
 
     protected $_parent;
 
+    // Public attributes are exposed to json_encode
+    // so will be downloaded to browser
+    public $name;
+    public $attrs;
+    public $elems;
+    public $file;
+    public $line;
+    public $data;
+
     public function __construct($parent = null, $name = null, $attrs = [], $file = null, $line = null) {
         $this->_parent = $parent;
         $this->name = $name;
         $this->attrs = $attrs;
-        // From associative array to index based to preserve order on client
-        /*
-        foreach($attrs as $name => $value) {
-            $this->attrs[] = [$name => $value];
-        }
-        */
         $this->elems = [];
         $this->file = $file;
         $this->line = $line;
