@@ -11,12 +11,15 @@
  * To add an event to the MageDebugBar it has to be added
  * here and in \MageDebugBar\Observer.php
  */
+
+require_once "vendor/autoload.php";
+
 class BobD91_MageDebugBar_Model_Observer {
 
     protected $_delegate;
 
     public function __construct() {
-        $this->_delegate = Mage::App()->getDebugBar()->getEventObserver();
+        $this->_delegate = MageDebugBar\MageDebugBar::getBar()->getEventObserver();
     }
 
     public function http_response_send_before($observer) {

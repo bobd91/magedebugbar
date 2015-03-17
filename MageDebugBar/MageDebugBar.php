@@ -3,6 +3,8 @@ namespace MageDebugBar;
 
 class MageDebugBar extends \DebugBar\DebugBar {
 
+    protected static $_bar;
+
     public function __construct()
     {
 
@@ -31,5 +33,16 @@ class MageDebugBar extends \DebugBar\DebugBar {
         } else {
             return new NullEventObserver();
         }
+    }
+
+    public static function getBar() {
+        if(!isset(self::$_bar)) {
+            self::$_bar = new MageDebugBar();
+        }
+        return self::$_bar;
+    }
+
+    public static function setBar($bar) {
+        self::$_bar = $bar;
     }
 }

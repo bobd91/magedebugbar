@@ -4,8 +4,11 @@ namespace MageDebugBar;
 
 class LayoutConfig {
 
+    // Public attributes for json_encode ing
+    public $handles = [];
+    public $files = [];
+
     public function __construct($handles) {
-        $this->handles = [];
         foreach($handles as $handle) {
             $h = new \StdClass;
             $h->name = $handle;
@@ -44,10 +47,12 @@ class LayoutConfig {
 
     protected function _extractConfig($config) {
         $layout = $config->findFirst("layout");
-        foreach($this->handles as $handle) {
-            foreach($layout->findAll($handle->name) as $handleConfig) {
-                foreach($handleConfig->elems as $elem) {
-                    $handle->elems[] = $elem;
+        if($layout) {
+            foreach($this->handles as $handle) {
+                foreach($layout->findAll($handle->name) as $handleConfig) {
+                    foreach($handleConfig->elems as $elem) {
+                        $handle->elems[] = $elem;
+                    }
                 }
             }
         }

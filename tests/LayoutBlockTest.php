@@ -9,12 +9,8 @@ class LayoutBlockTest extends \PHPUnit_Framework_TestCase {
 
     public function testSimpleNoTemplate() {
         $mock = $this->getMockForAbstractClass('\tests\MockBlock'); 
-
-        $mock->method('getNameInLayout')
-             ->willreturn('blockname');
-
-        $mock->method('getData')
-             ->willreturn('blocktype');       
+        $mock->method('getNameInLayout')->willreturn('blockname');
+        $mock->method('getData')->willreturn('blocktype');       
 
         $block = new LayoutBlock(null, $mock, 1);
 
@@ -34,29 +30,16 @@ class LayoutBlockTest extends \PHPUnit_Framework_TestCase {
                     ->getMock();
         $mag->method('getBaseDir')
             ->will($this->returnCallback(function ($dir = null) {
-                $base = getcwd() . '/tests';
-                if($dir === 'design') {
-                    return $base . '/design';
-                } else { 
-                    return $base;
-                }
+                return getcwd() . '/tests' . ($dir === 'design' ? '/design' : '');
             }));
 
         Magento::setMagento($mag);
 
         $mock = $this->getMockForAbstractClass('\tests\MockTemplateBlock'); 
-
-        $mock->method('getNameInLayout')
-             ->willreturn('blockname');
-
-        $mock->method('getData')
-             ->willreturn('blocktype');       
-
-        $mock->method('getTemplate')
-             ->willreturn('a/b.phtml');
-
-        $mock->method('getTemplateFile')
-             ->willreturn('store/a/b.phtml');
+        $mock->method('getNameInLayout')->willreturn('blockname');
+        $mock->method('getData')->willreturn('blocktype');       
+        $mock->method('getTemplate')->willreturn('a/b.phtml');
+        $mock->method('getTemplateFile')->willreturn('store/a/b.phtml');
 
         $block = new LayoutBlock(null, $mock, 1);
 
@@ -71,19 +54,33 @@ class LayoutBlockTest extends \PHPUnit_Framework_TestCase {
             json_encode($block));
     }
 
+    public function testAddBlock() {
+        $mock = $this->getMockForAbstractClass('\tests\MockBlock'); 
+        $mock->method('getNameInLayout')->willreturn('blockname');
+        $mock->method('getData')->willreturn('blocktype');       
+
+        $parent = new LayoutBlock();
+        $parent->addBlock($mock, 2);
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'name' => '',
+                'type' => '',
+                'blocks' => [
+                    [
+                        'name' => 'blockname',
+                        'type' => 'blocktype',
+                        'blocks' => [],
+                        'template' => '',
+                        'template_file' => '',
+                        'id' => 2
+                    ]
+                ],
+                'template' => '',
+                'template_file' => '',
+                'id' => 0 ]),
+            json_encode($parent));
+    }
+
 }
 
-
-
-/**
- * Classes to provide the interface to Magento blocks that we use
- */
-abstract class MockBlock {
-    abstract public function getNameInLayout();
-    abstract public function getData($d);
-}
-
-abstract class MockTemplateBlock extends MockBlock {
-    abstract public function getTemplate();
-    abstract public function getTemplateFile();
-}

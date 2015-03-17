@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<layout>
+    <h1>
+        <elem1 />
+    </h1>
+    <h2>
+        <elem2 />
+    </h2>
+    <h3>
+        <elem3 a3='v3'>Content 3</elem3>
+    </h3>
+</layout>

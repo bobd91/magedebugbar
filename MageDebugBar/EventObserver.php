@@ -21,7 +21,7 @@ class EventObserver {
      */
     public function http_response_send_before($observer) {
         $response = $observer->getResponse();
-        $debugbar = \Mage::App()->getDebugBar();
+        $debugbar = MageDebugBar::getBar();
         $renderer = $debugbar->getJavascriptRenderer();
 
         if(self::isAjaxCall()) {
@@ -34,7 +34,7 @@ class EventObserver {
     }
 
     public static function isAjaxCall() {
-        return isset($SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
     /**
@@ -42,7 +42,7 @@ class EventObserver {
      * Collect details of block, PHP class and, optionally, template
      */
     public function core_block_abstract_to_html_before($observer) {
-        \Mage::App()->getDebugBar()['layout']->collectStartBlock($observer->getData('block'));
+        MageDebugBar::getBar()['layout']->collectStartBlock($observer->getData('block'));
     }
 
     /**
@@ -51,15 +51,15 @@ class EventObserver {
      * Also add markers to html to allow blocks to be highlighted on the client
      */
     public function core_block_abstract_to_html_after($observer) {
-        $blockid = \Mage::App()->getDebugBar()['layout']->collectEndBlock($observer->getData('block'));
+        $blockid = MageDebugBar::getBar()['layout']->collectEndBlock($observer->getData('block'));
         $this->_markBlock($blockid, $observer->getData('transport'));
     }
 
     protected function _markBlock($blockid, $transport) {
         $html = $transport->getHtml();
         if($this->_shouldMarkHtml($html)) {
-            $html = "<span data-blockid='$blockid'></span>$html<span data-blockid='$blockid'></span>";
-            $transport->setHtml($html);
+            $mark = "<span data-blockid='$blockid'></span>";
+            $transport->setHtml($mark . $html . $mark);
         }
     }
 

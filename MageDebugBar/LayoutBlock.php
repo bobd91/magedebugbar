@@ -8,12 +8,12 @@ class LayoutBlock {
 
     // Public attributes are exposed to json_encode
     // and so downloaded to the browser
-    public $name;
-    public $type;
-    public $blocks;
-    public $id;
-    public $template;
-    public $template_file;
+    public $name = '';
+    public $type = '';
+    public $blocks = [];
+    public $id = null;
+    public $template = '';
+    public $template_file = '';
 
     public function __construct($parent = null, $block = null, $id = 0) {
         if($block) {

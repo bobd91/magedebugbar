@@ -80,6 +80,7 @@ class LayoutCollector
         return $config;
     }
 
+    // implements \DebugBar\DataCollector\Renderable
     public function getWidgets() {
         return array(
             "layout" => array(
