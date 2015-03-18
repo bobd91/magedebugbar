@@ -87,37 +87,13 @@ class EventObserver {
      *
      * Searching for </head> and </body> might be enough but 
      * <script> tags could easily contain strings with </...> in
-     * so if we find multiple close tags we try to cater for
-     * the worse case and actually parse the html
-     * Unfortunately the XML parses take an exception to some HTML
-     * if which case we aere out of options
+     * which case we are out of options
      */
     private function _insertHeadBody($html, $head, $body) {
         // Positions in Magento HTML at start of </head> and </body> tags
         $headIndex = $this->_findUnique($html, '</head>');
         $bodyIndex = $this->_findUnique($html, '</body>');;
 
-        if($headIndex == false || $bodyIndex == false) {
-            // Set up the xml parser to examine closing head and body tags
-            $parser = xml_parser_create();
-            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-            xml_set_element_handler($parser, false, function($parser, $name) use (&$headIndex, &$bodyIndex) {
-                switch($name) {
-                case 'head': $headIndex = $this->_closeTagIndex($parser, $name); break;
-                case 'body': $bodyIndex = $this->_closeTagIndex($parser, $name); break;
-                }
-            });
-
-            // PHP does not give enough control over libxml2 to avoid entity errors
-            // and valid HTML entities are not necessarily valid XML entities 
-            // so we blank out all entities first
-            $mangled = preg_replace_callback('/&[a-z]+;/', function($match) { return str_repeat(' ', strlen($match[0])); }, $html);
-
-            xml_parse($parser, $mangled, true);
-            xml_parser_free($parser);
-        }
-
-        
         if($headIndex == false || $bodyIndex == false) {
             return $html;
         }
@@ -128,14 +104,6 @@ class EventObserver {
         return $start . $head. $middle . $body. $end;
     }
 
-    /**
-     * Return start position of closing tag just found by parser
-     * The current positon is at end of closing tag so
-     * "- (3 + strlen($name))" gives start position
-     */
-    private function _closeTagIndex($parser, $name) {
-        return  xml_get_current_byte_index($parser) - (3 + strlen($name));
-    }
 
     // Return index of $needle in $haystack as long as there is only one needle in haystack
     // Otherwise return false
