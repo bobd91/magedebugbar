@@ -63,4 +63,4 @@ $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 's
 Mage::app($mageRunCode, $mageRunType);
 
 require_once 'vendor/autoload.php';
-(new MageDebugBar\Ajax())->run();
+(new MageDebugBar\Ajax(new MageDebugBar\Magento()))->run();

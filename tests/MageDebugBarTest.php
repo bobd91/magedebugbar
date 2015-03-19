@@ -10,12 +10,11 @@ class MageDebugBarTest extends \PHPUnit_Framework_TestCase {
     public function setup() {
         require_once('tests/DebugBar.php');
 
-        $this->mage = $this->getMockBuilder('\MageDebugBar\RealMagento')
+        $this->mage = $this->getMockBuilder('\MageDebugBar\Magento')
                      ->getMock();
-        Magento::setMagento($this->mage);
 
         $this->bar = $this->getMockBuilder('\MageDebugBar\MageDebugBar')
-                    ->disableOriginalConstructor()
+                    ->setConstructorArgs([$this->mage])
                     ->setMethods(null)
                     ->getMock();
     }

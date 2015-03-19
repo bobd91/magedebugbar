@@ -21,7 +21,6 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
 
         $this->bar = $this->getMockBuilder('\tests\MockDebugBar')->getMock();
         $this->bar->method('getJavascriptRenderer')->willreturn($renderer);
-        MageDebugBar::setBar($this->bar);
     }
 
     public function testIsAjaxCall() {    
@@ -35,7 +34,7 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
         $this->response->expects($this->never())->method('setBody');    
 
         $this->withAjax(function() {
-            (new EventObserver())->http_response_send_before($this->observer);
+            (new EventObserver($this->bar))->http_response_send_before($this->observer);
         });
     }
 
@@ -49,7 +48,7 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
             ->method('setBody')
             ->with($this->equalTo($top . '<!-- Render Head -->' . $middle . '<!-- Render Body -->' . $bottom)); 
 
-        (new EventObserver())->http_response_send_before($this->observer);
+        (new EventObserver($this->bar))->http_response_send_before($this->observer);
     }
 
     public function testHtmlBad() {
@@ -62,7 +61,7 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
             ->method('setBody')
             ->with($this->equalTo($top . $middle . $bottom)); 
 
-        (new EventObserver())->http_response_send_before($this->observer);
+        (new EventObserver($this->bar))->http_response_send_before($this->observer);
     }
 
     public function testStartBlocks() {
@@ -76,7 +75,7 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
             ->method('collectStartBlock')
             ->with($this->equalTo('test data'));
 
-        (new EventObserver())->core_block_abstract_to_html_before($this->observer);
+        (new EventObserver($this->bar))->core_block_abstract_to_html_before($this->observer);
     }
 
     public function testMarkDivBlock() {
@@ -128,7 +127,7 @@ class EventObserverTest extends \PHPUnit_Framework_TestCase {
            $transport->expects($this->never())->method('setHtml');
         }
 
-        (new EventObserver())->core_block_abstract_to_html_after($this->observer);
+        (new EventObserver($this->bar))->core_block_abstract_to_html_after($this->observer);
     }
 
     protected function withAjax($f) {    

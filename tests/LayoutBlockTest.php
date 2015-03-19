@@ -26,14 +26,7 @@ class LayoutBlockTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSimpleWithTemplate() {
-        $mag = $this->getMockBuilder('\MageDebugBar\RealMagento')
-                    ->getMock();
-        $mag->method('getBaseDir')
-            ->will($this->returnCallback(function ($dir = null) {
-                return getcwd() . '/tests' . ($dir === 'design' ? '/design' : '');
-            }));
-
-        Magento::setMagento($mag);
+        LayoutBlock::setDirs(getcwd() . '/tests', getcwd() .'/tests/design');
 
         $mock = $this->getMockForAbstractClass('\tests\MockTemplateBlock'); 
         $mock->method('getNameInLayout')->willreturn('blockname');

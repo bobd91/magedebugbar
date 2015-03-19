@@ -14,7 +14,7 @@ class LayoutCollectorTest extends \PHPUnit_Framework_TestCase {
     public function setup() {
         require_once('tests/DebugBar.DataCollector.php');
 
-        $mock = $this->getMockBuilder('\MageDebugBar\RealMagento')
+        $mock = $this->getMockBuilder('\MageDebugBar\Magento')
                      ->getMock();
         $mock->method('getBaseDir') ->willReturn(getcwd() . '/tests');
         $mock->method('getStoreId')->willreturn(1);
@@ -31,13 +31,12 @@ class LayoutCollectorTest extends \PHPUnit_Framework_TestCase {
                     </b>
                 </updates>
             ", '\tests\DummyElement'));
-
-        \MageDebugBar\Magento::setMagento($mock);
+        $this->mock = $mock;
 
     }
 
     public function testConfig() {
-        $layout = (new LayoutCollector())->collect();
+        $layout = (new LayoutCollector($this->mock))->collect();
 
         $this->assertJsonStringEqualsJsonString(
             json_encode([
@@ -84,7 +83,7 @@ class LayoutCollectorTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testBlocks() {
-        $collector = new LayoutCollector();
+        $collector = new LayoutCollector($this->mock);
 
         $m1 = $this->getMockForAbstractClass('\tests\MockBlock'); 
         $m1->method('getNameInLayout')->willreturn('block1');
@@ -146,7 +145,7 @@ class LayoutCollectorTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testStore() {
-        $layout = (new LayoutCollector())->collect();
+        $layout = (new LayoutCollector($this->mock))->collect();
 
         $this->assertEquals(1, $layout['store']);
     }

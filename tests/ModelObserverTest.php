@@ -24,7 +24,6 @@ class ModelObserverTest extends \PHPUnit_Framework_TestCase {
 
     protected function checkEvent($event) {
         $bar = $this->getMockBuilder('\tests\MockDebugBar')->getMock();
-        MageDebugBar::setBar($bar);
 
         $mock = $this->getMockBuilder('\tests\MockModelObserver')->getMock();
 
@@ -32,7 +31,7 @@ class ModelObserverTest extends \PHPUnit_Framework_TestCase {
         $o = 'test';
         $mock->expects($this->once())->method($event)->with($this->equalTo($o));
 
-        $modelObserver = new \BobD91_MageDebugBar_Model_Observer();
+        $modelObserver = new \BobD91_MageDebugBar_Model_Observer($bar);
         $modelObserver->$event($o);
     }
 }

@@ -5,17 +5,14 @@ namespace tests;
 use \MageDebugBar\LayoutConfig;
 use \MageDebugBar\Magento;
 
-class LayoutconfigTest extends \PHPUnit_Framework_TestCase {
+class LayoutConfigTest extends \PHPUnit_Framework_TestCase {
 
     public function setup() {
-        $mag = $this->getMockBuilder('\MageDebugBar\RealMagento')
-            ->getMock();
-        $mag->method('getBaseDir')->willreturn(getcwd() . '/tests');
-        Magento::setMagento($mag);
+        $this->basedir = getcwd() . '/tests';
     }
 
     public function testMissingFile() {
-        $config = new LayoutConfig(['h1']);
+        $config = new LayoutConfig(['h1'], $this->basedir);
         $config->loadFile('tests/files/nosuch.file');
 
         $this->assertJsonStringEqualsJsonString(
@@ -32,7 +29,7 @@ class LayoutconfigTest extends \PHPUnit_Framework_TestCase {
     }   
 
     public function testFileNoLayout() {
-        $config = new LayoutConfig(['h2']);
+        $config = new LayoutConfig(['h2'], $this->basedir);
         $config->loadFile(getcwd() . '/tests/files/layoutconfig.nolayout.xml');
 
         $this->assertJsonStringEqualsJsonString(
@@ -49,7 +46,7 @@ class LayoutconfigTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testFileNoMatchingHandle() {
-        $config = new LayoutConfig(['nosuchhandle']);
+        $config = new LayoutConfig(['nosuchhandle'], $this->basedir);
         $config->loadFile(getcwd() . '/tests/files/layoutconfig.1.xml');
 
         $this->assertJsonStringEqualsJsonString(
@@ -66,7 +63,7 @@ class LayoutconfigTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSingleFile() {
-        $config = new LayoutConfig(['h1', 'h3']);
+        $config = new LayoutConfig(['h1', 'h3'], $this->basedir);
         $config->loadFile(getcwd() . '/tests/files/layoutconfig.1.xml');
 
         $this->assertJsonStringEqualsJsonString(
@@ -105,7 +102,7 @@ class LayoutconfigTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testMultipleFiles() {
-        $config = new LayoutConfig(['h1', 'h2']);
+        $config = new LayoutConfig(['h1', 'h2'], $this->basedir);
         $config->loadFile(getcwd() . '/tests/files/layoutconfig.1.xml');
         $config->loadFile(getcwd() . '/tests/files/layoutconfig.2.xml');
 
