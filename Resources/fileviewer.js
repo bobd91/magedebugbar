@@ -1,16 +1,35 @@
-(function($) {
+/**
+ * Provides a tab box for displaying files in an Ace editor
+ * Each file gets its own closeable tab
+ *
+ * @module fileviewer
+ * @author Bob Davison
+ * @version 1.0
+ */
+define(['class', 'tabbox', 'ace/ace', 'fileview'],
 
+function(Class, TabBox, Ace, FileView) {
 
-    FileViewer = Class.extend(TabBox, {
+    return Class.extend(TabBox, {
 
+        /**
+         * Create the FileViewer
+         * Adds a contianer div to hold the Ace editor
+         */
         constructor: function() {
             this.super.constructor.call(this);
-            $('<div />').attr('id', 'fileviewer').addClass('tab-active').appendTo(this.$content);
+            $('<div />').attr('id', 'fileviewer').addClass('tab-active').appendTo(this.getContent());
         },
 
+        /**
+         * Append the container div to the container and create and
+         * Ace editor component to go inside the container
+         *
+         * @param {jQuery} element - element to append to
+         */
         appendTo: function(element) {
             this.super.appendTo.call(this, element);
-            this.editor = ace.edit('fileviewer');
+            this.editor = Ace.edit('fileviewer');
             this.editor.setReadOnly(true);
             this.editor.setShowPrintMargin(false);
             this.editor.setTheme("ace/theme/chrome");
@@ -19,16 +38,29 @@
             this.editor.on('click', this.click.bind(this));
         },
 
+        /**
+         * Load the given file, with customizer, into its own tab
+         * If the file is already open then re-use that tab and set the desired line
+         * otherwise create a new tabe
+         *
+         * In any case activate the tab once the file is loaded
+         *
+         * @param {Object} fileinfo   - file information from Ajax call to server
+         * @prarm {Object} customizer - file view hot spot provider (optional)
+         */
         load: function(fileinfo, customizer) {
             var tab = this.findTab(fileinfo.path);
             if(tab) {
-                this.getContent(tab).setLine(fileinfo.line);
+                this.getTabContent(tab).setLine(fileinfo.line);
             } else {
                 tab = this.addTab(new FileView(this.editor, fileinfo, customizer));
             }
             this.activateTab(tab);
         },
 
+        /**
+         * Resize the component, ensures that contained editor is resized
+         */
         resize: function() {
             this.super.resize.call(this);
             if(this.editor) {
@@ -36,12 +68,16 @@
             }
         },
 
+        /**
+         * Mousemove processing is quite intensive as the location has to be
+         * checked for customization so don't react to each mousemove but
+         * rather coalesce all mousemoves within a 100ms time interval
+         */
         mousemoveCombiner: function() {
             var moveEvent;
             this.timer = 0;
             return function(e) {
-                    // Ignore multiple mousemoves with 10th of a second
-                    // but keep latest event
+                    // Ignore multiple mousemoves but keep latest event
                     moveEvent = e;
                     if(!this.timer) {
                         this.timer = window.setTimeout(function () {
@@ -52,6 +88,11 @@
             }.bind(this);
         },
 
+        /**
+         * Pass mousemoves onto the active FileView component
+         *
+         * @param {Event} e - the mousemove event
+         */
         mousemove: function(e) {
             var view = this.getActiveView();
             if(view) {
@@ -59,6 +100,11 @@
             }
         },
 
+        /**
+         * Pass clicks ontp the active FileView component
+         *
+         * @param {Event} e - the click event
+         */
         click: function(e) {
             var view = this.getActiveView();
             if(view) {
@@ -66,6 +112,13 @@
             }
         },
 
+        /**
+         * Find a tab with the given title
+         * Used to locate files that already have a tab open
+         *
+         * @param {String} title - the tab title
+         * @return {jQuery}      - the tab object or nothing if not found
+         */
         findTab: function(title) {
             var tab = this.$tabs.children('li[title="' + title + '"]');
             if(tab.length) {
@@ -73,127 +126,20 @@
             }
         },
 
+        /**
+         * Get the currently active FileView component
+         *
+         * @return {FileView} - the active FileView or nothing if no active tabs
+         */
         getActiveView: function() {
             var tab = this.$tabs.children('.tab-active');
             if(tab.length) {
-                return this.getContent(tab);
+                return this.getTabContent(tab);
             }
         },
 
     });
 
-    FileView = Class.create({
-        constructor: function(editor, fileinfo, customizer) {
-            this.label = this.filename(fileinfo.path);
-            this.title = fileinfo.path
-            this.closeable = true, 
-            this.editor = editor;
-            this.fileinfo = fileinfo;
-            if(!customizer) {
-                // No custom behaviour so need to respond to
-                // mouse hover or click for custom event
-                this.mousemove = this.click = function() {};
-            } else {
-                this.customizer = customizer;
-            }
 
-            this.setLine(fileinfo.line);
-        },
-
-        add: function() {
-            var mode;
-            switch(this.fileinfo['mime-type']) {
-                case "text/x-php": mode = "php"; break;
-                case "text/xml": mode = "xml"; break;
-                default: mode = "text";
-            }
-            this.session = ace.createEditSession(this.fileinfo.content, "ace/mode/" + mode);
-        },
-
-        activate: function() {
-            this.editor.setSession(this.session);
-            this.gotoLine();
-        },
-
-        remove: function() { },
-
-        gotoLine: function() {
-            if(this.line) {
-                this.editor.gotoLine(this.line);
-                this.editor.scrollToLine(this.line -1, false, false);
-                delete this.line;
-            }
-        },
-
-        setLine: function(line) {
-            this.line = line;
-        },
-
-        // Modified from https://github.com/ajaxorg/ace/blob/master/demo/kitchen-sink/token_tooltip.js
-        mousemove: function(e) {
-            var r = this.editor.renderer;
-            var canvasPos = r.rect = r.scroller.getBoundingClientRect();
-            var offset = (e.clientX + r.scrollLeft - canvasPos.left - r.$padding) / r.characterWidth;
-            var row = Math.floor((e.clientY + r.scrollTop - canvasPos.top) / r.lineHeight);
-            var col = Math.round(offset);
-
-            var screenPos = {row: row, column: col, side: offset - col > 0 ? 1 : -1};
-            var session = this.session;
-            var docPos = session.screenToDocumentPosition(screenPos.row, screenPos.column);
-            var token = session.getTokenAt(docPos.row, docPos.column);
-
-            if(token === this.token) {
-                return;
-            }
-            this.token = token;
-
-
-            if(this.marker) {
-                if(this.inMarker(this.marker, docPos)) {
-                    return;
-                }
-                session.removeMarker(this.marker);
-                this.marker = null;
-            }
-
-            var custom = token
-                ? this.customizer.atPosition(session, token, docPos)
-                : null;
-                if(custom) {
-                    var Range = require("ace/range").Range;
-                    var range = new Range(custom.row1, custom.col1, custom.row2, custom.col2);
-                    var css = "magedebugbar-fileviewer-" + (custom.action ? "action" : "disabled");
-                    var type = (custom.type === 'block') ? "fullLine" : "text";
-                    this.marker = session.addMarker(range, css, type, true);
-                    this.action = custom.action;
-                } else {
-                    this.action = null;
-                }
-        },
-
-        click: function() {
-            if(this.action) {
-                this.action();
-            }
-        },
-
-        inMarker: function(markerId, pos) {
-            // WARNING:
-            // No public way to get marker info from marker id
-            // Using session.$frontMarkers is private API
-            // and therefore subject to change
-            var marker = this.editor.getSession().$frontMarkers[markerId];
-            if(marker) {
-                return marker.range.contains(pos.row, pos.column);
-            }
-            return false;
-        },
-
-        filename: function(path) {
-            return path.substr(1 + path.lastIndexOf('/'));
-        }
-
-    });
-
-})(jQuery);
+});
 
