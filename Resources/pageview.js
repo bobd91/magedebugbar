@@ -11,7 +11,17 @@ function($, Class, TabContent, TreeViewGrid) {
 
     return Class.extend(TabContent, {
 
-        constructor: function(highlighter, loader, layout) {
+        /**
+         * Creates a TreeGridView for displaying Page Blocks from the layout config
+         * 
+         * Click on items to load resources from server
+         * Hover over rows to highlight blocks on the page
+         *
+         * @param {ResourceLoader} loader  - for loading resources from the server
+         * @param {LayoutModel} layout     - for access to the page blocks
+         * @param {LayoutBlockHighlighter} highlighter - to highlight blocks on the page
+         */ 
+        constructor: function(loader, layout, highlighter) {
             this.super.constructor.call(this, 'Page', $('<div />').addClass(csscls('view')));
             this.treeview = new TreeGridView(this.makeRootModel(layout.getPageBlocks()));
             $(this.treeview)
@@ -37,11 +47,22 @@ function($, Class, TabContent, TreeViewGrid) {
             });
         },
 
+        /**
+         * Tab added so append the TreeGridView
+         *
+         * @param {TabBox} tabbox - the owning tabbox
+         */
         add: function(tabbox) {
             this.super.add.call(this, tabbox);
             this.treeview.appendTo(this.$ui);
         },
 
+        /**
+         * Create model suitable for the TreeGridView
+         *
+         * @param {Array} blocks - [] of root page blocks
+         * @return {Object}      - model for TreeViewGrid
+         */
         makeRootModel: function(blocks) {
             return {
                 children: 'blocks',
@@ -50,5 +71,6 @@ function($, Class, TabContent, TreeViewGrid) {
                 root: blocks
             };
         },
-           });
+    });
+});
 

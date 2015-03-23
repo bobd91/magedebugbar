@@ -14,6 +14,11 @@ function(Class) {
     return Class.create({
 
         /**
+         * This is a handler for responses of type 'alert'
+         */
+        type: 'alert',
+
+        /**
          * Display alert message provided by Ajax call to server
          *
          * See PHP method MageDebugBar\Ajax->_processFlag()

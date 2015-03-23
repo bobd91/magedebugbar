@@ -11,9 +11,13 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'layoutviewer', 'fileviewer', 'resourceloader', 'filehandler', 'alerthandler', 'layoutfilecustomizer'],
+define(['jquery', 'class', 'layoutmodel', 'layoutviewer',
+        'fileviewer', 'resourceloader', 'filehandler',
+        'alerthandler', 'layoutfilecustomizer'],
 
-function($, Class, LayoutViewer, FileViewer, ResourceLoader, FileHandler, AlertHandler, LayoutFileCustomizer) {
+function($, Class, LayoutModel, LayoutViewer,
+         FileViewer, ResourceLoader, FileHandler,
+         AlertHandler, LayoutFileCustomizer) {
 
     return Class.create({
 
@@ -71,13 +75,14 @@ function($, Class, LayoutViewer, FileViewer, ResourceLoader, FileHandler, AlertH
          * New layout configuration data has been supplied by the server
          * so reload the LayoutViewer and FileViewer components
          *
-         * @param {Object} layout - layout configuration downloaded from server
+         * @param {Object} data - layout configuration downloaded from server
          */
-        setLayout: function(layout) {
+        setLayout: function(data) {
             this.$left.children().remove();
             this.$right.children().remove();
 
-            this.layoutviewer = new LayoutViewer(this.resourceLoader(), layout);
+            var layout = new LayoutModel(data);
+            this.layoutviewer = new LayoutViewer(this.resourceLoader(layout), layout);
             this.fileviewer = new FileViewer();
             this.layoutviewer.appendTo(this.$left);
             this.fileviewer.appendTo(this.$right);
@@ -96,16 +101,24 @@ function($, Class, LayoutViewer, FileViewer, ResourceLoader, FileHandler, AlertH
 
         /**
          * Create a ResourceLoader to get resources from the server
-         * and pass them to the correct resource handler
+         * and pass them to the correct response handler
          *
-         * @return {ResourceLoader}  object to request resources from the server
+         * @param {LayoutMode} layout - access to layout config data
+         * @return {ResourceLoader}   - object to request resources from the server
          */
-        resourceLoader: function() {
+        resourceLoader: function(layout) {
+            var loader = new ResourceLoader(layout);
+            
             var fileHandler = new FileHandler();
-            fileHandler.registerCustomizer('text/xml', new LayoutFileCustomizer());
+            var customizer = new LayoutFileCustomizer(loader, layout);
+            fileHandler.registerCustomizer(customizer);
+
             var alertHandler = new AlertHandler();
 
-           return new ResourceLoader(fileHandler, alertHandler);
+            loader.registerHandler(fileHandler)
+                  .registerHandler(alertHandler);
+
+           return loader;
         },
     });
       

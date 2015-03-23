@@ -18,14 +18,39 @@ function(Class, LayoutFileParser) {
 
     return Class.create({
 
-        constructor: fucntion(resourceLoader, layoutModel) {
+        /**
+         * Customizer needs to load resources in response to 'hotspot' clicks
+         * and access the layout config data to access active handles, template filenames, etc.
+         *
+         * @param {ResourceLoader} resourceLoader - for loading resources from the server
+         * @param {LayoutModel} layoutModel       - for accessing layout config data
+         */
+        constructor: function(resourceLoader, layoutModel) {
             this.parser = new LayoutFileParser(resourceLoader, layoutModel);
         },
 
+        /**
+         * Mime-type of file this customizer is for
+         */
+        mimetype: 'text/xml',
+
+        /**
+         * The customized file view has just loaded a file, this gives us access to the entire token stream
+         *
+         * @param {Ace/TokenIterator} iterator - iterator over entire token stream for a config file
+         */
         setTokens: function(iterator) {
             this.actions = this.parser.parse(iterator);
         },
 
+        /**
+         * Get an action for the given position in the config file document
+         * Looks up actions created in setTokens()
+         *
+         * @param {Ace/Token} token - the token atthe given position in the document
+         * @param {Object} pos      - row and column of position in document
+         * @return {Object}         - @see LayoutFileParser, nothing if no action
+         */
         getAction: function(token, pos) {
             var action = this.findAction(pos);
             // TODO: is this test necesary? Why can't we return any found action?
@@ -36,6 +61,12 @@ function(Class, LayoutFileParser) {
             }
         },
 
+        /**
+         * Lookup the action for given position in document
+         *
+         * @param {Object} pos - row and column of position in document
+         * @return {Object}    - @see LayouFileParser, nothing if no action found
+         */
         findAction: function(pos) {
             var row = pos.row;
             var rowActions = this.actions[row];

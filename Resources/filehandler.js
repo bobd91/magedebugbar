@@ -21,29 +21,43 @@ function(Class) {
          */
         constructor: function(fileViewer) {
             this.fileViewer = fileViewer;
-            this.customizer = [];
+            this.customizers = [];
         },
 
         /**
-         * Register a file view customizer for the given mime-type
+         * Resource request response type to handle
+         */
+        type: 'file',
+
+        /**
+         * Register a function that creates file view customizers for a given mime-type
          *
-         * @param {String} mimetype   - mime type that custopmizer applies to
-         * @param {Object} customizer - object to provie hot spot actions in file viewer
+         * @param {Function} customizer - to create object that provides hot spot actions in file viewer
+         * @return {FileHandler}        - self
          */  
-        registerCusomizer: function(mimetype, customizer) {
-            this.customizers[mimetype] = customizer;
+        registerCusomizer: function(customizer) {
+            this.customizers[customizer.mimetype] = customizer;
+            return this;
         },
 
         /**
          * Handles the file response from the server by loading the given file info
          * in the file viewer with any registered customizer for the mime-type
          *
+         * Note: we use the registered customizer as a prototype of the one
+         * to pass to the file viewer as customizers store per file state.
+         *
          * See PHP method MageDebugBar\Ajax->_processFile()
          *
          * @param {Object} fileinfo - file information provided by the server
          */
         handle: function(fileinfo) {
-            this.fileViewer.load(fileinfo, this.customizers[fileinfo['mime-type']]);
+            var customizer = this.customizers[fileinfo['mime-type']];
+            if(customizer) {
+                this.fileViewer.load(fileinfo, Object.create(customizer));
+            } else {
+                this.fileViewer.load(fileinfo);
+            }
         }
     });
 });

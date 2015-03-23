@@ -150,7 +150,7 @@ function(Class, Ace, Range, TokenIterator) {
          */
         customize: function(token, pos) {
             var custom = token
-                ? this.customizer.atPosition(token, docPos)
+                ? this.customizer.getAction(token, docPos)
                 : null;
             if(custom) {
                 var range = new Range(custom.row1, custom.col1, custom.row2, custom.col2);
