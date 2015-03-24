@@ -7,9 +7,11 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class'], 
+define(['jquery', 'class', 'cssclass'], 
        
-function($, Class) {
+function($, Class, CssClass) {
+
+    var cssClass = CssClass.generate('tab', ['box', 'content', 'active', 'close', 'icon-cross', 'icon-close']);
 
     return Class.create({
 
@@ -21,12 +23,21 @@ function($, Class) {
          * The content <div> will have class 'tab-content'
          */
         constructor: function() {
-            this.$box = $('<div />').addClass('tab-box');
+            this.$box = $('<div />').addClass(cssClass.box);
             this.$tabs = $('<ul />').appendTo(this.$box);
-            this.$content = $('<div />').addClass('tab-content').appendTo(this.$box);
+            this.$content = $('<div />').addClass(cssClass.content).appendTo(this.$box);
             this.$tabs
             .on('click', 'li', this.clickTab.bind(this))
-            .on('click', '.tab-close', this.clickCloseTab.bind(this));
+            .on('click', '.' + cssClass.close, this.clickCloseTab.bind(this));
+        },
+
+        /**
+         * Allow sub-classes access to the CSS class for active tabs and content
+         *
+         * @return {String} - CSS class for active tabs and content
+         */
+        activeClass: function() {
+            return cssClass.active;
         },
 
         /**
@@ -107,15 +118,15 @@ function($, Class) {
                 tab.attr('title', content.title);
             }
             if(content.closeable) {
-                var close = $('<span />').addClass('tab-close');
-                $('<i />').addClass('tab-cross-icon').appendTo(close);
-                $('<i />').addClass('tab-close-icon fa fa-times-circle icon').appendTo(close);
+                var close = $('<span />').addClass(cssClass.close);
+                $('<i />').addClass(cssClass.icon.cross).appendTo(close);
+                $('<i />').addClass(cssClass.icon.close + ' fa fa-times-circle icon').appendTo(close);
                 close.appendTo(tab);
             }
             this.$tabs.append(tab);
             content.add(this);
 
-            this.setContent(tab, content);
+            this.setTabContent(tab, content);
 
             this.resize();
 
@@ -129,7 +140,7 @@ function($, Class) {
          * @param {jQuery} tab - <li> element representing tab
          */
         removeTab: function(tab) {
-            var active = tab.hasClass('tab-active');
+            var active = tab.hasClass(cssClass.active);
             var siblings = tab.siblings().length;
             var index = tab.index();
             // Remove after index otherwise can't get index

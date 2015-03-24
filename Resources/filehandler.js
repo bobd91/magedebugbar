@@ -35,7 +35,7 @@ function(Class) {
          * @param {Function} customizer - to create object that provides hot spot actions in file viewer
          * @return {FileHandler}        - self
          */  
-        registerCusomizer: function(customizer) {
+        registerCustomizer: function(customizer) {
             this.customizers[customizer.mimetype] = customizer;
             return this;
         },

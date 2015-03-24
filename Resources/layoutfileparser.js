@@ -496,7 +496,7 @@ function(Class) {
          */
         willLoadHelper: function(helper) {
             return this.resourceLoader.loadHelper.bind(this.resourceLoader, helper);
-        }
+        },
 
         /**
          * @param {String} helperAlias - Magento alias for helper class

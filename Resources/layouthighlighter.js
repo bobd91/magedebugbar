@@ -3,26 +3,28 @@
  * by displaying a semi-opaque overlay
  * and a related tooltip
  *
- * @module layoutblockhightlighter
+ * @module layouthightlighter
  * @author Bob Davison
  * @version 1.0
  */
 
-define(['class'],
+define(['jquery', 'class', 'cssclass'],
 
-function(Class) {
+function($, Class, CssClass) {
+
+    var cssClass = CssClass.generate('highlight', ['block', 'tooltip', 'point-top', 'point-bottom', 'point-left', 'point-right']);
 
     return Class.create({
 
         /**
-         * Create <div> for highlighting and <span> for tooltip
+         * Create <div> for highlighting block and <span> for tooltip
          * and append to body element
          */
         constructor: function() {
-            this.$highlight = $('<div />').addClass(csscls('block-highlight'));
-            this.$tooltip = $('<span />').addClass(csscls('block-tooltip'));
+            this.$block = $('<div />').addClass(cssClass.block);
+            this.$tooltip = $('<span />').addClass(cssClass.tooltip);
 
-            $('body').append(this.$hover).append(this.$tooltip);
+            $('body').append(this.$block).append(this.$tooltip);
         },
 
         /**
@@ -40,27 +42,27 @@ function(Class) {
             if(2 === elems.length) {
                 var bounds = this.combineBounds(elems.eq(0), elems.eq(1));
                 if(bounds) {
-                    this.showHighlight(bounds);
+                    this.showBlock(bounds);
                     this.showToolTip(bounds, name);
                 }
             }
        },
 
        /**
-        * Hide higlight <div> amd tooltip <span>
+        * Hide higlight block <div> amd tooltip <span>
         */
         hide: function() {
-            this.$highlight.hide();
+            this.$block.hide();
             this.$tooltip.hide();
         },
 
         /**
-         * Show the highlight div over the given bounds
+         * Show the highlight block div over the given bounds
          *
          * @param {Object} bounds - top, right, bottom, left of area to highlight
          */
-        showHighlight: function(bounds) {
-            this.$highlight.css({
+        showBlock: function(bounds) {
+            this.$block.css({
                 top: bounds.top,
                 left: bounds.left,
                 width: bounds.right - bounds.left,
@@ -134,7 +136,7 @@ function(Class) {
          * @param {Object} position - top, right, bottom, left boolean values, true = possible position for tooltip
          * @return {Object}         - top, right, bottom, left boolean values, true = possible position for tooltip
          */
-        fallBackTipPosition(position) {
+        fallBackTipPosition: function(position) {
             return {
                 top: position.top,
                 right: position.right,
@@ -198,6 +200,7 @@ function(Class) {
          *
          * @param {jQuery} elem - element whose parent to check
          * @return {Object}     - left and right position of parent     
+         */
         parentLeftRight: function(elem) {
             var parents = elem.parents();
             var i = 0;
@@ -246,8 +249,8 @@ function(Class) {
         setPositionClass: function(topbottom, leftright) {
             // Note: tip at top left needs a bottom pointer so swap top <=> bottom
             this.$tooltip
-                    .addClass(csscls('block-tooltip-' + (topbottom === 'top' ? 'bottom' : 'top')))
-                    .addClass(csscls('block-tooltip-' + leftright));
+                    .addClass(cssClass.point[topbottom === 'top' ? 'bottom' : 'top'])
+                    .addClass(cssClass.point[leftright]);
         },
 
         /**
@@ -255,7 +258,7 @@ function(Class) {
          */
         clearPositionClass: function() {
             ['top', 'bottom', 'left', 'right'].forEach(function(where) {
-                this.$tooltip.removeClass(csscls('block-tooltip-' + where));
+                this.$tooltip.removeClass(cssClass.point[where]);
             }, this);
         },
 
@@ -359,7 +362,7 @@ function(Class) {
          */
        visibleLeft: function(screen, width, left) {
             return Math.min(screen.right - width - this.tipPointOffset, Math.max(screen.left + this.tipPointOffset, left));
-        }
+        },
 
         // Approx size/position of tip box and tip point
         // Just used to check where it would fit best

@@ -22,9 +22,11 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class'],
+define(['jquery', 'class', 'cssclass'],
 
-function($, Class) {
+function($, Class, CssClass) {
+
+    var cssClass = CssClass.generate('treegridview', ['container', 'open', 'closed', 'cell', 'hover']);
 
     return Class.create({
 
@@ -44,7 +46,7 @@ function($, Class) {
          */
         appendTo: function(element) {
             var container = $("<table />")
-            .addClass(this.cssClass("container"))
+            .addClass(cssClass.container)
             .appendTo(element);
             this.container = container;
             this.addColGroup(container);
@@ -104,9 +106,9 @@ function($, Class) {
         addRoot: function(container) {
             var children = this.model.root[this.model.children];
             var target;
-            this.insertChildren(children, 1, container, true);
+            this.insertRows(children, 1, container, true);
             if(children.length == 1) {
-                target =  container.find(this.cssClassSelector("closed"));
+                target =  container.find('.' + cssClass.closed);
                 if(target.length) {
                     this.open({ target: target });
                 }
@@ -125,14 +127,14 @@ function($, Class) {
                 var td = $("<td />").appendTo(tr);
                 if(i == 0) {
                     td.css("padding-left",  (level - 1) + ".3em");
-                    var cls = this.cssClass(this.hasChildren(branch) ? "closed" : "leaf");
+                    var cls = this.hasChildren(branch) ? cssClass.closed : cssClass.leaf;
                     $("<div />")
                     .addClass(cls)
                     .addClass('fa fa-play icon')
                     .appendTo(td);
                 }
                 var cell = $("<div>" + branch[v] + "</div>")
-                .addClass(this.cssClass("cell"))
+                .addClass(cssClass.cell)
                 .appendTo(td);
                 if(i == 0) {
                     cell.css("margin-left", ".5em");
@@ -160,10 +162,10 @@ function($, Class) {
          * @param {jQuery} container - object to add handlers to
          */
         addHandlers: function(container) {
-            container.on("click", this.cssClassSelector("open"), this.close.bind(this));
-            container.on("click", this.cssClassSelector("closed"), this.open.bind(this));
-            container.on("click", this.cssClassSelector("cell"), this.click.bind(this));
-            container.on("hover", this.cssClassSelector("hover"), this.hover.bind(this));
+            container.on("click", '.' + cssClass.open, this.close.bind(this));
+            container.on("click", '.' + cssClass.closed, this.open.bind(this));
+            container.on("click", '.' + cssClass.cell, this.click.bind(this));
+            container.on("hover", '.' + cssClass.hover, this.hover.bind(this));
         },
 
         /**
@@ -177,7 +179,7 @@ function($, Class) {
         open: function(event) {
             var target = $(event.target);
             target
-            .removeClass(this.cssClass("closed"))
+            .removeClass(cssClass.closed)
             .removeClass('fa-play icon')
             .addClass('fa-spinner fa-pulse')
             var row = this.findRow(event);
@@ -191,7 +193,7 @@ function($, Class) {
             .then(function() {
                 target
                 .removeClass('fa-spinner fa-pulse')
-                .addClass(this.cssClass("open"))
+                .addClass(cssClass.open)
                 .addClass('fa-play fa-rotate-90 icon');
             }.bind(this));
         },
@@ -205,8 +207,8 @@ function($, Class) {
          * @param {boolean} append - if true then append first branch, all others are inserted after
          */
         insertRows: function(branches, level, prev, append) {
-            nodes.forEach(function(node) { 
-                prev = this.insertRow(node, level, prev, append);
+            branches.forEach(function(branch) { 
+                prev = this.insertRow(branch, level, prev, append);
                 append = false;
             }, this);
         },
@@ -278,9 +280,9 @@ function($, Class) {
             })
             .remove();
             $(event.target)
-            .removeClass(this.cssClass("open"))
+            .removeClass(cssClass.open)
             .removeClass('fa-rotate-90')
-            .addClass(this.cssClass("closed"))
+            .addClass(cssClass.closed)
         },
 
         /**
@@ -302,7 +304,7 @@ function($, Class) {
          * @param {Event} event - mousemove event
          */
         hover: function(event) {
-            $(event.currentTarget).addClass(this.cssClass("hover"));
+            $(event.currentTarget).addClass(cssClass.hover);
             $(this).trigger('hover', [true, this.findRow(event)]);
         },
 
@@ -314,23 +316,9 @@ function($, Class) {
          * @param {Event} event - mousemove event
          */
        unhover: function(event) {
-            $(event.currentTarget).removeClass(this.cssClass("hover"));
+            $(event.currentTarget).removeClass(cssClass.hover);
             $(this).trigger('hover', [false, this.findRow(event)]);
         },
-
-        // TODO: change
-        cssClass: function(clas) {
-            return clas.split(" ")
-            .map(function (v) { return "treegridview-" + v; })
-            .join(" ");
-        },
-
-        // TODO: change
-        cssClassSelector: function(clas) {
-            return this.cssClass(clas).split(" ")
-            .map(function (v) { return "." + v; })
-            .join(" ");
-        }
 
     });
 

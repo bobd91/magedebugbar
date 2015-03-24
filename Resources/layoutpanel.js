@@ -11,13 +11,13 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'layoutmodel', 'layoutviewer',
-        'fileviewer', 'resourceloader', 'filehandler',
-        'alerthandler', 'layoutfilecustomizer'],
+define(['jquery', 'class', 'cssclass', 'layoutmodel', 'layoutviewer', 'fileviewer',
+        'resourceloader', 'filehandler', 'alerthandler', 'layoutfilecustomizer'],
 
-function($, Class, LayoutModel, LayoutViewer,
-         FileViewer, ResourceLoader, FileHandler,
-         AlertHandler, LayoutFileCustomizer) {
+function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
+         ResourceLoader, FileHandler, AlertHandler, LayoutFileCustomizer) {
+
+    var cssClass = CssClass.generate('layout', ['panel', 'left', 'right', 'resize-handle']);
 
     return Class.create({
 
@@ -26,10 +26,10 @@ function($, Class, LayoutModel, LayoutViewer,
          * And add handlers to support dragging the resize handle
          */
         constructor: function() {
-            this.$panel = $('<div />').addClass(csscls('panel'));
-            this.$left = $('<div />').addClass(csscls('left')).appendTo(this.$panel);
-            this.$resizehdle = $('<div />').addClass(csscls('resize-handle')).appendTo(this.$panel);
-            this.$right = $('<div />').addClass(csscls('right')).appendTo(this.$panel);
+            this.$panel = $('<div />').addClass(cssClass.panel);
+            this.$left = $('<div />').addClass(cssClass.left).appendTo(this.$panel);
+            this.$resizehdle = $('<div />').addClass(cssClass.resize.handle).appendTo(this.$panel);
+            this.$right = $('<div />').addClass(cssClass.right).appendTo(this.$panel);
 
             this.addResizeHandlers();
         },

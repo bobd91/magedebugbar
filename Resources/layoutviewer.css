@@ -1,5 +1,6 @@
 
-.magedebugbar-layout-view {
+.magedebugbar-page-view,
+.magedebugbar-handle-view {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -7,18 +8,19 @@
     right: 0;
 }
 
-.tab-active #magedebugbar-layout-handle-chooser {
+.magedebugbar-tab-active #magedebugbar-handle-chooser {
     background: white;
 }
 
-.magedebugbar-layout-block-hover {
+.magedebugbar-highlight-block {
     position: absolute;
     background: rgba(127, 127, 255, .4);
     display: none;
     z-index: 9998; /* one less than tooltips */
 }
 
-.magedebugbar-layout-view table {
+.magedebugbar-page-view table,
+.magedebugbar-handle-view table {
     font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
     font-size: 12px;
     font-weight: normal;
@@ -26,33 +28,33 @@
     color: #1a1aa6;
 }
 
-.magedebugbar-layout-icon {
+.magedebugbar-handle-icon-base {
     font-size: 10px;
     margin-right: .3em;
 }
 
-.magedebugbar-layout-block-icon {
+.magedebugbar-handle-icon-block {
     color: blue;
 }
 
-.magedebugbar-layout-forced-block-icon {
+.magedebugbar-handle-icon-forced {
     color: gray;
 }
 
-.magedebugbar-layout-remove-icon {
+.magedebugbar-handle-icon-remove {
     color: red;
 }
 
-.magedebugbar-layout-action-icon {
+.magedebugbar-handle-icon-action {
     color: green;
 }
 
 
-.magedebugbar-layout-if-action-icon {
+.magedebugbar-handle-icon-ifconfig {
     color: orange;
 }
 
-#magedebugbar-layout-handle-chooser {
+#magedebugbar-handle-chooser {
     display: inline-block;
     font-size: 0.9em;
     margin-left: 0.4em;

@@ -5,9 +5,9 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['class', 'tabbox', 'pageview', 'handleview', 'layoutblockhighlighter'],
+define(['class', 'tabbox', 'pageview', 'handleview', 'layouthighlighter'],
 
-function(Class, TabBox, PageView, HandleView, LayoutBlockHighlighter) {
+function(Class, TabBox, PageView, HandleView, LayoutHighlighter) {
 
     return Class.extend(TabBox, {
 
@@ -22,7 +22,7 @@ function(Class, TabBox, PageView, HandleView, LayoutBlockHighlighter) {
         constructor: function(loader, layout) {
             this.super.constructor.call(this);
             
-            var highlighter = new LayoutBlockHighlighter();
+            var highlighter = new LayoutHighlighter();
 
             this.pageView = this.addTab(new PageView(loader, layout, highlighter));
             this.addTab(new HandleView(loader, layout));

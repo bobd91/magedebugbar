@@ -9,9 +9,14 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['class', 'tabcontent', 'ace/ace', 'ace/range', 'ace/token_iterator'], 
+define(['class', 'tabcontent', 'cssclass', 'ace/ace'], 
 
-function(Class, Ace, Range, TokenIterator) {
+function(Class, TabContent, CssClass, Ace) {
+
+    var cssClass = CssClass.generate('fileview', ['action', 'disabled']); 
+
+    var Range = require('ace/range');
+    var TokenIterator = require('ace/token_iterator');
 
     return Class.extend(TabContent, {
 
@@ -26,10 +31,10 @@ function(Class, Ace, Range, TokenIterator) {
          */
         constructor: function(editor, fileinfo, customizer) {
             this.super.constructor.call(this,
-                    :wthis.filename(fileinfo.path), // label
+                    this.filename(fileinfo.path), // label
                     null,                         // no $ui
                     true,                         // closeable
-                    fileinfo.path,                // title
+                    fileinfo.path                 // title
             );
             this.editor = editor;
             this.fileinfo = fileinfo;
@@ -154,7 +159,7 @@ function(Class, Ace, Range, TokenIterator) {
                 : null;
             if(custom) {
                 var range = new Range(custom.row1, custom.col1, custom.row2, custom.col2);
-                var css = "magedebugbar-fileviewer-" + (custom.action ? "action" : "disabled");
+                var css = custom.action ? cssClass.action : cssClass.disabled;
                 var type = (custom.type === 'block') ? "fullLine" : "text";
                 this.marker = session.addMarker(range, css, type, true);
                 this.action = custom.action;
@@ -202,3 +207,4 @@ function(Class, Ace, Range, TokenIterator) {
         }
 
     });
+});

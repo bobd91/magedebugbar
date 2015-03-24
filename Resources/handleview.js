@@ -8,9 +8,11 @@
  * @version 1.0
  */
 
-define(['jquery', 'class', 'tabcontent', 'treegridview'],
+define(['jquery', 'class', 'cssclass', 'tabcontent', 'treegridview'],
 
-function($, Class, TabContent, TreeGridView) {
+function($, Class, CssClass, TabContent, TreeGridView) {
+
+    var cssClass = CssClass.generate('handle', ['view', 'chooser', 'icon-base', 'icon-block', 'icon-forced', 'icon-action', 'icon-ifconfig']);
 
     return Class.extend(TabContent, {
 
@@ -25,7 +27,7 @@ function($, Class, TabContent, TreeGridView) {
             this.super.constructor.call(
                 this,
                 'Handles',                             // Tab label
-                $('<div />').addClass(csscls('view')), // Content div
+                $('<div />').addClass(cssClass.view),  // Content div
                 false,                                 // Closeable
                 undefined,                             // Tooltip title
                 this.handleChooser(layoutModel)        // Additional label HTML
@@ -48,7 +50,7 @@ function($, Class, TabContent, TreeGridView) {
          * @param {LayoutModel} layoutModel - layout configuration data
          */
         handleChooser: function(layoutModel) {
-            var html = $('<select />').attr('id', csscls('handle-chooser'));
+            var html = $('<select />').attr('id', cssClass.chooser);
             html.append($('<option />').attr('selected', 'true').text('(all)'));
             layoutModel.getHandles().forEach(function(handle) {
                 html.append($('<option />').text(handle.name));
@@ -87,7 +89,6 @@ function($, Class, TabContent, TreeGridView) {
             return {
                 children: 'blocks',
                 values: ['html'],
-                columns: [csscls('actions')],
                 root: { blocks: this.blocksToHtml(layoutModel.getHandleBlocks()) }
             };
         },
@@ -194,7 +195,7 @@ function($, Class, TabContent, TreeGridView) {
          * @return {String}         - HTML for block icon
          */
         blockIcon: function(forced) {
-            return this.icon('fa-cube', (forced ? 'forced-' : '') + 'block-icon');
+            return this.icon('fa-cube', forced ? cssClass.icon.forced : cssClass.icon.block);
         },
 
          /**
@@ -203,7 +204,7 @@ function($, Class, TabContent, TreeGridView) {
          * @return {String} - HTML for removed block icon
          */
        removeIcon: function() {
-            return this.icon('fa-ban', 'remove-icon');
+            return this.icon('fa-ban', cssClass.icon.remove);
         },
 
          /**
@@ -213,7 +214,7 @@ function($, Class, TabContent, TreeGridView) {
          * @return {String}         - HTML for action icon
          */
        actionIcon: function(ifconfig) {
-            return this.icon('fa-gears', (ifconfig ? 'if-' : '') + 'action-icon');
+            return this.icon('fa-gears', ifconfig ? cssClass.icon.ifconfig : cssClass.action );
         },
 
         /**
@@ -225,7 +226,7 @@ function($, Class, TabContent, TreeGridView) {
          * @return {String}          - HTML for icon
          */
         icon: function(facls, layoutcls, title) {
-            return "<i class='fa icon " + facls + " " + csscls('icon') + " " + csscls(layoutcls) + "' " + (title ? "title='" + title + "'" : '') + " />";
+            return "<i class='fa icon " + facls + " " + cssClass.icon.base + " " + layoutcls + "' " + (title ? "title='" + title + "'" : '') + " />";
         },
 
     });

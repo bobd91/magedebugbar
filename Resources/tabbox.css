@@ -1,8 +1,8 @@
-.tab-box {
+.magedebugbar.magedebugbar-tab-box {
     width: 100%;
     height: 100%;
 }
-    .tab-box > ul {
+    .magedebugbar.magedebugbar-tab-box > ul {
         list-style: none;
         background: #eeeeee;
         border-bottom: 1px solid #bebebe;
@@ -10,13 +10,13 @@
         margin: 0;
     }
 
-    .tab-box > ul:after {
+    .magedebugbar.magedebugbar-tab-box > ul:after {
         clear: both;
         content: ' ';
         display: table;
     }
 
-    .tab-box > ul li {
+    .magedebugbar.magedebugbar-tab-box > ul li {
         color: #525252;
         border: 1px solid rgba(0, 0, 0, 0);
         border-bottom-style: none;
@@ -26,52 +26,52 @@
                 position: relative;
     }
 
-    .tab-box > ul li.tab-active {
+    .magedebugbar.magedebugbar-tab-box > ul li.magedebugbar-tab-active {
         border-color: #bebebe;
         background: white;
     }
 
-    .tab-content {
+    .magedebugbar.magedebugbar-tab-content {
         position: relative;
         width: 100%;
         overflow: auto;
     }
 
-    .tab-content > div {
+    .magedebugbar.magedebugbar-tab-content > div {
         display: none;
     }
 
-    .tab-content > div.tab-active {
+    .magedebugbar.magedebugbar-tab-content > div.magedebugbar-tab-active {
         display: block;
     }
 
-    .tab-close {
+    .magedebugbar-tab-close {
         display: inline-block;
         width: .8em;
         margin-left: .3em;
     }
 
-    .tab-close .tab-cross-icon,
-    .tab-close .tab-close-icon {
+    .magedebugbar-tab-close .magedebugbar-tab-icon-cross,
+    .magedebugbar-tab-close .magedebugbar-tab-icon-close {
         color: #C0C0C0;
         text-align: center;
         display: none;
     }
 
-    .tab-close:hover .tab-close-icon {
+    .magedebugbar-tab-close:hover .magedebugbar-tab-icon-close {
         display: inline;
     }
 
-    li.tab-active .tab-cross-icon,
-    li:hover .tab-cross-icon {
+    li.magedebugbar-tab-active .magedebugbar-tab-icon-cross,
+    li:hover .magedebugbar-tab-icon-cross {
         display: inline;
     }
 
-    .tab-close:hover .tab-cross-icon {
+    .magedebugbar-tab-close:hover .magedebugbar-tab-icon-cross {
         display: none;
     }
 
-    .tab-cross-icon:before {
+    .magedebugbar-tab-icon-cross:before {
         color: #808080;
         content: '\00D7'; /* &times; */
         font-weight: bold;

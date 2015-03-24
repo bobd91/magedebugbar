@@ -5,9 +5,11 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'tabcontent', 'treeviewgrid'],
+define(['jquery', 'class', 'cssclass', 'tabcontent', 'treegridview'],
 
-function($, Class, TabContent, TreeViewGrid) {
+function($, Class, CssClass, TabContent, TreeGridView) {
+
+    var cssClass = CssClass.generate('page', ['view']);
 
     return Class.extend(TabContent, {
 
@@ -19,10 +21,10 @@ function($, Class, TabContent, TreeViewGrid) {
          *
          * @param {ResourceLoader} loader  - for loading resources from the server
          * @param {LayoutModel} layout     - for access to the page blocks
-         * @param {LayoutBlockHighlighter} highlighter - to highlight blocks on the page
+         * @param {LayoutHighlighter} highlighter - to highlight blocks on the page
          */ 
         constructor: function(loader, layout, highlighter) {
-            this.super.constructor.call(this, 'Page', $('<div />').addClass(csscls('view')));
+            this.super.constructor.call(this, 'Page', $('<div />').addClass(cssClass.view));
             this.treeview = new TreeGridView(this.makeRootModel(layout.getPageBlocks()));
             $(this.treeview)
             .on('click', function(e, row, col) {
@@ -67,7 +69,6 @@ function($, Class, TabContent, TreeViewGrid) {
             return {
                 children: 'blocks',
                 values: ['name', 'type', 'template'],
-                columns: [csscls('name'), csscls('type'), csscls('template')],
                 root: blocks
             };
         },

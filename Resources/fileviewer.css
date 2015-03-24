@@ -10,7 +10,7 @@ div#fileviewer {
     display: block;
 }
 
-.magedebugbar-fileviewer-action {
+.magedebugbar-fileview-action {
     position: absolute;
     cursor: pointer;
     pointer-events: auto;
@@ -18,11 +18,11 @@ div#fileviewer {
     z-index: 10;
 }
 
-.magedebugbar-fileviewer-disabled {
+.magedebugbar-fileview-disabled {
     position: absolute;
     pointer-events: auto;
 }
 
-.magedebugbar-fileviewer-disabled:hover {
+.magedebugbar-fileview-disabled:hover {
     background: rgba(175,175, 175, 0.5);
 }

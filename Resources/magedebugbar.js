@@ -4,27 +4,53 @@
  * Passes window resize and PhpDebugBar resize events to the LayoutPanel
  * Passes data supplied by the server to the LayoutPanel
  *
- * This is the interface between the world of PhpDebugBar and MageDebugBar
- * PhpDebugBar requires that we have and entry in the global namespace
- * (see PHP function MageDebugBar\LayoutCollector->getWidgets())
+ * This is where the world of PhpDebugBar and MageDebugBar meet so
+ * PhpDebugBar stuff must load synchronoulsy but MageDebugBar uses
+ * require.js which loads stuff asynchronoulsy
  *
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'layoutpanel'],
 
-function($, LayoutPanel) {
+/**
+ * PhpDebugBar requires its tabs to exist in global namespace
+ * (see PHP function MageDebugBar\LayoutCollector->getWidgets())
+ */
+if(typeof(MageDebugBar) === 'undefined') {
+    MageDebugBar = {};
+}
 
-    // Ensure MageDebugBar namespace
-    if (typeof(MageDebugBar) == 'undefined') {
-        var MageDebugBar = {};
-    }
+(function($, PhpDebugBar) {
 
+    // The rest of MageDebugBar uses requirejs for module loading
+    require.config({
+        baseUrl: "/js/MageDebugBar",
+        shim: {
+            ace: {exports: 'ace'}
+        },
+        paths: {
+            ace: "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8",
+        },
+    });
+
+
+    // MageDebugBar.LayoutTab is expected by PhpDebugBar
     MageDebugBar.LayoutTab = PhpDebugBar.Widget.extend({
 
         render: function() {
-            this.panel = new LayoutPanel();
-            this.panel.appendTo(this.$el);
+            // Requirejs will load panel asynchronously so
+            // we may have data to load by the time the
+            // panel is created
+            require(['layoutpanel'], function(LayoutPanel) {
+                this.panel = new LayoutPanel();
+                this.panel.appendTo(this.$el);
+
+                if(this.layout) {
+                    this.panel.setLayout(this.layout);
+                    this.panel.resize();
+                }
+
+            }.bind(this));
 
             // Resize content when window resizes
             $(window).on('resize', this.resize.bind(this));
@@ -41,16 +67,23 @@ function($, LayoutPanel) {
             }.bind(this));
 
             // PhpDebugBar has layout data for us from the server
+            // But panel may not be created yet
             this.bindAttr('data', function(layout) {
-                this.panel.setLayout(layout);
+                if(this.panel) {
+                    this.panel.setLayout(layout);
+                } else {
+                    this.layout = layout;
+                }
             }.bind(this));
         },
 
         resize: function() {
-            this.panel.resize();
+            if(this.panel) {
+                this.panel.resize();
+            }
         },
  
     });
-});
+})(jQuery, PhpDebugBar);
 
 
