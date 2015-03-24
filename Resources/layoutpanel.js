@@ -24,9 +24,11 @@ function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
         /**
          * Create the required main, left, right and resize handle components
          * And add handlers to support dragging the resize handle
+         *
+         * @param {jQuery} panel - PhpDebugBar.Widget created by magedebugbar.js
          */
-        constructor: function() {
-            this.$panel = $('<div />').addClass(cssClass.panel);
+        constructor: function(panel) {
+            this.$panel = panel.addClass(cssClass.panel);
             this.$left = $('<div />').addClass(cssClass.left).appendTo(this.$panel);
             this.$resizehdle = $('<div />').addClass(cssClass.resize.handle).appendTo(this.$panel);
             this.$right = $('<div />').addClass(cssClass.right).appendTo(this.$panel);
@@ -60,15 +62,6 @@ function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
                 this.$panel.off('mousemove', mousemove).off('mouseup', mouseup);
                 this.$panel.css('cursor', orig_cursor);
             }.bind(this);
-        },
-
-        /**
-         * Append the LayoutPanel to the given container
-         *
-         * @param {jQuery} container  the container to add to
-         */
-        appendTo: function(container) {
-            this.$panel.appendTo(container);
         },
 
         /**

@@ -42,8 +42,7 @@ if(typeof(MageDebugBar) === 'undefined') {
             // we may have data to load by the time the
             // panel is created
             require(['layoutpanel'], function(LayoutPanel) {
-                this.panel = new LayoutPanel();
-                this.panel.appendTo(this.$el);
+                this.panel = new LayoutPanel(this.$el);
 
                 if(this.layout) {
                     this.panel.setLayout(this.layout);
