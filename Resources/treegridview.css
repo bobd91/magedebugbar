@@ -1,40 +1,47 @@
+ /* PhpDebugBar has an awful selector
+ * *
+ * which is more specific than
+ * all single class selectors we might
+ * want to use so we have to be more 
+ * specific than we wanted :(
+ */
 
-.treegridview-container {
-  width: 100%;
-  table-layout: fixed;
-}
+ .magedebugbar-treegridview-container {
+     width: 100%;
+     table-layout: fixed;
+ }
 
-.treegridview-container td {
-    white-space: nowrap;
-    position: relative;
-    text-align: left;
-    overflow: hidden;
-    }
+ .magedebugbar-treegridview-container td {
+     white-space: nowrap;
+     position: relative;
+     text-align: left;
+     overflow: hidden;
+ }
 
-.treegridview-container th {
-    background: #eeeeee;
-    }
+ .magedebugbar-treegridview-container th {
+     background: #eeeeee;
+ }
 
-.treegridview-container th:first-child {
-    padding-left: .3em;
-}
+ .magedebugbar-treegridview-container th:first-child {
+     padding-left: .3em;
+ }
 
-  .treegridview-hover { background: #dff3f5; }
+ .magedebugbar-treegridview-hover { background: #dff3f5; }
 
-  .treegridview-leaf {
-      visibility: hidden;
-  }
+ .magedebugbar-treegridview-leaf {
+     visibility: hidden;
+ }
 
-  .treegridview-leaf,
-  .treegridview-open,
-  .treegridview-closed {
-      color: #808080;
-      font-size: 10px;
-  }
+ .magedebugbar-treegridview-leaf,
+ .magedebugbar-treegridview-open,
+ .magedebugbar-treegridview-closed {
+     color: #808080;
+     font-size: 10px;
+ }
 
-  .treegridview-cell {
-    display: inline-block;
-    cursor: pointer;
-    }
+ .magedebugbar-treegridview-cell {
+     display: inline-block;
+     cursor: pointer;
+ }
 
 

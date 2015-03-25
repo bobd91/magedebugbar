@@ -59,10 +59,17 @@ function(Class, TabContent, CssClass, Ace) {
                 case "text/xml": mode = "xml"; break;
                 default: mode = "text";
             }
+
             this.session = Ace.createEditSession(this.fileinfo.content, "ace/mode/" + mode);
 
+            // Do not try to acces tokens until background tokenizer has completed 
+            // Do not woory about multiple events as we only have read only views 
+            // so no retokenization
             if(this.customizer) {
-                customizer.setTokens(new TokenIterator.TokenIterator(session, 0, 0));
+                this.session.on('tokenizerUpdate', function() {
+                    this.customizer.setTokens(new TokenIterator.TokenIterator(this.session, 0, 0));
+                    this.setTokens = true;
+                }.bind(this));
             }
         },
 
@@ -109,6 +116,9 @@ function(Class, TabContent, CssClass, Ace) {
          * @param {Event} e - the mousemove event
          */
         mousemove: function(e) {
+            // Do not process mousemoves until we have got all of the tokens 
+            if(!this.setTokens) return;
+
             var r = this.editor.renderer;
             var canvasPos = r.rect = r.scroller.getBoundingClientRect();
             var offset = (e.clientX + r.scrollLeft - canvasPos.left - r.$padding) / r.characterWidth;
@@ -155,13 +165,13 @@ function(Class, TabContent, CssClass, Ace) {
          */
         customize: function(token, pos) {
             var custom = token
-                ? this.customizer.getAction(token, docPos)
+                ? this.customizer.getAction(token, pos)
                 : null;
             if(custom) {
-                var range = new Range(custom.row1, custom.col1, custom.row2, custom.col2);
+                var range = new Range.Range(custom.row1, custom.col1, custom.row2, custom.col2);
                 var css = custom.action ? cssClass.action : cssClass.disabled;
                 var type = (custom.type === 'block') ? "fullLine" : "text";
-                this.marker = session.addMarker(range, css, type, true);
+                this.marker = this.session.addMarker(range, css, type, true);
                 this.action = custom.action;
             } else {
                 this.action = null;

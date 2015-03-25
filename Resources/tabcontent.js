@@ -42,7 +42,7 @@ function(Class) {
          * Called by the owning tabbox when the tab is made active
          */
         activate: function() {
-            this.$ui.addClass('tab-active');
+            this.$ui.addClass(this.tabbox.activeClass());
         },
 
         /**

@@ -4,6 +4,7 @@
  * but is nice in requirejs world to use define to pass in dependencies
  * even if it is not responsible for loading them
  *
- * This is a mock of a pre-loaded jQuery just so it can play with requirejs
+ * PhpDebugBar will remove the global jQuery at the end of its processing
+ * but it keeps a copy for itself which we can access
  */
-define(function() { return jQuery; });
+define(['phpdebugbar'], function(PhpDebugBar) { return PhpDebugBar.$; });

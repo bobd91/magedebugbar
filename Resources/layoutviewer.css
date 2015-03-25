@@ -1,3 +1,10 @@
+/* PhpDebugBar has an awful selector
+ * *
+ * which is more specific than
+ * all single class selectors we might
+ * want to use so we have to be more 
+ * specific than we wanted :(
+ */
 
 .magedebugbar-page-view,
 .magedebugbar-handle-view {
@@ -54,7 +61,7 @@
     color: orange;
 }
 
-#magedebugbar-handle-chooser {
+.magedebugbar-handle-chooser {
     display: inline-block;
     font-size: 0.9em;
     margin-left: 0.4em;

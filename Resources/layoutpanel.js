@@ -75,8 +75,8 @@ function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
             this.$right.children().remove();
 
             var layout = new LayoutModel(data);
-            this.layoutviewer = new LayoutViewer(this.resourceLoader(layout), layout);
             this.fileviewer = new FileViewer();
+            this.layoutviewer = new LayoutViewer(this.resourceLoader(layout, this.fileviewer), layout);
             this.layoutviewer.appendTo(this.$left);
             this.fileviewer.appendTo(this.$right);
 
@@ -96,13 +96,14 @@ function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
          * Create a ResourceLoader to get resources from the server
          * and pass them to the correct response handler
          *
-         * @param {LayoutMode} layout - access to layout config data
-         * @return {ResourceLoader}   - object to request resources from the server
+         * @param {LayoutMode} layout     - access to layout config data
+         * @param {FileViewer} fileviewer - recipient of loaded files
+         * @return {ResourceLoader}       - object to request resources from the server
          */
-        resourceLoader: function(layout) {
+        resourceLoader: function(layout, fileviewer) {
             var loader = new ResourceLoader(layout);
             
-            var fileHandler = new FileHandler();
+            var fileHandler = new FileHandler(fileviewer);
             var customizer = new LayoutFileCustomizer(loader, layout);
             fileHandler.registerCustomizer(customizer);
 

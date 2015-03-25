@@ -2,6 +2,7 @@
     "name": "bobd91/magedebugbar",
     "type": "magento-module",
     "require": {
+        "php": ">=5.4.0",
         "magento-hackathon/magento-composer-installer": "*",
         "maximebf/debugbar": "1.*"
     },

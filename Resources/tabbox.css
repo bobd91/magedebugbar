@@ -1,79 +1,86 @@
-.magedebugbar.magedebugbar-tab-box {
+/* PhpDebugBar has an awful selector
+ * *
+ * which is more specific than
+ * all single class selectors we might
+ * want to use so we have to be more 
+ * specific than we wanted :(
+ */
+.magedebugbar-tab-box {
     width: 100%;
     height: 100%;
 }
-    .magedebugbar.magedebugbar-tab-box > ul {
-        list-style: none;
-        background: #eeeeee;
-        border-bottom: 1px solid #bebebe;
-        padding: .2em 0 0 .4em;
-        margin: 0;
-    }
+.magedebugbar-tab-box > ul {
+    list-style: none;
+    background: #eeeeee;
+    border-bottom: 1px solid #bebebe;
+    padding: .2em 0 0 .4em;
+    margin: 0;
+}
 
-    .magedebugbar.magedebugbar-tab-box > ul:after {
-        clear: both;
-        content: ' ';
-        display: table;
-    }
+.magedebugbar-tab-box > ul:after {
+    clear: both;
+    content: ' ';
+    display: table;
+}
 
-    .magedebugbar.magedebugbar-tab-box > ul li {
-        color: #525252;
-        border: 1px solid rgba(0, 0, 0, 0);
-        border-bottom-style: none;
-        float: left;
-        padding: 0 .3em;
-            cursor: pointer;
-                position: relative;
-    }
+.magedebugbar-tab-box > ul li {
+    color: #525252;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-bottom-style: none;
+    float: left;
+    padding: 0 .3em;
+    cursor: pointer;
+    position: relative;
+}
 
-    .magedebugbar.magedebugbar-tab-box > ul li.magedebugbar-tab-active {
-        border-color: #bebebe;
-        background: white;
-    }
+.magedebugbar-tab-box > ul li.magedebugbar-tab-active {
+    border-color: #bebebe;
+    background: white;
+}
 
-    .magedebugbar.magedebugbar-tab-content {
-        position: relative;
-        width: 100%;
-        overflow: auto;
-    }
+.magedebugbar-tab-content {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+}
 
-    .magedebugbar.magedebugbar-tab-content > div {
-        display: none;
-    }
+.magedebugbar-tab-content > div {
+    display: none;
+}
 
-    .magedebugbar.magedebugbar-tab-content > div.magedebugbar-tab-active {
-        display: block;
-    }
+.magedebugbar-tab-content > div.magedebugbar-tab-active {
+    display: block;
+}
 
-    .magedebugbar-tab-close {
-        display: inline-block;
-        width: .8em;
-        margin-left: .3em;
-    }
+.magedebugbar-tab-close {
+    display: inline-block;
+    width: .8em;
+    margin-left: .3em;
+}
 
-    .magedebugbar-tab-close .magedebugbar-tab-icon-cross,
-    .magedebugbar-tab-close .magedebugbar-tab-icon-close {
-        color: #C0C0C0;
-        text-align: center;
-        display: none;
-    }
+.magedebugbar-tab-close .magedebugbar-tab-icon-cross,
+.magedebugbar-tab-close .magedebugbar-tab-icon-close {
+    color: #C0C0C0;
+    text-align: center;
+    display: none;
+}
 
-    .magedebugbar-tab-close:hover .magedebugbar-tab-icon-close {
-        display: inline;
-    }
+.magedebugbar-tab-close:hover .magedebugbar-tab-icon-close {
+    display: inline;
+}
 
-    li.magedebugbar-tab-active .magedebugbar-tab-icon-cross,
-    li:hover .magedebugbar-tab-icon-cross {
-        display: inline;
-    }
+li .magedebugbar-tab-active .magedebugbar-tab-icon-cross,
+li:hover .magedebugbar-tab-icon-cross {
+    display: inline;
+}
 
-    .magedebugbar-tab-close:hover .magedebugbar-tab-icon-cross {
-        display: none;
-    }
+.magedebugbar-tab-close:hover .magedebugbar-tab-icon-cross {
+    display: none;
+}
 
-    .magedebugbar-tab-icon-cross:before {
-        color: #808080;
-        content: '\00D7'; /* &times; */
-        font-weight: bold;
-    }
+.magedebugbar-tab-icon-cross:before {
+    color: #808080;
+    content: '\00D7'; /* &times; */
+    font-weight: bold;
+}
 

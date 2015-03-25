@@ -31,10 +31,10 @@ function(Class) {
          * and produces actions that load resources from the server
          */
         constructor: function(resourceLoader, layoutModel) {
-            this.resourceloader = resourceLoader;
+            this.resourceLoader = resourceLoader;
             this.layoutModel = layoutModel;
         },
-
+    
         /**
          * Parse the token stream for a layout config file and build up array of actions
          * for each row in the document.
@@ -48,7 +48,7 @@ function(Class) {
             this.document(iterator);
             return this.actions;
         },
-
+    
         /**
          * Parsing tag, expecting attributes
          *
@@ -87,7 +87,7 @@ function(Class) {
                 }
             }    
         },
-
+    
         /**
          * Parsing, expecting a start tag
          *
@@ -121,7 +121,7 @@ function(Class) {
                 }
             }
         },
-
+    
         /**
          * Opened an element so increase level
          */
@@ -129,7 +129,7 @@ function(Class) {
             this.level = this.level || 0;
             this.level++;
         },
-
+    
         /**
          * Closed element so decrease level
          */
@@ -137,7 +137,7 @@ function(Class) {
             this.level--;
             this.popBlockNames();
         },
-
+    
         /**
          * Remove surrounding quotes from attribute value
          *
@@ -147,7 +147,7 @@ function(Class) {
         attributeValue: function(attr) {
             return attr.slice(1, -1);
         },
-
+    
         /**
          * Used as a default function for calls to the elements() method
          * to consume unwanted elements
@@ -159,7 +159,7 @@ function(Class) {
                 this.elements(iterator);
             }
         },
-
+    
         /**
          * Detected </ so skip past rest of end tag
          *
@@ -169,7 +169,7 @@ function(Class) {
             iterator.stepForward(); // Element name
             iterator.stepForward(); // >
         },
-
+    
         /**
          * Parse the whole document
          *
@@ -185,7 +185,7 @@ function(Class) {
                 }
             }
         },
-
+    
         /**
          * Parse the layout element
          *
@@ -198,7 +198,7 @@ function(Class) {
                 this.elements(iterator, [], this.handleElement);
             }
         },
-
+    
         /**
          * Parse a handle element
          *
@@ -217,7 +217,7 @@ function(Class) {
                 }
             }
         },
-
+    
         /**
          * Create and action to disable all rows for this handle element
          *
@@ -230,7 +230,7 @@ function(Class) {
 
             this.addAction(row1, 0, row2, 0);
         },
-
+    
         /**
          * Parsing a block element
          *
@@ -260,7 +260,7 @@ function(Class) {
                 this.elements(iterator, ['block', 'action', 'remove']);
             }
         },
-
+    
         /**
          * Parsing a remove element
          *
@@ -274,7 +274,7 @@ function(Class) {
                 this.elements(iterator);
             }
         },
-
+    
         /**
          * Parsing an action element
          *
@@ -288,7 +288,7 @@ function(Class) {
                 this.elements(iterator, [], this.paramsElement);
             }
         },
-
+    
         /**
          * Parsing a parameter element for an action
          *
@@ -303,7 +303,7 @@ function(Class) {
                 this.elements(iterator);
             }
         },
-
+    
         /**
          * Parsed a name attribute
          *
@@ -317,7 +317,7 @@ function(Class) {
             this.pushBlockName(name);
             this.nameAction(iterator,  name);
         },
-
+    
         /**
          * Special processing for name attribute of block element
          *
@@ -328,12 +328,12 @@ function(Class) {
          * @param {String} name       - name of attribute
          * @param {String} value      - value of attribute
          */
-        checkblocknameattribute: function(iterator, name, value) {
+        checkBlockNameAttribute: function(iterator, name, value) {
             if('name' === name) { // Only the name attribute
                 this.pushBlockName(value);
             }
         },
-
+    
         /**
          * Parsed a before attribute
          *
@@ -347,7 +347,7 @@ function(Class) {
                 this.nameAction(iterator, name);
             }
         },
-
+    
         /**
          * Parsed an after attribute
          *
@@ -361,7 +361,7 @@ function(Class) {
                 this.nameAction(iterator, name);
             }
         },
-
+    
         /**
          * Parsed a type attribute
          *
@@ -561,7 +561,7 @@ function(Class) {
             this.blockNames = this.blockNames || [];
             this.blockNames.push({ name: name, level: this.level });
         },
-
+    
         /**
          * Remove any old block names to restore the correct current block name 
          *
@@ -574,7 +574,7 @@ function(Class) {
                 this.blockNames.pop();
             }
         },
-
+    
         /**
          * Return the current block name 
          *
@@ -588,4 +588,3 @@ function(Class) {
 
     });
 });
-

@@ -166,8 +166,8 @@ function($, Class, CssClass) {
          * @param {jQuery} tab - <li> element representing tab
          */
         activateTab: function(tab) {
-            this.$box.find('.tab-active').removeClass('tab-active');
-            tab.addClass('tab-active');
+            this.$box.find('.' + cssClass.active).removeClass(cssClass.active);
+            tab.addClass(cssClass.active);
             this.getTabContent(tab).activate();
             if(1 == this.tabCount()) {
                 this.showContent();

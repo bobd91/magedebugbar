@@ -18,6 +18,7 @@
  */
 if(typeof(MageDebugBar) === 'undefined') {
     MageDebugBar = {};
+
 }
 
 (function($, PhpDebugBar) {
@@ -25,12 +26,11 @@ if(typeof(MageDebugBar) === 'undefined') {
     // The rest of MageDebugBar uses requirejs for module loading
     require.config({
         baseUrl: "/js/MageDebugBar",
-        shim: {
-            ace: {exports: 'ace'}
-        },
         paths: {
             ace: "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8",
-        },
+            // Outstanding query with Ace team re: problems mapping theme urls
+            "ace/theme/chrome": "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-chrome"
+        }
     });
 
 
@@ -38,18 +38,25 @@ if(typeof(MageDebugBar) === 'undefined') {
     MageDebugBar.LayoutTab = PhpDebugBar.Widget.extend({
 
         render: function() {
-            // Requirejs will load panel asynchronously so
-            // we may have data to load by the time the
-            // panel is created
+
             require(['layoutpanel'], function(LayoutPanel) {
                 this.panel = new LayoutPanel(this.$el);
 
+                // Requirejs will load panel asynchronously so
+                // we may have data to load by the time the
+                // panel is created
                 if(this.layout) {
                     this.panel.setLayout(this.layout);
-                    this.panel.resize();
+                    this.resize();
                 }
 
             }.bind(this));
+
+            // PhpDebugBar bug - bottom padding does not work
+            $('<div />').addClass('magedebugbar-padding-bottom').appendTo('body');
+            phpdebugbar.recomputeBottomOffset = function() {
+                $('.magedebugbar-padding-bottom').height($('.phpdebugbar').height());
+            };
 
             // Resize content when window resizes
             $(window).on('resize', this.resize.bind(this));
@@ -81,7 +88,7 @@ if(typeof(MageDebugBar) === 'undefined') {
                 this.panel.resize();
             }
         },
- 
+
     });
 })(jQuery, PhpDebugBar);
 

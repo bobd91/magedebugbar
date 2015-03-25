@@ -32,7 +32,7 @@ function($, Class, TabBox, Ace, FileView) {
             this.editor = Ace.edit('fileviewer');
             this.editor.setReadOnly(true);
             this.editor.setShowPrintMargin(false);
-            //this.editor.setTheme("ace/theme/chrome");
+            this.editor.setTheme("ace/theme/chrome");
 
             this.editor.on('mousemove', this.mousemoveCombiner());
             this.editor.on('click', this.click.bind(this));
@@ -132,7 +132,7 @@ function($, Class, TabBox, Ace, FileView) {
          * @return {FileView} - the active FileView or nothing if no active tabs
          */
         getActiveView: function() {
-            var tab = this.$tabs.children('.tab-active');
+            var tab = this.$tabs.children('.' + this.activeClass());
             if(tab.length) {
                 return this.getTabContent(tab);
             }

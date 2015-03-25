@@ -26,7 +26,7 @@ define(['jquery', 'class', 'cssclass'],
 
 function($, Class, CssClass) {
 
-    var cssClass = CssClass.generate('treegridview', ['container', 'open', 'closed', 'cell', 'hover']);
+    var cssClass = CssClass.generate('treegridview', ['container', 'open', 'closed', 'leaf', 'cell', 'hover']);
 
     return Class.create({
 
@@ -165,7 +165,6 @@ function($, Class, CssClass) {
             container.on("click", '.' + cssClass.open, this.close.bind(this));
             container.on("click", '.' + cssClass.closed, this.open.bind(this));
             container.on("click", '.' + cssClass.cell, this.click.bind(this));
-            container.on("hover", '.' + cssClass.hover, this.hover.bind(this));
         },
 
         /**
@@ -304,8 +303,12 @@ function($, Class, CssClass) {
          * @param {Event} event - mousemove event
          */
         hover: function(event) {
-            $(event.currentTarget).addClass(cssClass.hover);
-            $(this).trigger('hover', [true, this.findRow(event)]);
+            // TODO: why is my trigger causing my own hover to run?
+            //       put event check in for now
+            if(event) {
+                $(event.currentTarget).addClass(cssClass.hover);
+                $(this).trigger('hover', [true, this.findRow(event)]);
+            }
         },
 
         /**
