@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
         sass: {
             options: {
-//                outputStyle: "compressed"
+                outputStyle: "compressed"
             },
             dist: {
                 files: {
@@ -18,18 +18,14 @@ module.exports = function(grunt) {
                 options: {
                     baseUrl: "js",
                     paths: {
-        // Ace editor
-        ace: "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8",
-
-        // Outstanding query with Ace team re: problems mapping theme urls
-        "ace/theme/chrome": "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-chrome",
+                        ace: "empty:",
                         requireLib: 'require'
                     },
                     out: "Resources/magedebugbar.js",
                     name: "magedebugbar",
                     include: ["requireLib", "layouttab", "layoutpanel"],
                     create: true,
-                    optimize: "none",
+                    //optimize: "none",
                     wrap: {
                         start: "(function() {",
                         // PhpDebugBar needs access to global objects 
