@@ -13,7 +13,7 @@ define(['jquery', 'class', 'cssclass', 'tabcontent', 'treegridview'],
 function($, Class, CssClass, TabContent, TreeGridView) {
 
     var cssClass = CssClass.generate('handle',
-                ['view', 'chooser', 'icon-base', 'icon-rendered', 'icon-configured',
+                ['view', 'chooser', 'icon-rendered', 'icon-configured',
                  'icon-forced', 'icon-action', 'icon-ifconfig']);
 
     return Class.extend(TabContent, {
@@ -236,7 +236,7 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String}          - HTML for icon
          */
         icon: function(facls, layoutcls, title) {
-            return "<i class='fa icon " + facls + " " + cssClass.icon.base + " " + layoutcls + "' " + (title ? "title='" + title + "'" : '') + " />";
+            return "<i class='fa icon " + facls + " " + " " + layoutcls + "' " + (title ? "title='" + title + "'" : '') + " />";
         },
 
     });

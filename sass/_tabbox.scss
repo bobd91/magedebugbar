@@ -56,7 +56,7 @@ div.magedebugbar-tab-content {
     }
 }
 
-div.magedebugbar-tab-close {
+span.magedebugbar-tab-close {
     display: inline-block;
     width: .8em;
     margin-left: .3em;
@@ -85,7 +85,7 @@ li:hover .magedebugbar-tab-icon-cross {
 }
 
 
-div.magedebugbar-tab-icon-cross:before {
+i.magedebugbar-tab-icon-cross:before {
     color: $control-icon-color;
     content: '\00D7'; /* &times; */
     font-weight: bold;

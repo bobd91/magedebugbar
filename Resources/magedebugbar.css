@@ -17,7 +17,7 @@ div.magedebugbar-tab-box {
   div.magedebugbar-tab-box > ul {
     list-style: none;
     background: #eeeeee;
-    border-bottom: 1px solid #6d6d6d;
+    border-bottom: 1px solid #bebebe;
     padding: .2em 0 0 .4em;
     margin: 0; }
     div.magedebugbar-tab-box > ul:after {
@@ -33,7 +33,7 @@ div.magedebugbar-tab-box {
       cursor: pointer;
       position: relative; }
       div.magedebugbar-tab-box > ul li.magedebugbar-tab-active {
-        border-color: #6d6d6d;
+        border-color: #bebebe;
         background: white; }
 
 div.magedebugbar-tab-content {
@@ -45,23 +45,23 @@ div.magedebugbar-tab-content {
     div.magedebugbar-tab-content > div.magedebugbar-tab-active {
       display: block; }
 
-div.magedebugbar-tab-close {
+span.magedebugbar-tab-close {
   display: inline-block;
   width: .8em;
   margin-left: .3em; }
-  div.magedebugbar-tab-close .magedebugbar-tab-icon-cross, div.magedebugbar-tab-close .magedebugbar-tab-icon-close {
+  span.magedebugbar-tab-close .magedebugbar-tab-icon-cross, span.magedebugbar-tab-close .magedebugbar-tab-icon-close {
     color: #C0C0C0;
     text-align: center;
     display: none; }
-  div.magedebugbar-tab-close:hover .magedebugbar-tab-icon-close {
+  span.magedebugbar-tab-close:hover .magedebugbar-tab-icon-close {
     display: inline; }
-  div.magedebugbar-tab-close:hover .magedebugbar-tab-icon-cross {
+  span.magedebugbar-tab-close:hover .magedebugbar-tab-icon-cross {
     display: none; }
 
 li .magedebugbar-tab-active .magedebugbar-tab-icon-cross, li:hover .magedebugbar-tab-icon-cross {
   display: inline; }
 
-div.magedebugbar-tab-icon-cross:before {
+i.magedebugbar-tab-icon-cross:before {
   color: #808080;
   content: '\00D7';
   /* &times; */
@@ -96,7 +96,7 @@ div.magedebugbar-layout-resize-handle {
   height: 100%;
   float: left;
   width: 1px;
-  background: #6d6d6d;
+  background: #bebebe;
   border-left: 2px solid #eeeeee;
   border-right: 2px solid #eeeeee;
   cursor: col-resize; }
@@ -165,7 +165,7 @@ span.magedebugbar-highlight-tooltip {
   vertical-align: middle;
   color: #1a1aa6;
   background: #ffffcc;
-  border: 1px solid #6d6d6d;
+  border: 1px solid #bebebe;
   font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
   font-size: 11px;
   font-weight: normal;
@@ -178,8 +178,8 @@ span.magedebugbar-highlight-tooltip {
     position: absolute;
     width: 0;
     height: 0;
-    border-top: 8px solid #6d6d6d;
-    border-bottom: 8px solid #6d6d6d;
+    border-top: 8px solid #bebebe;
+    border-bottom: 8px solid #bebebe;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent; }
 
