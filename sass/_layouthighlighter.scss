@@ -15,7 +15,7 @@ div.magedebugbar-highlight-block {
     z-index: 9998; /* one less than tooltips */
 }
 
-div.magedebugbar-highlight-tooltip {
+span.magedebugbar-highlight-tooltip {
     position: absolute;
     white-space: nowrap;
     vertical-align: middle;
@@ -41,27 +41,27 @@ div.magedebugbar-highlight-tooltip {
     }
 }
 
-div.magedebugbar-highlight-point-top:before {
+span.magedebugbar-highlight-point-top:before {
     bottom: 100%;
     border-top-width: 0;
 }
 
-div.magedebugbar-highlight-point-bottom:before {
+span.magedebugbar-highlight-point-bottom:before {
     top: 100%;
     border-bottom-width: 0;
 }
 
-div.magedebugbar-highlight-point-left:before {
+span.magedebugbar-highlight-point-left:before {
     left: 15px;
     margin-left: -8px;
 }
 
-div.magedebugbar-highlight-point-right:before {
+span.magedebugbar-highlight-point-right:before {
     right: 15px;
     margin-right: -8px;
 }
 
-div.magedebugbar-highlight-tooltip:after {
+span.magedebugbar-highlight-tooltip:after {
     content: '';
     position: absolute;
     width: 0;
@@ -72,22 +72,22 @@ div.magedebugbar-highlight-tooltip:after {
     border-right: 7px solid transparent;
 }
 
-div.magedebugbar-highlight-point-top:after {
+span.magedebugbar-highlight-point-top:after {
     bottom: 100%;
     border-top-width: 0;
 }
 
-div.magedebugbar-highlight-point-bottom:after {
+span.magedebugbar-highlight-point-bottom:after {
     top: 100%;
     border-bottom-width: 0;
 }
 
-div.magedebugbar-highlight-point-left:after {
+span.magedebugbar-highlight-point-left:after {
     left: 15px;
     margin-left: -7px;
 }
 
-div.magedebugbar-highlight-point-right:after {
+span.magedebugbar-highlight-point-right:after {
     right: 15px;
     margin-right: -7px;
 }
