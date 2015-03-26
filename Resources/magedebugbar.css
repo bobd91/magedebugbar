@@ -115,20 +115,20 @@ div.magedebugbar-layout-right {
 /**
  * Sass shared variables
  */
-div.magedebugbar-treegridview-container {
+table.magedebugbar-treegridview-container {
   width: 100%;
   table-layout: fixed; }
-  div.magedebugbar-treegridview-container td {
+  table.magedebugbar-treegridview-container td {
     white-space: nowrap;
     position: relative;
     text-align: left;
     overflow: hidden; }
-  div.magedebugbar-treegridview-container th {
+  table.magedebugbar-treegridview-container th {
     background: #eeeeee; }
-    div.magedebugbar-treegridview-container th:first-child {
+    table.magedebugbar-treegridview-container th:first-child {
       padding-left: .3em; }
 
-div.magedebugbar-treegridview-hover {
+tr.magedebugbar-treegridview-hover {
   background: #dff3f5; }
 
 div.magedebugbar-treegridview-leaf {
@@ -257,32 +257,32 @@ div.magedebugbar-page-view, div.magedebugbar-handle-view {
   margin-left: 0.4em;
   vertical-align: middle-top; }
 
-div.magedebugbar-handle-icon-rendered {
+i.magedebugbar-handle-icon-rendered {
   font-size: 10px;
   margin-right: .3em;
   color: blue; }
 
-div.magedebugbar-handle-icon-configured {
+i.magedebugbar-handle-icon-configured {
   font-size: 10px;
   margin-right: .3em;
   color: gray; }
 
-div.magedebugbar-handle-icon-forced {
+i.magedebugbar-handle-icon-forced {
   font-size: 10px;
   margin-right: .3em;
   color: purple; }
 
-div.magedebugbar-handle-icon-remove {
+i.magedebugbar-handle-icon-remove {
   font-size: 10px;
   margin-right: .3em;
   color: red; }
 
-div.magedebugbar-handle-icon-action {
+i.magedebugbar-handle-icon-action {
   font-size: 10px;
   margin-right: .3em;
   color: green; }
 
-div.magedebugbar-handle-icon-ifconfig {
+i.magedebugbar-handle-icon-ifconfig {
   font-size: 10px;
   margin-right: .3em;
   color: orange; }

@@ -8,7 +8,7 @@
 
 @import 'vars';
 
-div.magedebugbar-treegridview-container {
+table.magedebugbar-treegridview-container {
     width: 100%;
     table-layout: fixed;
 
@@ -28,7 +28,7 @@ div.magedebugbar-treegridview-container {
     }
 }
 
-div.magedebugbar-treegridview-hover {
+tr.magedebugbar-treegridview-hover {
     background: $hover-background;
 }
 

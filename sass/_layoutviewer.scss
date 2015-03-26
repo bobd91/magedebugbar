@@ -42,26 +42,26 @@ div.magedebugbar-handle-view {
     color: $color;
 }
 
-div.magedebugbar-handle-icon-rendered {
+i.magedebugbar-handle-icon-rendered {
     @include handle-icon(blue);
 }
 
-div.magedebugbar-handle-icon-configured {
+i.magedebugbar-handle-icon-configured {
     @include handle-icon(gray);
 }
 
-div.magedebugbar-handle-icon-forced {
+i.magedebugbar-handle-icon-forced {
     @include handle-icon(purple);
 }
 
-div.magedebugbar-handle-icon-remove {
+i.magedebugbar-handle-icon-remove {
     @include handle-icon(red);
 }
 
-div.magedebugbar-handle-icon-action {
+i.magedebugbar-handle-icon-action {
     @include handle-icon(green);
 }
 
-div.magedebugbar-handle-icon-ifconfig {
+i.magedebugbar-handle-icon-ifconfig {
     @include handle-icon(orange);
 }
