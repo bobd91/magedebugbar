@@ -1,0 +1,47 @@
+/**
+ * Sass styles for layoutpanel
+ *
+ *  PhpDebugBar has a reset selector div.phpdebugbar *
+ *  which means that out styles will be ignored if we
+ *  only have a single class selector
+ */
+
+@import 'vars';
+
+div.magedebugbar-layout-panel {
+    height: 100%;
+    min-width: 200px;
+
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+div.magedebugbar-layout-left {
+    height: 100%;
+    float: left;
+    width: 40%;
+    overflow: auto;
+}
+
+div.magedebugbar-layout-resize-handle {
+    height: 100%;
+    float: left;
+    width: 1px;
+    // Swap the control colors for the resize handle
+    background: $control-border-color;
+    border-left: 2px solid $control-background;
+    border-right: 2px solid $control-background;
+    cursor: col-resize;
+}
+
+div.magedebugbar-layout-right {
+    height: 100%;
+    overflow: auto;
+}

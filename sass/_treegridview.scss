@@ -1,0 +1,51 @@
+/**
+ * Sass styles for treegridview
+ *
+ *  PhpDebugBar has a reset selector div.phpdebugbar *
+ *  which means that out styles will be ignored if we
+ *  only have a single class selector
+ */
+
+@import 'vars';
+
+div.magedebugbar-treegridview-container {
+    width: 100%;
+    table-layout: fixed;
+
+    td {
+        white-space: nowrap;
+        position: relative;
+        text-align: left;
+        overflow: hidden;
+    }
+
+    th {
+        background: $control-background;
+
+        &:first-child {
+            padding-left: .3em;
+        }
+    }
+}
+
+div.magedebugbar-treegridview-hover {
+    background: $hover-background;
+}
+
+div.magedebugbar-treegridview-leaf {
+    visibility: hidden;
+}
+
+div.magedebugbar-treegridview-leaf,
+div.magedebugbar-treegridview-open,
+div.magedebugbar-treegridview-closed {
+    color: $control-icon-color;
+    font-size: 10px;
+}
+
+div.magedebugbar-treegridview-cell {
+    display: inline-block;
+    cursor: pointer;
+}
+
+

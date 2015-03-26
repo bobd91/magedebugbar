@@ -15,8 +15,8 @@ function(Class, TabContent, CssClass, Ace) {
 
     var cssClass = CssClass.generate('fileview', ['action', 'disabled']); 
 
-    var Range = require('ace/range');
-    var TokenIterator = require('ace/token_iterator');
+    var Range = Ace.require('ace/range');
+    var TokenIterator = Ace.require('ace/token_iterator');
 
     return Class.extend(TabContent, {
 

@@ -111,8 +111,8 @@ function($, Class, CssClass) {
          */   
         addTab: function(content) {
             var tab = $('<li />').text(content.label);
-            if(content.html) {
-                content.html.appendTo(tab);
+            if(content.$html) {
+                content.$html.appendTo(tab);
             }
             if(content.title) {
                 tab.attr('title', content.title);
@@ -154,7 +154,7 @@ function($, Class, CssClass) {
                 var newActive = this.$tabs.children().eq(index);
                 this.activateTab(newActive);
             }
-            if(0 == this.tabCount()) {
+            if(0 === this.tabCount()) {
                 this.hideContent();
             }
         },

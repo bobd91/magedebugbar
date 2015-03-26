@@ -1,0 +1,67 @@
+/**
+ * Sass styles for layoutviewer
+ *
+ *  PhpDebugBar has a reset selector div.phpdebugbar *
+ *  which means that out styles will be ignored if we
+ *  only have a single class selector
+ */
+
+@import 'vars';
+
+div.magedebugbar-page-view,
+div.magedebugbar-handle-view {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    table {
+        font-family: $monospace-font;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        color: $monospace-font-color;
+    }
+}
+
+.magedebugbar-tab-active #magedebugbar-handle-chooser {
+    background: $control-active-background;
+}
+
+#magedebugbar-handle-chooser {
+    display: inline-block;
+    font-size: 0.9em;
+    margin-left: 0.4em;
+    vertical-align: middle-top;
+}
+
+@mixin handle-icon($color) {
+    font-size: 10px;
+    margin-right: .3em;
+    color: $color;
+}
+
+div.magedebugbar-handle-icon-rendered {
+    @include handle-icon(blue);
+}
+
+div.magedebugbar-handle-icon-configured {
+    @include handle-icon(gray);
+}
+
+div.magedebugbar-handle-icon-forced {
+    @include handle-icon(purple);
+}
+
+div.magedebugbar-handle-icon-remove {
+    @include handle-icon(red);
+}
+
+div.magedebugbar-handle-icon-action {
+    @include handle-icon(green);
+}
+
+div.magedebugbar-handle-icon-ifconfig {
+    @include handle-icon(orange);
+}

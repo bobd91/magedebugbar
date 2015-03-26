@@ -44,10 +44,11 @@ function($, Class, CssClass, LayoutModel, LayoutViewer, FileViewer,
          */
         addResizeHandlers: function() {
             var pos_x, orig_w, orig_cursor;
-            var orig_cursor = this.$panel.css('cursor');
+            orig_cursor = this.$panel.css('cursor');
 
             this.$resizehdle.on('mousedown', function(e) {
-                orig_w = this.$left.width(), pos_x = e.pageX;
+                orig_w = this.$left.width();
+                pos_x = e.pageX;
                 this.$panel.on('mousemove', mousemove).on('mouseup', mouseup);
                 this.$panel.css('cursor', 'col-resize');
             }.bind(this));

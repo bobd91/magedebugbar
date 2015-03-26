@@ -62,7 +62,6 @@ function($, Class, CssClass) {
          * @param {Object} bounds - top, right, bottom, left of area to highlight
          */
         showBlock: function(bounds) {
-console.log("Show block", bounds);
             this.$block.css({
                 top: bounds.top,
                 left: bounds.left,
@@ -174,13 +173,13 @@ console.log("Show block", bounds);
         combineBounds: function(begin, end) {
             if(begin.parent().is(':hidden')) return;
 
-            var off, res;
+            var off, res, display, h, w;
             var content = false; // Have we seen anything since beginning
             for(var elem = begin.next() ; !elem.is(end) && elem.length ; elem = elem.next()) {
-                var display = elem.css('display');
+                display = elem.css('display');
                 if((off = elem.offset()) && display !== 'none' && display !== 'inline') {
-                    var h = elem.outerHeight();
-                    var w = elem.outerWidth();
+                    h = elem.outerHeight();
+                    w = elem.outerWidth();
                     if(!content) {
                         res = {
                             top: off.top,
@@ -201,7 +200,7 @@ console.log("Show block", bounds);
                 off = begin.offset();
                 res = {top: off.top, right: off.left, bottom: off.top, left: off.left};
                 off = end.offset();
-                var h = end.height()
+                h = end.height();
                 if(res.top + h <= off.top) {
                     // spans on different lines
                     // so must go to parent block container
@@ -363,7 +362,6 @@ console.log("Show block", bounds);
         position: function(pos, topbottom, leftright) {
             var body = $('body');
             this.$tooltip.css('top', pos.top).css('left', pos.left);
-console.log("Show tip", pos);
             this.setLocationClass(topbottom, leftright);
         },
 

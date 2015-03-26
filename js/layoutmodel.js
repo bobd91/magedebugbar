@@ -17,6 +17,9 @@
  *   blocks:          [] of child blocks
  * }
  *
+ * this.pageBlocks    [block names => page block] for all page blocks
+ *
+ *
  * Handle Config Blocks (Configuration)
  *
  * layout.config {
@@ -36,11 +39,12 @@
  * The Handle View needs the Handle Config Blocks in a different data structure for
  * easier processing so a different data structure is produced by the constructor
  *
- * this.blocks      [block name => block detail] for all config blocks
+ * this.configBlocks      [block name => block detail] for all config blocks
  *
  * block detail {
  *   name:           block name
  *   handle:         handle
+ *   rendered:       true if block was rendered (in pageBlocks)
  *   parent:         parent config block
  *   removedBy:      { 
  *                     handle: handle of remove element
@@ -72,10 +76,18 @@ function(Class) {
 
     return Class.create({
 
+        /**
+         * Process layout into structures for easier processing
+         *
+         * @param {Object} layout - layout from server
+         */
         constructor: function(layout) {
             this.layout = layout;
 
-            this.blocks = {};
+            this.pageBlocks = {};
+            this.processPageBlocks(layout.blocks.blocks);
+
+            this.configBlocks = {};
             this.rootBlocks = [];
             this.handleBlocks = {};
             layout.config.handles.forEach(function(handle) {
@@ -83,6 +95,27 @@ function(Class) {
                 this.processConfigBlocks(handle.elems, handle.name);
             }, this);
 
+        },
+
+        /**
+         * Add blocks to the this.pageBlock object
+         *
+         * @param {Array} blocks - [] of page blocks
+         */ 
+        processPageBlocks: function(blocks) {
+            blocks.forEach(function(block) {
+                this.processPageBlock(block);
+            }, this);
+        },
+
+        /**
+         * Add block and its children to the this.pageBlock object
+         *
+         * @param {Object} block - page block
+         */ 
+        processPageBlock: function(block) {
+            this.pageBlocks[block.name] = block;
+            this.processPageBlocks(block.blocks);
         },
 
         /**
@@ -290,10 +323,18 @@ function(Class) {
          */
         process_block: function(elem, handle, parent) {
             var name = elem.attrs.name;
-            var block = { name: name, handle: handle, parent: parent, blocks: [], actions: [], elem: elem };
-            this.blocks[name] = block
+            var block = {
+                name: name,
+                handle: handle,
+                rendered: typeof(this.pageBlocks[name]) !== 'undefined',
+                parent: parent,
+                blocks: [],
+                actions: [],
+                elem: elem
+            };
+            this.configBlocks[name] = block;
             if(parent) {
-                var pblock = this.blocks[parent.attrs.name];
+                var pblock = this.configBlocks[parent.attrs.name];
                 if(pblock) {
                     pblock.blocks.push(block);
                     if(pblock.handle !== handle && -1 === this.handleBlocks[handle].indexOf(pblock)) {
@@ -318,7 +359,7 @@ function(Class) {
          * @param {Object} parent - parent config block
          */
         process_remove: function(elem, handle, parent) {
-            var pblock = this.blocks[elem.attrs.name];
+            var pblock = this.configBlocks[elem.attrs.name];
             if(pblock) {
                 if(pblock.handle !== handle && -1 === this.handleBlocks[handle].indexOf(pblock)) {
                     this.handleBlocks[handle].push(pblock);
@@ -339,7 +380,7 @@ function(Class) {
          */
         process_action: function(elem, handle, parent) {
             var action = { action: this.formatAction(elem), ifconfig: elem.attrs.ifconfig, handle: handle, elem: elem };
-            var pblock = this.blocks[parent.attrs.name];
+            var pblock = this.configBlocks[parent.attrs.name];
             if(pblock) {
                     if(pblock.handle !== handle && -1 === this.handleBlocks[handle].indexOf(pblock)) {
                         this.handleBlocks[handle].push(pblock);

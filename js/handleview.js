@@ -12,7 +12,9 @@ define(['jquery', 'class', 'cssclass', 'tabcontent', 'treegridview'],
 
 function($, Class, CssClass, TabContent, TreeGridView) {
 
-    var cssClass = CssClass.generate('handle', ['view', 'chooser', 'icon-base', 'icon-block', 'icon-forced', 'icon-action', 'icon-ifconfig']);
+    var cssClass = CssClass.generate('handle',
+                ['view', 'chooser', 'icon-base', 'icon-rendered', 'icon-configured',
+                 'icon-forced', 'icon-action', 'icon-ifconfig']);
 
     return Class.extend(TabContent, {
 
@@ -124,7 +126,9 @@ function($, Class, CssClass, TabContent, TreeGridView) {
                 blocks = [];
                 elem = block.removedBy.elem;
             } else if(force || !handle || handle === block.handle) {
-                html = this.blockIcon(force && handle && handle !== block.handle) + block.name;
+                // Is this block from a different handle (could have been forced)
+                var diffHandle = handle && handle !== block.handle;
+                html = this.blockIcon(block.rendered, diffHandle) + block.name;
                 blocks = this.actionsToHtml(block.actions, handle)
                 .concat(this.blocksToHtml(block.blocks, handle));
                 elem = block.elem;
@@ -191,11 +195,17 @@ function($, Class, CssClass, TabContent, TreeGridView) {
         /**
          * Generate block icon
          *
-         * @param {boolean} forced - this block is from another handle
-         * @return {String}         - HTML for block icon
+         * @param {boolean} rendered - this block was rendered on the page
+         * @param {boolean} forced   - this block was forced here from another handle
+         * @return {String}          - HTML for block icon
          */
-        blockIcon: function(forced) {
-            return this.icon('fa-cube', forced ? cssClass.icon.forced : cssClass.icon.block);
+        blockIcon: function(rendered, forced) {
+            var css = rendered
+                ? forced 
+                  ? cssClass.icon.forced
+                  : cssClass.icon.rendered
+                : cssClass.icon.configured;
+            return this.icon('fa-cube', css);
         },
 
          /**
@@ -204,7 +214,7 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String} - HTML for removed block icon
          */
        removeIcon: function() {
-            return this.icon('fa-ban', cssClass.icon.remove);
+            return this.icon('fa-cube', cssClass.icon.remove);
         },
 
          /**
@@ -214,7 +224,7 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String}         - HTML for action icon
          */
        actionIcon: function(ifconfig) {
-            return this.icon('fa-gears', ifconfig ? cssClass.icon.ifconfig : cssClass.action );
+            return this.icon('fa-gears', ifconfig ? cssClass.icon.ifconfig : cssClass.icon.action );
         },
 
         /**

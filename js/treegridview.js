@@ -125,7 +125,7 @@ function($, Class, CssClass) {
             var tr = $("<tr />");
             this.model.values.forEach(function(v, i) {
                 var td = $("<td />").appendTo(tr);
-                if(i == 0) {
+                if(i === 0) {
                     td.css("padding-left",  (level - 1) + ".3em");
                     var cls = this.hasChildren(branch) ? cssClass.closed : cssClass.leaf;
                     $("<div />")
@@ -136,7 +136,7 @@ function($, Class, CssClass) {
                 var cell = $("<div>" + branch[v] + "</div>")
                 .addClass(cssClass.cell)
                 .appendTo(td);
-                if(i == 0) {
+                if(i === 0) {
                     cell.css("margin-left", ".5em");
                 }
             }, this);
@@ -180,14 +180,14 @@ function($, Class, CssClass) {
             target
             .removeClass(cssClass.closed)
             .removeClass('fa-play icon')
-            .addClass('fa-spinner fa-pulse')
+            .addClass('fa-spinner fa-pulse');
             var row = this.findRow(event);
             Promise.resolve(row.branch[this.model.children])
             .then(function(children) {
                 this.insertRows(children, 1 + row.level, row.element);
             }.bind(this))
             .catch(function(err) {
-                console.err(err);
+                console.error(err);
             })
             .then(function() {
                 target
@@ -281,7 +281,7 @@ function($, Class, CssClass) {
             $(event.target)
             .removeClass(cssClass.open)
             .removeClass('fa-rotate-90')
-            .addClass(cssClass.closed)
+            .addClass(cssClass.closed);
         },
 
         /**

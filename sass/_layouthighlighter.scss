@@ -1,0 +1,93 @@
+/**
+ * Sass styles for layouthighlighter
+ *
+ *  PhpDebugBar has a reset selector div.phpdebugbar *
+ *  which means that out styles will be ignored if we
+ *  only have a single class selector
+ */
+
+@import 'vars';
+
+div.magedebugbar-highlight-block {
+    position: absolute;
+    background: $highlight-block-color;
+    display: none;
+    z-index: 9998; /* one less than tooltips */
+}
+
+div.magedebugbar-highlight-tooltip {
+    position: absolute;
+    white-space: nowrap;
+    vertical-align: middle;
+    color: $monospace-font-color;
+    background: $tooltip-background;
+    border: 1px solid $control-border-color;
+    font-family: $monospace-font;
+    font-size: 11px;
+    font-weight: normal;
+    font-style: normal;
+    padding: 0 .4em;
+    z-index: 9999; /* one less than PhpdebugBar */
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-top: 8px solid $control-border-color;
+        border-bottom: 8px solid $control-border-color;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+    }
+}
+
+div.magedebugbar-highlight-point-top:before {
+    bottom: 100%;
+    border-top-width: 0;
+}
+
+div.magedebugbar-highlight-point-bottom:before {
+    top: 100%;
+    border-bottom-width: 0;
+}
+
+div.magedebugbar-highlight-point-left:before {
+    left: 15px;
+    margin-left: -8px;
+}
+
+div.magedebugbar-highlight-point-right:before {
+    right: 15px;
+    margin-right: -8px;
+}
+
+div.magedebugbar-highlight-tooltip:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 7px solid $tooltip-background;
+    border-bottom: 7px solid $tooltip-background;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+}
+
+div.magedebugbar-highlight-point-top:after {
+    bottom: 100%;
+    border-top-width: 0;
+}
+
+div.magedebugbar-highlight-point-bottom:after {
+    top: 100%;
+    border-bottom-width: 0;
+}
+
+div.magedebugbar-highlight-point-left:after {
+    left: 15px;
+    margin-left: -7px;
+}
+
+div.magedebugbar-highlight-point-right:after {
+    right: 15px;
+    margin-right: -7px;
+}

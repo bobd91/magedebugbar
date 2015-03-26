@@ -18,7 +18,7 @@ function($, Class, TabBox, Ace, FileView) {
          */
         constructor: function() {
             this.super.constructor.call(this);
-            $('<div />').attr('id', 'fileviewer').addClass(this.activeClass()).appendTo(this.getContent());
+            $('<div />').attr('id', 'magedebugbar-fileviewer').addClass(this.activeClass()).appendTo(this.getContent());
         },
 
         /**
@@ -29,7 +29,7 @@ function($, Class, TabBox, Ace, FileView) {
          */
         appendTo: function(element) {
             this.super.appendTo.call(this, element);
-            this.editor = Ace.edit('fileviewer');
+            this.editor = Ace.edit('magedebugbar-fileviewer');
             this.editor.setReadOnly(true);
             this.editor.setShowPrintMargin(false);
             this.editor.setTheme("ace/theme/chrome");

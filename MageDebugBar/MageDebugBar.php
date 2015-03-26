@@ -29,17 +29,11 @@ class MageDebugBar extends \DebugBar\DebugBar {
         $this->addCollector(new LayoutCollector($magento));
 
         $this->getJavascriptRenderer("/js/DebugBar")->addAssets(
-            ['magedebugbar.css', 'treegridview.css', 'fileviewer.css', 'tabbox.css', 'layoutviewer.css', 'layouthighlighter.css'],
-            ['require.js', 'magedebugbar.js'],
+            ['magedebugbar.css'],
+            ['magedebugbar.js'],
             '/js/MageDebugBar',
             '/js/MageDebugBar'
         ); 
-/*
-        $this->getJavascriptRenderer()->addAssets(
-            [],
-            ["https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/ace.js"]
-        );
- */
     }
 
     /**

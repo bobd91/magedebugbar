@@ -1,0 +1,26 @@
+/**
+ * Sass styles for fileview
+ *
+ *  PhpDebugBar has a reset selector div.phpdebugbar *
+ *  which means that out styles will be ignored if we
+ *  only have a single class selector
+ */
+
+@import 'vars';
+
+div.magedebugbar-fileview-action {
+    position: absolute;
+    cursor: pointer;
+    pointer-events: auto;
+    border-bottom: 1px dotted black;
+    z-index: 10;
+}
+
+div.magedebugbar-fileview-disabled {
+    position: absolute;
+    pointer-events: auto;
+
+    &:hover {
+        background: $disabled-hover-background;
+    }
+}
