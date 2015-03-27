@@ -7,6 +7,7 @@ class AjaxTest extends \PHPUnit_Framework_TestCase {
     protected $magento;
 
     public function setup() {
+        chdir('php');
         $this->magento = $this->getMockBuilder('\MageDebugBar\Magento')->getMock();
         $this->magento
             ->method('getBaseDir')

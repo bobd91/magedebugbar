@@ -7,6 +7,10 @@ use \MageDebugBar\Magento;
 
 class LayoutBlockTest extends \PHPUnit_Framework_TestCase {
 
+    public function setup() {
+        chdir('php');
+    }
+
     public function testSimpleNoTemplate() {
         $mock = $this->getMockForAbstractClass('\tests\MockBlock'); 
         $mock->method('getNameInLayout')->willreturn('blockname');

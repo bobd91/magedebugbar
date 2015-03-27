@@ -8,6 +8,7 @@ use MageDebugBar\Magento;
 class MageDebugBarTest extends \PHPUnit_Framework_TestCase {
 
     public function setup() {
+        chdir('php');
         require_once('tests/DebugBar.php');
 
         $this->mage = $this->getMockBuilder('\MageDebugBar\Magento')

@@ -1,7 +1,7 @@
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="php/vendor/autoload.php">
     <testsuites>
         <testsuite name="magedebugbar">
-            <directory>tests</directory>
+            <directory>php/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

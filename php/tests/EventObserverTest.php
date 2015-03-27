@@ -8,6 +8,7 @@ use MageDebugBar\MageDebugBar;
 class EventObserverTest extends \PHPUnit_Framework_TestCase {
 
     public function setup() {
+        chdir('php');
         require_once "tests/DebugBar.php";
 
         $this->response = $this->getMockBuilder('\tests\MockResponse')->getMock();

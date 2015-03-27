@@ -8,6 +8,7 @@ use \MageDebugBar\Magento;
 class LayoutConfigTest extends \PHPUnit_Framework_TestCase {
 
     public function setup() {
+        chdir('php');
         $this->basedir = getcwd() . '/tests';
     }
 

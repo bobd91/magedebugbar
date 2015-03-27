@@ -7,6 +7,7 @@ use \MageDebugBar\MageDebugBar;
 class ModelObserverTest extends \PHPUnit_Framework_TestCase {
 
     public function setup() {
+        chdir('php');
         require_once('app/code/community/BobD91/MageDebugBar/Model/Observer.php');
     }
 

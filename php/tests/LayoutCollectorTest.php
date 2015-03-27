@@ -12,6 +12,7 @@ class LayoutCollectorTest extends \PHPUnit_Framework_TestCase {
      *  as it interacts with many different players  
      */
     public function setup() {
+        chdir('php');
         require_once('tests/DebugBar.DataCollector.php');
 
         $mock = $this->getMockBuilder('\MageDebugBar\Magento')

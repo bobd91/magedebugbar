@@ -1,7 +1,7 @@
 # Magento additions
-app/code/community/BobD91/MageDebugBar/ app/code/community/BobD91/MageDebugBar/
-app/etc/modules/BobD91_MageDebugBar.xml app/etc/modules/BobD91_MageDebugBar.xml
-magedebugbar.php magedebugbar.php
+php/app/code/community/BobD91/MageDebugBar/ app/code/community/BobD91/MageDebugBar/
+php/app/etc/modules/BobD91_MageDebugBar.xml app/etc/modules/BobD91_MageDebugBar.xml
+php/magedebugbar.php magedebugbar.php
 
 # Composer
 ../../../vendor lib/vendor

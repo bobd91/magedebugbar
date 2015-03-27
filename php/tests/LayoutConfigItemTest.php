@@ -6,6 +6,10 @@ use \MageDebugBar\LayoutConfigItem;
 
 class LayoutConfigItemTest extends \PHPUnit_Framework_TestCase {
 
+    public function setup() {
+        chdir('php');
+    }
+
     public function testSimple() {
         $simple = new LayoutConfigItem(null, 'simple', [], 2, 3);
         $simple->close();
