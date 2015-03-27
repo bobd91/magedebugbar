@@ -40,9 +40,6 @@ function($, Class, CssClass) {
         show: function(name, blockid) {
             var elems = $("[data-blockid='" + blockid + "']");
             if(2 === elems.length) {
-                if(blockid === 24) {
-                    console.log("stop here");
-                }
                 var bounds = this.combineBounds(elems.eq(0), elems.eq(1));
                 if(bounds) {
                     this.showBlock(bounds);

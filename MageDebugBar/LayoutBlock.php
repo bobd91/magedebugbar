@@ -77,6 +77,9 @@ class LayoutBlock {
                 $this->template_file = $this->_templateDir($block->getTemplateFile());
             }
             // Avoid 'null' and 'undefined' in JSON
+            if(!$this->type) {
+                $this->type = '';
+            }
             if(!(isset($this->template) && $this->template)) {
                 $this->template = $this->template_file = "";
             }
