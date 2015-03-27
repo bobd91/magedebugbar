@@ -23,13 +23,13 @@ module.exports = function(grunt) {
                     },
                     out: "Resources/magedebugbar.js",
                     name: "magedebugbar",
-                    include: ["requireLib", "layouttab", "layoutpanel"],
+                    include: ["config", "requireLib", "layouttab", "layoutpanel"],
                     create: true,
-                    //optimize: "none",
+                    optimize: "none",
                     wrap: {
                         start: "(function() {",
                         // PhpDebugBar needs access to global objects 
-                        end: "require(['layouttab'], function(LayoutTab) { window.MageDebugBar = { LayoutTab: LayoutTab };});}());"
+                        end: "window.MageDebugBar = { LayoutTab: layoutTab };}());"
                     },
                 }
             }
@@ -43,6 +43,10 @@ module.exports = function(grunt) {
             requirejs: {
                 files: 'js/*.js',
                 tasks: ['requirejs']
+            },
+            grunt: {
+                files: 'Gruntfile.js',
+                tasks: ['default']
             }
         },
 

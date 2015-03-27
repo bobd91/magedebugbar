@@ -7,9 +7,9 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'cssclass'], 
+define(['jquery', 'class', 'cssclass', 'clipboard'], 
        
-function($, Class, CssClass) {
+function($, Class, CssClass, Clipboard) {
 
     var cssClass = CssClass.generate('tab', ['box', 'content', 'active', 'close', 'icon-cross', 'icon-close']);
 
@@ -116,6 +116,10 @@ function($, Class, CssClass) {
             }
             if(content.title) {
                 tab.attr('title', content.title);
+                tab.hover(
+                    function() { Clipboard.set(content.title); },
+                    function() { Clipboard.unset(); }
+                );
             }
             if(content.closeable) {
                 var close = $('<span />').addClass(cssClass.close);
@@ -160,7 +164,32 @@ function($, Class, CssClass) {
         },
 
         /**
+         * Remove all other tabs except the one passed in
+         *        
+         * @param {jQuery} tab - <li> element representing tab
+         */
+        removeOtherTabs: function(tab) {
+            var elem = tab.get(0);
+            this.$tabs.children().each(function(index, child) {
+                if(child !== elem) {
+                    $(child).remove();
+                }
+            });
+            this.activateTab(tab);
+        },
+
+        /**
+         * Remove all tabs
+         */
+        removeAllTabs: function() {
+            this.$tabs.empty();
+            this.hideContent();
+        },
+
+
+        /**
          * Activate the given tab
+         *
          * If this is the only tab then the content <div> is shown
          *
          * @param {jQuery} tab - <li> element representing tab

@@ -3,7 +3,9 @@
  */
 
 $hover-background: #dff3f5;
-$disabled-hover-background: rgba(175,175, 175, 0.5);
+$hover-menu-background: #4a90d9;
+$hover-menu-color: #ffffff;
+$hover-disabled-background: rgba(175,175, 175, 0.5);
 
 $tooltip-background: #ffffcc;
 
@@ -16,6 +18,7 @@ $control-icon-reverse-color: #C0C0C0;
 $monospace-font: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
 $monospace-font-color: #1a1aa6;
 
+$font: Verdana, Arial, sans-serif;
 $font-color: #525252;
 
 $highlight-block-color: rgba(127, 127, 255, .4);

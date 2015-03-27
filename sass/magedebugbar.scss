@@ -2,6 +2,8 @@
  * Combine all MageDebugBar sass files
  */
 
+@import 'contextmenu';
+@import 'clipboard';
 @import 'tabbox';
 @import 'layoutpanel';
 @import 'treegridview';

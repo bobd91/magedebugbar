@@ -8,32 +8,15 @@
  * @version 1.0
  */
 
-// Configure requirejs 
-require.config({
-    baseUrl: "/js/MageDebugBar",
-    paths: {
-        // Ace editor
-        ace: "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8",
-
-        // Outstanding query with Ace team re: problems mapping theme urls
-        "ace/theme/chrome": "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.8/theme-chrome"
-    },
-    shim: {
-        "ace/ace": {
-            exports: "ace"
-        }
-    }
-});
-
-define(['jquery', 'phpdebugbar'],
-      
-function($, PhpDebugBar) {
+// Not loaded via requirejs as the PhpDebugBar component
+// will be needed before requirejs's aynch load
+var layoutTab =
+(function($, PhpDebugBar) {
 
      return PhpDebugBar.Widget.extend({
 
         render: function() {
-            // We want to load synchronoulsy but LayoutPanel wants
-            // to load asynchronously (due to Ace edtor loading)
+            // Load everything else via requirejs
             require(['layoutpanel'], function(LayoutPanel) {
                 this.panel = new LayoutPanel(this.$el);
                 if(this.layout) {
@@ -82,6 +65,6 @@ function($, PhpDebugBar) {
 
     });
 
-});
+}(jQuery, PhpDebugBar));
 
 

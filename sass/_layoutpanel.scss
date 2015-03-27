@@ -11,6 +11,9 @@
 div.magedebugbar-layout-panel {
     height: 100%;
     min-width: 200px;
+    font-family: $font;
+    color: $font-color;
+    font-size: 14px;
 
     &:before,
     &:after {

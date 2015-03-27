@@ -207,6 +207,24 @@ function(Class, TabContent, CssClass, Ace) {
         },
 
         /**
+         * Get Magento relative path of file
+         *
+         * @return {String} - Magento relative path
+         */
+        getPath: function() {
+            return this.fileinfo.path;
+        },
+
+        /**
+         * Get current line in file (1 index based)
+         *
+         * @return {integer} - current line in file
+         */
+        currentLine: function() {
+            return 1 + this.editor.getSelectionRange().start.row;
+        },
+
+        /**
          * Extract filename part from given path
          *
          * @param {String} path - file path with directories

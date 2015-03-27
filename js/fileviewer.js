@@ -6,9 +6,9 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'tabbox', 'ace/ace', 'fileview'],
+define(['jquery', 'class', 'tabbox', 'ace/ace', 'fileview', 'contextmenu', 'remotecall'],
 
-function($, Class, TabBox, Ace, FileView) {
+function($, Class, TabBox, Ace, FileView, ContextMenu, RemoteCall) {
 
     return Class.extend(TabBox, {
 
@@ -19,7 +19,24 @@ function($, Class, TabBox, Ace, FileView) {
         constructor: function() {
             this.super.constructor.call(this);
             $('<div />').attr('id', 'magedebugbar-fileviewer').addClass(this.activeClass()).appendTo(this.getContent());
+            this.createContextMenu();
         },
+
+        createContextMenu: function() {
+            this.contextMenu = new ContextMenu([
+                { label: 'Open in Editor', action: this.openInEditor.bind(this) },
+                { label: 'Close', action: this.removeTab.bind(this) },
+                { label: 'Close Others', action: this.removeOtherTabs.bind(this) },
+                { label: 'Close All', action: this.removeAllTabs.bind(this) }
+            ]);
+        },
+
+        openInEditor: function(tab) {
+            var view = this.getTabContent(tab);
+            RemoteCall.open(view.getPath(), view.currentLine());
+        },
+
+        
 
         /**
          * Append the container div to the container and create and
@@ -54,6 +71,7 @@ function($, Class, TabBox, Ace, FileView) {
                 this.getTabContent(tab).setLine(fileinfo.line);
             } else {
                 tab = this.addTab(new FileView(this.editor, fileinfo, customizer));
+                this.contextMenu.attach(tab);
             }
             this.activateTab(tab);
         },
