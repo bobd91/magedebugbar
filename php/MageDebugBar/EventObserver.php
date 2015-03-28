@@ -15,7 +15,8 @@ namespace MageDebugBar;
 class EventObserver {
 
     // Don't put identifying <div> around these elements as they are not display elements
-    const DONT_MARK_ELEMENTS = ['html', 'head', 'title', 'meta', 'base', 'style', 'script', 'link', 'object', 'body'];
+    // Pre PHP 5.6 arrays are not allowed as constants
+    protected static $DONT_MARK_ELEMENTS = ['html', 'head', 'title', 'meta', 'base', 'style', 'script', 'link', 'object', 'body'];
     const MAX_ELEM_LENGTH = 6;
 
     /**
@@ -114,7 +115,7 @@ class EventObserver {
                 return false; // <!DOCTYPE
             }
             $rest = strtolower(substr($trim, 1, 6));
-            foreach(self::DONT_MARK_ELEMENTS as $not) {
+            foreach(self::$DONT_MARK_ELEMENTS as $not) {
                 if($not === substr($rest, 0, strlen($not))) {
                     return false;
                 }
