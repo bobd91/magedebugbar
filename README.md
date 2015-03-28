@@ -22,7 +22,7 @@ Create a composer.json file
             "bobd91/magedebugbar": "@dev"
         },
         "repositories": [
-            {
+        {
             "type": "composer",
             "url": "http://packages.firegento.com"
         },
@@ -42,4 +42,4 @@ Create a composer.json file
 
 Make sure that the "magento-root-dir" points to your Magento installation.
 
-> composer install
+    composer install
