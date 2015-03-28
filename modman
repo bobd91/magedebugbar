@@ -8,4 +8,4 @@ php/magedebugbar.php magedebugbar.php
 
 # Javascript and CSS
 Resources js/MageDebugBar
-../../maximebf/debugbar/src/DebugBar/Resources js/DebugBar
+../php-debugbar/src/DebugBar/Resources js/DebugBar
