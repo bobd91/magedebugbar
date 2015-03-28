@@ -4,7 +4,7 @@
     "require": {
         "php": ">=5.4.0",
         "magento-hackathon/magento-composer-installer": "*",
-        "bobd91/php-debugbar": "@dev"
+        "bobd91/php-debugbar": "1.*"
     },
     "repositories": [
         {
