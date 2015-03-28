@@ -30,6 +30,8 @@ div.magedebugbar-handle-view {
 }
 
 #magedebugbar-handle-chooser {
+    background: $control-background;
+    border: 1px solid $control-border-color; /* phpdebugbar madness is resetting all borders */
     display: inline-block;
     font-size: 0.9em;
     margin-left: 0.4em;

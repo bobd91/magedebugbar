@@ -4,12 +4,16 @@
     "require": {
         "php": ">=5.4.0",
         "magento-hackathon/magento-composer-installer": "*",
-        "maximebf/debugbar": "1.*"
+        "bobd91/php-debugbar": "1.*"
     },
     "repositories": [
         {
         "type": "composer",
         "url": "http://packages.firegento.com"
+    },
+    {
+        "type":"vcs",
+        "url":"https//github.com/bobd91/php-debugbar"
     }
     ],
     "autoload": {
