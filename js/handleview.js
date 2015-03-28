@@ -200,12 +200,20 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String}          - HTML for block icon
          */
         blockIcon: function(rendered, forced) {
-            var css = rendered
-                ? forced 
-                  ? cssClass.icon.forced
-                  : cssClass.icon.rendered
-                : cssClass.icon.configured;
-            return this.icon('fa-cube', css);
+            var title, css;
+            if(rendered) {
+                if(forced) {
+                    css = cssClass.icon.forced;
+                    title = "Rendered block from another handle";
+                } else {
+                  css = cssClass.icon.rendered;
+                  title = "Rendered block";
+                }
+            } else {
+                css = cssClass.icon.configured;
+                title = "Non-rendered block";
+            }
+            return this.icon('fa-cube', css, title);
         },
 
          /**
@@ -214,7 +222,7 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String} - HTML for removed block icon
          */
        removeIcon: function() {
-            return this.icon('fa-cube', cssClass.icon.remove);
+            return this.icon('fa-cube', cssClass.icon.remove, "Removed block");
         },
 
          /**
@@ -224,7 +232,9 @@ function($, Class, CssClass, TabContent, TreeGridView) {
          * @return {String}         - HTML for action icon
          */
        actionIcon: function(ifconfig) {
-            return this.icon('fa-gears', ifconfig ? cssClass.icon.ifconfig : cssClass.icon.action );
+            return this.icon('fa-gears',
+                             ifconfig ? cssClass.icon.ifconfig : cssClass.icon.action,
+                             ifconfig ? "Action with ifconfig" : "Action" );
         },
 
         /**
