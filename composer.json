@@ -13,7 +13,7 @@
     },
     {
         "type":"vcs",
-        "url":"https//github.com/bobd91/php-debugbar"
+        "url":"https://github.com/bobd91/php-debugbar"
     }
     ],
     "autoload": {
