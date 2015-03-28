@@ -39,6 +39,7 @@ div.magedebugbar-treegridview-leaf {
 div.magedebugbar-treegridview-leaf,
 div.magedebugbar-treegridview-open,
 div.magedebugbar-treegridview-closed {
+    cursor: default;
     color: $control-icon-color;
     font-size: 10px;
 }

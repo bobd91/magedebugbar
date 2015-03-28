@@ -13,9 +13,13 @@ class LayoutCollector
 {
     /**
      * The current block being processed
-     * Will start and end as the root block
      */
     protected $_block;
+
+    /**
+     * The start block
+     */
+    protected $_rootBlock;
 
     /**
      * Allows a unique id to be added to each block
@@ -38,7 +42,8 @@ class LayoutCollector
         $this->_magento = $magento;
         // Directories are shared across all LayoutBlocks
         LayoutBlock::setDirs($magento->getBaseDir(), $magento->getBaseDir('design'));
-        $this->_block = new LayoutBlock();
+        $this->_block = $this->_rootBlock = new LayoutBlock();
+
     }
 
     /**
@@ -53,7 +58,7 @@ class LayoutCollector
     public function collect()
     {
         return [ 
-            'blocks' => $this->_block, 
+            'blocks' => $this->_rootBlock, 
             'config' => $this->_getLayoutConfig(), 
             'store' => $this->_magento->getStoreId() 
         ];
@@ -75,6 +80,13 @@ class LayoutCollector
      * @param $block   Magento block being rendered
      */
     public function collectStartBlock($block) {
+        // Strange Magento behaviour, if block is disabled sends a 
+        // ..to_html_before event but then returns without sending
+        // a ..to_html_after event
+        // So we ignore it
+        if (\Mage::getStoreConfig('advanced/modules_disable_output/' . $block->getModuleName())) {
+            return '';
+        }
         $this->_block = $this->_block->addBlock($block, $this->_nextId());
     }
 

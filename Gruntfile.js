@@ -25,7 +25,7 @@ module.exports = function(grunt) {
                     name: "magedebugbar",
                     include: ["config", "requireLib", "layouttab", "layoutpanel"],
                     create: true,
-                    optimize: "none",
+//                    optimize: "none",
                     wrap: {
                         start: "(function() {",
                         // PhpDebugBar needs access to global objects 

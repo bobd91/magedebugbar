@@ -57,4 +57,5 @@ class BobD91_MageDebugBar_Model_Observer {
     public function core_block_abstract_to_html_after($observer) {
         $this->_delegate->core_block_abstract_to_html_after($observer);
     }
+
 }

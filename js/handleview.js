@@ -14,7 +14,7 @@ function($, Class, CssClass, TabContent, TreeGridView) {
 
     var cssClass = CssClass.generate('handle',
                 ['view', 'chooser', 'icon-rendered', 'icon-configured',
-                 'icon-forced', 'icon-action', 'icon-ifconfig']);
+                 'icon-forced', 'icon-action', 'icon-ifconfig', 'icon-remove']);
 
     return Class.extend(TabContent, {
 
