@@ -12,6 +12,7 @@
  *   headings:  [] of heading names, one for each column (optional)
  *   values:    [] of property names to access column values from 'root'
  *   children:  property name to access child nodes array from 'root'
+ *   open:      property name to access if node is open
  *   root:      [] of root nodes
  * }
  *
@@ -99,20 +100,11 @@ function($, Class, CssClass) {
 
         /**
          * Add root nodes to container
-         * and if only one root node then openit (display its children)
          *
          * @param {jQuery} container - container to add rows to
          */
         addRoot: function(container) {
-            var children = this.model.root[this.model.children];
-            var target;
-            this.insertRows(children, 1, container, true);
-            if(children.length == 1) {
-                target =  container.find('.' + cssClass.closed);
-                if(target.length) {
-                    this.open({ target: target });
-                }
-            }
+            this.insertRows(this.model.root, 1, container, true);
         },
 
         /**
@@ -154,6 +146,30 @@ function($, Class, CssClass) {
         },
 
         /**
+         * Check if branch is recorded as open
+         * Note: an open branch could be a child of a closed
+         *       branch and so not be displayed
+         *
+         * @param {Object} branch - root node or descendant of root node
+         * @return {boolean}      - true if branch is open
+         */
+        isOpen: function(branch) {
+            return true === branch[this.model.open];
+        },
+
+         /**
+         * Set branch open status
+         * Note: an open branch could be a child of a closed
+         *       branch and so not be displayed
+         *
+         * @param {Object} branch - root node or descendant of root node
+         * @param {boolean} val   - true = branch recorded as open
+         */
+        setOpen: function(branch, val) {
+            branch[this.model.open] = val;
+        },
+
+        /**
          * Add handlers for:
          *  opening and closing nodes 
          *  clicking on values in treegrid
@@ -177,10 +193,9 @@ function($, Class, CssClass) {
          */
         open: function(event) {
             var target = $(event.target);
-            target
-            .removeClass(cssClass.closed)
-            .removeClass('fa-play icon')
-            .addClass('fa-spinner fa-pulse');
+            target.removeClass(cssClass.closed)
+                  .removeClass('fa-play icon')
+                  .addClass('fa-spinner fa-pulse');
             var row = this.findRow(event);
             Promise.resolve(row.branch[this.model.children])
             .then(function(children) {
@@ -190,10 +205,10 @@ function($, Class, CssClass) {
                 console.error(err);
             })
             .then(function() {
-                target
-                .removeClass('fa-spinner fa-pulse')
-                .addClass(cssClass.open)
-                .addClass('fa-play fa-rotate-90 icon');
+                target.removeClass('fa-spinner fa-pulse')
+                      .addClass(cssClass.open)
+                      .addClass('fa-play fa-rotate-90 icon');
+                this.setOpen(row.branch, true);
             }.bind(this));
         },
 
@@ -227,10 +242,17 @@ function($, Class, CssClass) {
             } else {
                 row = row.insertAfter(element);
             }
-            return row
-            .hover(this.hover.bind(this), this.unhover.bind(this))
-            .data('branch', branch)
-            .data('level', level);
+            row.hover(this.hover.bind(this), this.unhover.bind(this))
+               .data('branch', branch)
+               .data('level', level);
+            // If row is open then open it
+            if(this.isOpen(branch) && this.hasChildren(branch)) {
+                target =  row.find('.' + cssClass.closed);
+                if(target.length === 1) {
+                    this.open({ target: target });
+                }
+            }
+            return row;
         },
 
         /**
@@ -272,16 +294,17 @@ function($, Class, CssClass) {
             var row = this.findRow(event);
             var ok = true;
             row.element
-            .nextAll()
-            .filter(function (i, e) {
-                ok = ok && $(e).data().level > row.level;
-                return ok;
-            })
-            .remove();
+                .nextAll()
+                .filter(function (i, e) {
+                    ok = ok && $(e).data().level > row.level;
+                    return ok;
+                })
+                .remove();
             $(event.target)
-            .removeClass(cssClass.open)
-            .removeClass('fa-rotate-90')
-            .addClass(cssClass.closed);
+                .removeClass(cssClass.open)
+                .removeClass('fa-rotate-90')
+                .addClass(cssClass.closed);
+            this.setOpen(row.branch, false);
         },
 
         /**

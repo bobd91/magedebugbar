@@ -121,10 +121,12 @@ function(Class) {
         /**
          * Get the details of the page blocks rendered for this page
          *
-         * @return {Object} - page blocks
+         * @return {Array} - root page blocks
          */
         getPageBlocks: function() {
-            return this.layout.blocks;
+            // Top level blocks object is a dummy single root
+            // Its children are the real root nodes
+            return this.layout.blocks.blocks;
         },
 
         /**

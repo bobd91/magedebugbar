@@ -61,11 +61,11 @@ function($, Class, CssClass, TabContent, TreeGridView) {
                 var handle = $(e.target).val();
                 var root;
                 if(handle === '(all)') {
-                    root= { blocks: this.blocksToHtml(layoutModel.getHandleBlocks()) };
+                    root= this.blocksToHtml(layoutModel.getHandleBlocks());
                 } else {
-                    root = { blocks: this.blocksToHtml(layoutModel.getHandleBlocks(handle), handle, true) };
+                    root = this.blocksToHtml(layoutModel.getHandleBlocks(handle), handle, true);
                 }
-                this.treeview.resetRoot(root);
+                this.treeview.resetRoot(this.openFirst(root));
             }.bind(this));
 
             return html;
@@ -91,8 +91,22 @@ function($, Class, CssClass, TabContent, TreeGridView) {
             return {
                 children: 'blocks',
                 values: ['html'],
-                root: { blocks: this.blocksToHtml(layoutModel.getHandleBlocks()) }
+                open: 'open',
+                root: this.openFirst(this.blocksToHtml(layoutModel.getHandleBlocks()))
             };
+        },
+
+        /**
+         * Open the first node
+         *
+         * @param {Array} blocks - [] of root nodes
+         * @return {Array}       - [] of root nodes
+         */
+        openFirst: function(blocks) {
+            if(blocks.length >= 1) {
+                blocks[0].open = true;
+            }
+            return blocks;
         },
 
         /**

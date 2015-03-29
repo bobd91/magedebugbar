@@ -62,15 +62,29 @@ function($, Class, CssClass, TabContent, TreeGridView) {
         /**
          * Create model suitable for the TreeGridView
          *
-         * @param {Array} blocks - [] of root page blocks
+         * @param {Array} blocks - [] of root blocks
          * @return {Object}      - model for TreeViewGrid
          */
         makeRootModel: function(blocks) {
             return {
                 children: 'blocks',
                 values: ['name', 'type', 'template'],
-                root: blocks
+                open: 'open',
+                root: this.openFirst(blocks)
             };
+        },
+
+        /**
+         * Open the first node
+         *
+         * @param {Array} blocks - [] of root nodes
+         * @return {Array}       - [] of root nodes
+         */
+        openFirst: function(blocks) {
+            if(blocks.length >= 1) {
+                blocks[0].open = true;
+            }
+            return blocks;
         },
     });
 });
