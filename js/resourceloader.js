@@ -6,9 +6,9 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['class'],
+define(['class', 'promise'],
 
-function(Class) {
+function(Class, Promise) {
 
     return Class.create({
 

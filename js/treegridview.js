@@ -23,9 +23,9 @@
  * @author Bob Davison
  * @version 1.0
  */
-define(['jquery', 'class', 'cssclass'],
+define(['jquery', 'class', 'cssclass', 'promise'],
 
-function($, Class, CssClass) {
+function($, Class, CssClass, Promise) {
 
     var cssClass = CssClass.generate('treegridview', ['container', 'open', 'closed', 'leaf', 'cell', 'hover']);
 
