@@ -1,0 +1,11 @@
+/php/tests export-ignore
+/php/vendor export-ignore
+/js export-ignore
+/sass export-ignore
+/bower-components export-ignore
+.gitignore export-ignore
+bower.json export-ignore
+package.json export-ignore
+Gruntfile.js export-ignore
+README.md export-ignore
+phpunit.xml export-ignore
