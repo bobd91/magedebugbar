@@ -24,8 +24,8 @@ https://getcomposer.org/download/
 
 Create the directory near to your Magento root.  I use a directory structure like:
 
-..../vhost/www      - Magento root
-..../vhost/composer - Composer files
+    vhost/www      - Magento root
+    vhost/composer - Composer files
 
 ### Install using composer
 
