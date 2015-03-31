@@ -1,6 +1,10 @@
 PhpDebugBar Widget for Magento
 ==============================
 
+### Magento Versions
+
+MageDebugBar has only be tested with Magento 1.9, some earlier versions may work however Magento 2 will not.
+
 Installation
 ------------
 
@@ -10,11 +14,22 @@ The composer install will create a symlink {magento root}/lib/vendor for compose
 
 If you already have a file /lib/vendor in your Magento root then this installation will not be safe.
 
-### Install using composer:
+Note: you will need a github account as much of the code is retrieved from github and it may complain that you are requesting too much information and require your github username and password.
 
-Note: you will need a github account as much of the code is retrieved from github and it may complain that you are requesting too mmuch information and require your github username and password.
+### Install composer
 
-Create a composer.json file
+https://getcomposer.org/download/
+
+### Create a directory to hold the composer files
+
+Create the directory near to your Magento root.  I use a directory structure like:
+
+..../vhost/www      - Magento root
+..../vhost/composer - Composer files
+
+### Install using composer
+
+Create a composer.json file in the composer directory
 
     {
         "prefer-stable": true,
@@ -41,5 +56,7 @@ Create a composer.json file
     }
 
 Make sure that the "magento-root-dir" points to your Magento installation.
+
+Then run
 
     composer install
