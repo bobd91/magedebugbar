@@ -1,0 +1,15 @@
+{
+  "name": "es6-promise-2.0.1",
+  "_cacheHeaders": {
+    "ETag": "\"b687d5d823474b1e0fb1dc63f0448ecd\"",
+    "Last-Modified": "Mon, 01 Dec 2014 10:18:43 GMT",
+    "Content-Length": "28549",
+    "Content-Type": "application/x-javascript"
+  },
+  "_release": "e-tag:b687d5d82",
+  "main": "index.js",
+  "_source": "https://es6-promises.s3.amazonaws.com/es6-promise-2.0.1.js",
+  "_target": "*",
+  "_originalSource": "https://es6-promises.s3.amazonaws.com/es6-promise-2.0.1.js",
+  "_direct": true
+}

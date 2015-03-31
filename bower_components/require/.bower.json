@@ -1,0 +1,15 @@
+{
+  "name": "require",
+  "_cacheHeaders": {
+    "ETag": "\"7e64a66-14641-51299da573d80\"",
+    "Last-Modified": "Tue, 31 Mar 2015 18:34:46 GMT",
+    "Content-Length": "83521",
+    "Content-Type": "application/javascript"
+  },
+  "_release": "e-tag:7e64a66-1",
+  "main": "index.js",
+  "_source": "http://requirejs.org/docs/release/2.1.17/comments/require.js",
+  "_target": "*",
+  "_originalSource": "http://requirejs.org/docs/release/2.1.17/comments/require.js",
+  "_direct": true
+}
