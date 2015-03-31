@@ -1,9 +1,8 @@
 {
   "name": "magedebugbar",
-  "version": "1.0.0",
   "dependencies": {
-    "es6-promise-2.0.1": "https://es6-promises.s3.amazonaws.com/es6-promise-2.0.1.js",
-    "require": "http://requirejs.org/docs/release/2.1.17/comments/require.js"
+    "requirejs": "~2.1.17",
+    "es6-promise": "~2.0.1"
   },
   "private": true
 }

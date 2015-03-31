@@ -1,1 +1,1 @@
-../bower_components/es6-promise-2.0.1/index.js
+bower_components/es6-promise/promise.js

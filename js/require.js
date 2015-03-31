@@ -1,1 +1,1 @@
-../bower_components/require/index.js
+bower_components/requirejs/require.js
