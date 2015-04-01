@@ -54,8 +54,7 @@ function($, CssClass, Class) {
          * @param {Function} action - the action function 
          */
         click: function(elem, action) {
-                $(document).off('mouseup', this.mouseup);
-                this.hide();
+            this.hide();
             action(elem);
         },
 
@@ -77,8 +76,6 @@ function($, CssClass, Class) {
          * @param {Event} event - the contextmenu event
          */
         show: function(elem, event) {
-            var body = $('body');
-
             // Prevent default contextmenu
             event.preventDefault();
 
@@ -91,7 +88,7 @@ function($, CssClass, Class) {
             // Place in DOM
             this.$menu.appendTo($('body'));
 
-            // Move to the into position
+            // Move to into position
             this.position(event.clientX, event.clientY);
 
             // Use left mouseup to hide
@@ -107,15 +104,21 @@ function($, CssClass, Class) {
          * @param {integer} y - y position of mouse in client area
          */
         position: function(x, y) {
-            var menu = this.$menu; // save having to lookup all the time
+            var menu = this.$menu;
             var height = menu.outerHeight();
             var width = menu.outerWidth();
             var body = $('body');
             var posX = x + body.scrollLeft();
             var posY = y + body.scrollTop();
+
+            // If no room below
+            // and there is room above then move up
             if(y + height > window.innerHeight && y > height) {
                 posY -= height;
             }
+
+            // If no room to the right
+            // and there is room to the left then move left
             if(x + width > window.innerWidth && x > width) {
                 posX -= width;
             }
@@ -131,7 +134,6 @@ function($, CssClass, Class) {
         mouseup: function(e) {
             // Left click anywhere else hides menu
             if(e.which === 1 && e.target.offsetParent !== this.$menu.get(0)) {
-                $(document).off('mouseup', this.mouseup);
                 this.hide();
             }
         },
@@ -140,6 +142,11 @@ function($, CssClass, Class) {
          * Hide the menu if visible
          */
         hide: function() {
+            // Remove listener for hiding the menu
+            $(document).off('mouseup', this.mouseup);
+
+            // Remove menu entries
+            // And detach menu container from DOM
             if(this.$menu.children().length) {
                 this.$menu.empty();
                 this.$menu.detach();
