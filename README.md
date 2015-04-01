@@ -3,7 +3,7 @@ PhpDebugBar Widget for Magento
 
 ### Magento Versions
 
-MageDebugBar has only been tested with Magento 1.9, some earlier versions may work however Magento 2 will not.
+MageDebugBar has only been tested with Magento 1.9, some earlier versions may work however Magento 2 does not, yet.
 
 Installation
 ------------
