@@ -10,11 +10,6 @@ namespace MageDebugBar;
 class MageDebugBar extends \DebugBar\DebugBar {
 
     /**
-     * The singleton MageDebugBar instance
-     */
-    protected static $_bar;
-
-    /**
      * Facade to Magento functionality
      */
     protected $_magento;
