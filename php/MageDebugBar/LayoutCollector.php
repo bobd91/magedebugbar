@@ -84,7 +84,9 @@ class LayoutCollector
         // ..to_html_before event but then returns without sending
         // a ..to_html_after event
         // So we ignore it
-        if (\Mage::getStoreConfig('advanced/modules_disable_output/' . $block->getModuleName())) {
+        if ($this->_magento->getStoreConfigFlag(
+                'advanced/modules_disable_output/' . $block->getModuleName(),
+                $this->_magento->getStoreId())) {
             return '';
         }
         $this->_block = $this->_block->addBlock($block, $this->_nextId());
