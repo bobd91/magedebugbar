@@ -1,4 +1,15 @@
 <?php
+/**
+ * Entry point for MageDebugBar Ajax requests.
+ *
+ * Sets up Magento, loads the Composer class loader
+ * then calls Ajax->run
+ *
+ * Most of the code is copied from Magento's index.php
+ */
+?>
+
+<?php
 
 if (version_compare(phpversion(), '5.3.0', '<')===true) {
     echo  '<div style="font:12px/1.35em arial, helvetica, sans-serif;">
@@ -62,5 +73,6 @@ $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 's
 
 Mage::app($mageRunCode, $mageRunType);
 
+/* Handle MageDebugBar Ajax request */ 
 require_once 'vendor/autoload.php';
 (new MageDebugBar\Ajax(new MageDebugBar\Magento()))->run();
