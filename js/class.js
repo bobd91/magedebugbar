@@ -31,8 +31,9 @@ define({
     /**
      * Create a new class, as an extension of an existing class, based on the definition object
      *
+     * @param {Function} base     - constructor function for the base class
      * @param {Object} definition - object whose members become members of the new class
-     * @return {Function}         - the constructor function to make instances of the class
+     * @return {Function}         - the constructor function to make instances of the new class
      */
     extend: function(base, definition) {
         var proto = Object.create(base.prototype),
